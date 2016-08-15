@@ -189,4 +189,94 @@ Verify all connected USB devices
 
 `git clone https://github.com/khinds10/CarComputer.git`
 
-to be continued....
+###Install driving monitoring tools & DB Logging
+
+`sudo apt-get install ifstat memcached python-memcache postgresql postgresql-contrib python-psycopg2`
+
+`sudo vi /etc/postgresql/9.4/main/pg_hba.conf`
+> Add the following line to the end of the file:
+>
+>local all pi password
+
+`sudo -i -u postgres`
+
+`psql`
+
+`create role pi password 'password here';`
+
+`alter role pi login;`
+
+`alter role pi superuser;`
+
+`\du`
+
+>(you should see your PI user with the permissions granted)
+
+`create database driving_statistics;`
+
+`\q`
+
+`exit`
+
+`psql -d driving_statistics`
+
+Run the following queries:
+
+>CREATE TABLE driving\_stats (
+> id serial,
+> time timestamp without time zone NOT NULL,
+> new\_trip\_start timestamp without time zone NULL,
+> gps\_latitude double precision	,
+> gps\_longitude double precision,
+> gps\_altitude real,
+> gps\_speed real,
+> gps\_climb real,
+> gps\_track real,
+> locale\_address text,
+> locale\_area text,
+> locale\_city text,
+> locale\_county text,
+> locale\_country text,
+> locale\_zipcode text,
+> inside\_temp real,
+> inside\_hmidty real,
+> weather\_time timestamp,
+> weather\_summary text,
+> weather\_icon text,
+> weather\_apparentTemperature real,
+> weather\_humidity real,
+> weather\_precipIntensity real,
+> weather\_precipProbability real,
+> weather\_windSpeed real
+>);
+>CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
+
+
+
+
+to be continued here...
+
+Copy the "logging" folder of code from this project to the home directory of your RPi
+
+`crontab -e`
+
+Add this line
+
+`@reboot /bin/sleep 60; nohup python /home/pi/XXX >/dev/null 2>&1`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

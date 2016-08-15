@@ -14,7 +14,7 @@ lcd.create_char(2, [0,4,14,21,4,4,4,4])
 lcd.create_char(3, [0,0,0,4,0,0,0,0])
 
 while True:
-    pprint(data.getJSONFromDataFile('location.data'))
+    #pprint(data.getJSONFromDataFile('location.data'))
     lcd.set_color(round(random.random()), round(random.random()), round(random.random()))
     lcd.clear()
     lcd.message(str(random.random()) + "\n" + str(random.random()))
