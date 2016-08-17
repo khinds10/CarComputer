@@ -16,13 +16,11 @@ def saveJSONObjToFile(fileName, JSONObj):
       
 def getCurrentLatLong():
     """get the current lat/long from location data"""
-    try:
-        currentLocation = getJSONFromDataFile('location.data')
-    except (Exception):
-        # default to 0.0 if GPS is not ready
-        currentLocation = {}
-        currentLocation['latitude'] = '0.0'
-        currentLocation['longitude'] = '0.0'
+    currentLocation = getJSONFromDataFile('location.data')
+    
+    # if we don't have
+    if str(currentLocation['track']) == 'nan' or str(currentLocation['altitude']) == 'nan' or str(currentLocation['longitude']) == '0.0' or str(currentLocation['latitude']) == '0.0' or str(currentLocation['climb']) == 'nan' or str(currentLocation['speed']) == 'nan':
+        raise ValueError('GPS is not fixed')
     
     # return lat/long as simple object
     currentLatLong = {}

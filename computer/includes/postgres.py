@@ -5,6 +5,12 @@ import time, commands, subprocess, re, psycopg2
 # postgresql connection
 postgresConn = psycopg2.connect(database="driving_statistics", user="pi", password="password", host="127.0.0.1", port="5432")
 
+def startNewTrip():
+    """start new trip entry in the DB"""
+    dBCursor = postgresConn.cursor()
+    dBCursor.execute("""INSERT INTO driving_stats (time, new_trip_start) VALUES (%s, %s)""", ("now()","now()",))
+    postgresConn.commit()
+
 def saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo):
     """save second worth of driving stats to the DB"""
     dBCursor = postgresConn.cursor()

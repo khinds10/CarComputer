@@ -1,10 +1,10 @@
 {
-    "apparentTemperature": 46.26, 
-    "humidity": 0.51, 
-    "icon": "clear-night", 
+    "apparentTemperature": 86.01, 
+    "humidity": 0.44, 
+    "icon": "clear-day", 
     "precipIntensity": 0.0, 
     "precipProbability": 0.0, 
     "summary": "Clear", 
-    "time": 1462853769, 
-    "windSpeed": 1.13
+    "time": 1471291112, 
+    "windSpeed": 3.36
 }

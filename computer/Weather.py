@@ -22,29 +22,30 @@ class WeatherDetails:
 data.removeJSONFile('weather.data')
 while True:
 
-    # get current conditions from API
-    currentLocationInfo = data.getCurrentLatLong()
-    
-    # wait for lat/long info to be available
-    if (str(currentLocationInfo['latitude']) ==  '0.0' and str(currentLocationInfo['longitude'] ==  '0.0')):
-        time.sleep(1)
-        continue
+    try:
+        # get current location from GPS
+        currentLocationInfo = data.getCurrentLatLong()
+                    
+        # get current forecast from location
+        weatherInfo = json.loads(subprocess.check_output(['curl', 'https://api.forecast.io/forecast/' + settings.weatherAPIKey + '/' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude']) + '?lang=en']))
+        currentConditions = weatherInfo['currently']
         
-    # get current forecast from location
-    weatherInfo = json.loads(subprocess.check_output(['curl', 'https://api.forecast.io/forecast/' + settings.weatherAPIKey + '/' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude']) + '?lang=en']))
-    currentConditions = weatherInfo['currently']
-    
-    # gather info in serializable object to store as JSON file
-    weatherDetails = WeatherDetails()
-    weatherDetails.time = int(currentConditions['time'])
-    weatherDetails.summary = str(currentConditions['summary'])
-    weatherDetails.icon = str(currentConditions['icon'])
-    weatherDetails.apparentTemperature = float(currentConditions['apparentTemperature'])
-    weatherDetails.humidity = float(currentConditions['humidity'])
-    weatherDetails.precipIntensity = float(currentConditions['precipIntensity'])
-    weatherDetails.precipProbability = float(currentConditions['precipProbability'])
-    weatherDetails.windSpeed = float(currentConditions['windSpeed'])
+        # gather info in serializable object to store as JSON file
+        weatherDetails = WeatherDetails()
+        weatherDetails.time = int(currentConditions['time'])
+        weatherDetails.summary = str(currentConditions['summary'])
+        weatherDetails.icon = str(currentConditions['icon'])
+        weatherDetails.apparentTemperature = float(currentConditions['apparentTemperature'])
+        weatherDetails.humidity = float(currentConditions['humidity'])
+        weatherDetails.precipIntensity = float(currentConditions['precipIntensity'])
+        weatherDetails.precipProbability = float(currentConditions['precipProbability'])
+        weatherDetails.windSpeed = float(currentConditions['windSpeed'])
 
-    # create or rewrite data to weather data file as JSON, then wait 5 minutes
-    data.saveJSONObjToFile('weather.data', weatherDetails)
-    time.sleep(300)
+        # create or rewrite data to weather data file as JSON, then wait 5 minutes
+        data.saveJSONObjToFile('weather.data', weatherDetails)
+        time.sleep(300)
+        
+    except (Exception):
+        # GPS is not fixed, wait 5 seconds
+        time.sleep(5)
+        pass

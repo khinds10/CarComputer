@@ -2,12 +2,16 @@
 # Kevin Hinds http://www.kevinhinds.com / Dan Mandle http://dan.mandle.me
 # License: GPL 2.0
 import os, time, threading, pprint, json
+import includes.postgres as postgres
 from gps import *
 import includes.data as data
 pp = pprint.PrettyPrinter(indent=4)
 
 # setting the global variable
 gpsd = None 
+
+# start a new trip by inserting the new trip DB entry
+postgres.startNewTrip()
 
 class GPSInfo:
     '''GPS info as class to persist as JSON information to file'''

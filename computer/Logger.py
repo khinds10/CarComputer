@@ -5,6 +5,7 @@ import os, time, json
 import includes.data as data
 import includes.postgres as postgres
 
+# save full datasets to DB each second
 while True:
     locationInfo = data.getJSONFromDataFile('location.data')
     localeInfo = data.getJSONFromDataFile('locale.data')
