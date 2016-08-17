@@ -265,18 +265,3 @@ Add this line
 `@reboot /bin/sleep 60; nohup python /home/pi/XXX >/dev/null 2>&1`
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -46,6 +46,5 @@ while True:
         time.sleep(300)
         
     except (Exception):
-        # GPS is not fixed, wait 5 seconds
+        # GPS is not fixed or network issue, wait 5 seconds
         time.sleep(5)
-        pass

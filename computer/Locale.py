@@ -4,6 +4,9 @@
 import time, json, string, cgi, subprocess
 import includes.data as data
 
+# remove data and start logging
+data.removeJSONFile('locale.data')
+
 def getLocalData():
     """get the locale info from Google Maps and save as JSON formatted object to file"""    
     
@@ -26,7 +29,7 @@ def getLocalData():
         
     except (Exception):
         
-        # try again in 5 seconds if GPS data not ready yet
+        # GPS or network not available, wait 5 seconds
         time.sleep(5)
         getLocalData()
     

@@ -16,3 +16,27 @@ def saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo):
     dBCursor = postgresConn.cursor()
     dBCursor.execute("""INSERT INTO driving_stats (time, gps_latitude, gps_longitude, gps_altitude, gps_speed, gps_climb, gps_track, locale_address, locale_area, locale_city, locale_county, locale_country, locale_zipcode, inside_temp, inside_hmidty, weather_time, weather_summary, weather_icon, weather_apparenttemperature, weather_humidity, weather_precipintensity, weather_precipprobability, weather_windspeed) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", ("now()", str(locationInfo["latitude"]), str(locationInfo["longitude"]), str(locationInfo["altitude"]), str(locationInfo["speed"]), str(locationInfo["climb"]), str(locationInfo["track"]), str(localeInfo["address"]), str(localeInfo["area"]), str(localeInfo["city"]), str(localeInfo["country"]), str(localeInfo["county"]), str(localeInfo["zipcode"]), str(tempInfo["temp"]), str(tempInfo["hmidty"]), str(weatherInfo["time"]), str(weatherInfo["summary"]), str(weatherInfo["icon"]), str(weatherInfo["apparentTemperature"]), str(weatherInfo["humidity"]), str(weatherInfo["precipIntensity"]), str(weatherInfo["precipProbability"]), str(weatherInfo["windSpeed"])))
     postgresConn.commit()
+    
+def calculateDrivingTimes():
+
+    
+    
+# dBCursor.execute("SELECT * FROM test;")
+# dBCursor.fetchone()
+# (1, 100, "abc'def")
+    
+    
+    
+    # Driving         8 min
+    # Miles           10mi
+    # Speed (avg.)    23mph
+    # Direction       WSW
+    # Alt             552 ft
+
+    # Stats               1 Day       7 days          30 days
+    ------------------------------------------------------------------------------------
+    # Time                1h 23m      1d 6h 56m       6d 3h 43m
+    # Speed (avg.)        23mph       35mph           44mph
+    # Miles               5.5mi       124mi           600mi
+    # Alt (avg.)          551ft       553ft           556ft
+
