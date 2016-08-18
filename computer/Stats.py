@@ -5,26 +5,49 @@ import os, time, json
 import includes.data as data
 import includes.postgres as postgres
 
+class DrivingStatistics:
+    """Overall Driving Statistics to save as class to persist as JSON information to file"""
+    drivingTimes = []
+    inTrafficTimes = []
+    averageSpeeds = []
+    averageAltitude = []
+    def to_JSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
+        
 # get the beginning of the trip
 thisTripStartID = postgres.getNewTripStartID()
 
-print thisTripStartID
+def convertHumanReadable(seconds):
+    """return days,hours,seconds for seconds in readable form"""
+    return data.displayHumanReadableTime(seconds)
+
+def convertToInt(integer):
+    """convert to integer catch for NoneTypes"""
+    try:
+        return int(integer)
+    except (Exception):
+        return 0
+
+def convertToString(value):
+    """convert to string catch for NoneTypes"""
+    try:
+        return str(value)
+    except (Exception):
+        return ""
 
 # remove stats data and start calculating
 data.removeJSONFile('stats.data')
 while True:
+    try:
+        drivingStatistics = DrivingStatistics()
+        drivingStatistics.drivingTimes = map(convertHumanReadable, postgres.getDrivingTimes(thisTripStartID))
+        drivingStatistics.inTrafficTimes = map(convertHumanReadable, postgres.getInTrafficTimes(thisTripStartID))
+        drivingStatistics.averageSpeeds = map(convertToString, map(convertToInt, postgres.getAverageSpeeds(thisTripStartID)))
+        drivingStatistics.averageAltitude = map(convertToString, map(convertToInt, postgres.getAverageAlt(thisTripStartID)))
 
-    # check for Nones here
-    # [0L, 3L, 3L, 3L]
-    # [None, None, None, None]
-
-    drivingTimes = postgres.getDrivingTimes(thisTripStartID)
-    print drivingTimes
-
-    averageSpeeds = postgres.getAverageSpeeds(thisTripStartID)
-    print averageSpeeds
-    
-    averageAltitude = postgres.getAverageAlt(thisTripStartID)
-    print averageAltitude
-
-    time.sleep(1)
+        # create or rewrite data to stats data file as JSON, then wait 1 minute
+        data.saveJSONObjToFile('stats.data', drivingStatistics)
+        time.sleep(60)
+    except (Exception):
+        # data issue, wait 5 seconds
+        time.sleep(5)

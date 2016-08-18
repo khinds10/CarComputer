@@ -194,6 +194,7 @@ Verify all connected USB devices
 `sudo apt-get install ifstat memcached python-memcache postgresql postgresql-contrib python-psycopg2`
 
 `sudo vi /etc/postgresql/9.4/main/pg_hba.conf`
+
 > Add the following line to the end of the file:
 >
 >local all pi password
@@ -251,20 +252,17 @@ Run the following queries:
 >);
 >CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
 
-
-
-
-to be continued here...
-
-Copy the "logging" folder of code from this project to the home directory of your RPi
+###Setup the scripts to run at boot
 
 `crontab -e`
 
-Add this line
+Add the following lines 
 
-`@reboot /bin/sleep 60; nohup python /home/pi/XXX >/dev/null 2>&1`
-
-
-remember the "in traffic counter" < 5mph qualifies
-also summarize it
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Display.py > /home/pi/CarComputer/computer/Display.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 

@@ -23,7 +23,15 @@ def getNewTripStartID():
 def getDrivingTimes(tripStartId):
     """get the driving times for current trip, day, week and month"""
     return [getOneResult("SELECT count(id) FROM driving_stats WHERE id > " + str(tripStartId)), getDrivingTimeByInterval("count(id)", "1 day"), getDrivingTimeByInterval("count(id)", "7 day"), getDrivingTimeByInterval("count(id)", "1 month")]
-    
+
+def getInTrafficTimes(tripStartId):
+    """get the driving times for current trip, day, week and month"""
+    return [getOneResult("SELECT count(id) FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND id > " + str(tripStartId)), getTrafficTimeByInterval("count(id)", "1 day"), getTrafficTimeByInterval("count(id)", "7 day"), getTrafficTimeByInterval("count(id)", "1 month")]
+
+def getTrafficTimeByInterval(value, internal):
+    """"for given column and date interval retrieve the calculated value"""
+    return getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= (now() - interval '" + str(internal) + "')")
+
 def getAverageSpeeds(tripStartId):
     """get the average speed in mph for current trip, day, week and month"""    
     return [getOneResult("SELECT AVG(gps_speed) FROM driving_stats WHERE id > " + str(tripStartId) + "  AND gps_speed != 'NaN'"), getDrivingAvgByInterval("gps_speed", "1 day"), getDrivingAvgByInterval("gps_speed", "7 day"), getDrivingAvgByInterval("gps_speed", "1 month")]
@@ -45,44 +53,3 @@ def getOneResult(query):
     dBCursor.execute(query)
     result = dBCursor.fetchone()
     return result[0]
-
-    #SELECT count(*)
-    #FROM users
-    #WHERE created_at >= (now() - interval '1 month');
-        
-     #id                          | integer                     | not null default nextval('driving_stats_id_seq'::regclass)
-     #time                        | timestamp without time zone | not null
-     #new_trip_start              | timestamp without time zone | 
-     #gps_latitude                | double precision            | 
-     #gps_longitude               | double precision            | 
-     #gps_altitude                | real                        | 
-     #gps_speed                   | real                        | 
-     #gps_climb                   | real                        | 
-     #gps_track                   | real                        | 
-     #locale_address              | text                        | 
-     #locale_area                 | text                        | 
-     #locale_city                 | text                        | 
-     #locale_county               | text                        | 
-     #locale_country              | text                        | 
-     #locale_zipcode              | text                        | 
-     #inside_temp                 | real                        | 
-     #inside_hmidty               | real                        | 
-     #weather_time                | timestamp without time zone | 
-     #weather_summary             | text                        | 
-     #weather_icon                | text                        | 
-     #weather_apparenttemperature | real                        | 
-     #weather_humidity            | real                        | 
-     #weather_precipintensity     | real                        | 
-     #weather_precipprobability   | real                        | 
-     #weather_windspeed           | real                        |  
-        
-    # dBCursor.execute("SELECT * FROM test;")
-    # dBCursor.fetchone()
-    # (1, 100, "abc'def")
-    
-    # Miles           10mi
-    # Speed (avg.)    23mph
-
-    # Stats               1 Day       7 days          30 days
-    # ------------------------------------------------------------------------------------
-    # Miles               5.5mi       124mi           600mi
