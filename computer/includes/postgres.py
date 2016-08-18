@@ -18,59 +18,38 @@ def saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo):
     
 def getNewTripStartID():
     """get the highest DB row indentifier where a new trip starts"""
-    dBCursor.execute("SELECT max(id) FROM driving_stats WHERE new_trip_start IS NOT NULL")
-    return dBCursor.fetchone()
+    return getOneResult("SELECT max(id) FROM driving_stats WHERE new_trip_start IS NOT NULL")
     
-def calculateDrivingTimes(tripStartId):
+def getDrivingTimes(tripStartId):
     """get the driving times for current trip, day, week and month"""
-    dBCursor.execute("SELECT count(id) FROM driving_stats WHERE id > %s", (tripStartId))
-    currentDrivingSeconds = dBCursor.fetchone()
-    currentDrivingSeconds = currentDrivingSeconds[0]
+    return [getOneResult("SELECT count(id) FROM driving_stats WHERE id > " + str(tripStartId)), getDrivingTimeByInterval("count(id)", "1 day"), getDrivingTimeByInterval("count(id)", "7 day"), getDrivingTimeByInterval("count(id)", "1 month")]
     
-    dBCursor.execute("SELECT count(id) FROM driving_stats WHERE time >= (now() - interval '1 day')")
-    dayDrivingSeconds = dBCursor.fetchone()
-    dayDrivingSeconds = dayDrivingSeconds[0]
-    
-    dBCursor.execute("SELECT count(id) FROM driving_stats WHERE time >= (now() - interval '7 day')")
-    weekDrivingSeconds = dBCursor.fetchone()
-    weekDrivingSeconds = weekDrivingSeconds[0]
-    
-    dBCursor.execute("SELECT count(id) FROM driving_stats WHERE time >= (now() - interval '1 month')")
-    monthDrivingSeconds = dBCursor.fetchone()
-    monthDrivingSeconds = monthDrivingSeconds[0]
-    
-    return [currentDrivingSeconds, dayDrivingSeconds, weekDrivingSeconds, monthDrivingSeconds]
-
-
 def getAverageSpeeds(tripStartId):
-    """get the average speed in mph for current trip, day, week and month"""
-    dBCursor.execute("SELECT AVG(gps_speed) FROM driving_stats WHERE id > %s  AND gps_speed != 'NaN'", (tripStartId))
-    currentAvgMPH = dBCursor.fetchone()
-    currentAvgMPH = currentAvgMPH[0]
-    
-    dBCursor.execute("SELECT AVG(gps_speed) FROM driving_stats WHERE time >= (now() - interval '1 day') AND gps_speed != 'NaN'")
-    dayAvgMPH = dBCursor.fetchone()
-    dayAvgMPH = dayAvgMPH[0]
-    
-    dBCursor.execute("SELECT AVG(gps_speed) FROM driving_stats WHERE time >= (now() - interval '7 day') AND gps_speed != 'NaN'")
-    weekAvgMPH = dBCursor.fetchone()
-    weekAvgMPH = weekAvgMPH[0]
-    
-    dBCursor.execute("SELECT AVG(gps_speed) FROM driving_stats WHERE time >= (now() - interval '1 month') AND gps_speed != 'NaN'")
-    monthAvgMPH = dBCursor.fetchone()
-    monthAvgMPH = monthAvgMPH[0]
-    
-    return [int(currentAvgMPH), int(dayAvgMPH), int(weekAvgMPH), int(monthAvgMPH)]
+    """get the average speed in mph for current trip, day, week and month"""    
+    return [getOneResult("SELECT AVG(gps_speed) FROM driving_stats WHERE id > " + str(tripStartId) + "  AND gps_speed != 'NaN'"), getDrivingAvgByInterval("gps_speed", "1 day"), getDrivingAvgByInterval("gps_speed", "7 day"), getDrivingAvgByInterval("gps_speed", "1 month")]
 
+def getAverageAlt(tripStartId):
+    """get the average speed in mph for current trip, day, week and month"""    
+    return [getOneResult("SELECT AVG(gps_altitude) FROM driving_stats WHERE id > " + str(tripStartId) + "  AND gps_altitude != 'NaN'"), getDrivingAvgByInterval("gps_altitude", "1 day"), getDrivingAvgByInterval("gps_altitude", "7 day"), getDrivingAvgByInterval("gps_altitude", "1 month")]
 
+def getDrivingTimeByInterval(value, internal):
+    """"for given column and date interval retrieve the calculated value"""
+    return getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= (now() - interval '" + str(internal) + "')")
 
+def getDrivingAvgByInterval(value, internal):
+    """"for given column and date interval retrieve the avg value"""
+    return getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= (now() - interval '" + internal + "') AND " + value + " != 'NaN'")
 
- 
+def getOneResult(query):
+    """get one result row for query"""
+    dBCursor.execute(query)
+    result = dBCursor.fetchone()
+    return result[0]
+
     #SELECT count(*)
     #FROM users
     #WHERE created_at >= (now() - interval '1 month');
         
-     
      #id                          | integer                     | not null default nextval('driving_stats_id_seq'::regclass)
      #time                        | timestamp without time zone | not null
      #new_trip_start              | timestamp without time zone | 
@@ -101,15 +80,9 @@ def getAverageSpeeds(tripStartId):
     # dBCursor.fetchone()
     # (1, 100, "abc'def")
     
-
     # Miles           10mi
     # Speed (avg.)    23mph
 
-
     # Stats               1 Day       7 days          30 days
     # ------------------------------------------------------------------------------------
-
-    # Speed (avg.)        23mph       35mph           44mph
     # Miles               5.5mi       124mi           600mi
-    # Alt (avg.)          551ft       553ft           556ft
-

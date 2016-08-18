@@ -265,3 +265,6 @@ Add this line
 `@reboot /bin/sleep 60; nohup python /home/pi/XXX >/dev/null 2>&1`
 
 
+remember the "in traffic counter" < 5mph qualifies
+also summarize it
+
