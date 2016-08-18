@@ -4,6 +4,19 @@
 import time, json, string, cgi, subprocess, os
 import includes.settings as settings
 
+def displayHumanReadableTime(seconds, granularity=3):
+    """display human readable units of time for given seconds"""
+    intervals = (('days', 86400),('hrs', 3600),('min', 60),)
+    result = []
+    for name, count in intervals:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            if value == 1:
+                name = name.rstrip('s')
+            result.append("{} {}".format(value, name))
+    return ', '.join(result[:granularity])
+    
 def getJSONFromDataFile(fileName):
     """get JSON contents from file in question"""
     with open(settings.logFilesLocation + fileName) as locationFile:    
