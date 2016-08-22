@@ -266,3 +266,6 @@ Add the following lines
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 
+### Get the screen program working in desktop view
+sudo apt-get install python-tk
+sudo pip install tkinterhtml

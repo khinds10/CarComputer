@@ -1,10 +1,11 @@
 {
-    "apparentTemperature": 86.01, 
-    "humidity": 0.44, 
-    "icon": "clear-day", 
+    "apparentTemperature": 82.27, 
+    "humidity": 0.5, 
+    "icon": "partly-cloudy-day", 
+    "nextHour": "Partly cloudy for the hour.", 
     "precipIntensity": 0.0, 
     "precipProbability": 0.0, 
-    "summary": "Clear", 
-    "time": 1471291112, 
-    "windSpeed": 3.36
+    "summary": "Partly Cloudy", 
+    "time": 1471725720, 
+    "windSpeed": 8.75
 }

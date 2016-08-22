@@ -9,6 +9,7 @@ class WeatherDetails:
     '''Weather Information as class to persist as JSON information to file'''
     time = 0
     summary = 0
+    nextHour = ''
     icon = 0
     apparentTemperature = 0
     humidity = 0
@@ -25,15 +26,18 @@ while True:
     try:
         # get current location from GPS
         currentLocationInfo = data.getCurrentLatLong()
-                    
+        
         # get current forecast from location
         weatherInfo = json.loads(subprocess.check_output(['curl', 'https://api.forecast.io/forecast/' + settings.weatherAPIKey + '/' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude']) + '?lang=en']))
+        
+        hourlyConditions = weatherInfo['minutely']
         currentConditions = weatherInfo['currently']
         
         # gather info in serializable object to store as JSON file
         weatherDetails = WeatherDetails()
         weatherDetails.time = int(currentConditions['time'])
         weatherDetails.summary = str(currentConditions['summary'])
+        weatherDetails.nextHour = str(hourlyConditions['summary'])
         weatherDetails.icon = str(currentConditions['icon'])
         weatherDetails.apparentTemperature = float(currentConditions['apparentTemperature'])
         weatherDetails.humidity = float(currentConditions['humidity'])
