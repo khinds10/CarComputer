@@ -1,0 +1,29 @@
+body {
+    background-color: black; 
+    color: white; 
+    font-family: 'Courier New', Courier, monospace; 
+    font-size: 18px; 
+    font-weight: bold;
+}
+
+#wrap {
+    width:790px;
+    margin:0 auto;
+}
+
+#left_col {
+    height: 270px;
+    float:left;
+    width:400px;
+}
+
+#right_col {
+    float:right;
+    height:270px;
+    width:400px; 
+    font-style:italic;
+}
+
+#stats {
+    font-size: 22px;
+}

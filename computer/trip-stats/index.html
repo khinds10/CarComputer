@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Trip Computer</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+  <link rel="stylesheet" href="style.css">
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+    <div id="wrap">
+        <div id="left_col">
+            <h1 style="margin: 0; padding: 0; display:inline;"><span id="time">--</span></h1> 
+            <h2 style="margin: 0; padding: 0; display:inline;">[<span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%]</h2>
+            <h2 style="margin: 0; padding: 0; color: #999;">In: <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%</h2> 
+            <h3>Heading: <span style="color: #FFF4AD;"><span id="tracking">--</span></span> <br/><span style="color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;Alt.<span id="altitude">--</span> ft</span></h3>
+            <div id="stats">
+                Driving&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#FFF4AD; font-weight: bolder;"><span id="drivingTime">--</span></span> 
+                <br/>Miles&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#BBEDFF;">-- mi</span>
+                <br/>Speed (avg.)&nbsp;&nbsp;&nbsp;<span style="color:#D6FFBB;"><span id="averageSpeed">--</span> mph</span>
+                <br/>In Traffic: &nbsp;&nbsp;&nbsp;<span style="color:#FFD5BB;"><span id="inTrafficTime">--</span></span>
+            </div>
+        </div>
+        <div>
+            <br/>
+            <span id="weatherSummary">--</span> / <span id="windSpeed">--</span> mph<br/>
+            Precip: <span id="precipProbability">--</span>% / Intensity: <span id="precipIntensity">--</span><br/><br/>
+            <span id="weatherNextHour">--</span><br/><br/>
+            <span id="localeInfo">--</span><br/>
+            <br/><br/><span style="color: #FFF4AD"><span id="phoneMessage"></span></span>
+        </div>    
+        <table style="width:100%;">
+          <tr>
+            <th></th>
+            <th style="text-align: left; color: #999;">1 Day</th>
+            <th style="text-align: left; color: #999;">7 Days</th>
+            <th style="text-align: left; color: #999;">30 Days</th>
+          </tr>
+          <tr>
+            <td>Driving</td>
+            <td><span id="drivingTimes1">--</span></td>
+            <td><span id="drivingTimes2">--</span></td>
+            <td><span id="drivingTimes3">--</span></td>
+          </tr>
+          <tr>
+            <td>Traffic</td>
+            <td><span id="inTrafficTimes1">--</span></td>
+            <td><span id="inTrafficTimes2">--</span></td>
+            <td><span id="inTrafficTimes3">--</span></td>
+          </tr>
+          <tr>
+            <td>Speed (avg.)</td>
+            <td><span id="averageSpeeds1">--</span> mph</td>
+            <td><span id="averageSpeeds2">--</span> mph</td>
+            <td><span id="averageSpeeds3">--</span> mph</td>
+          </tr>
+          <tr>
+            <td>Miles</td>
+            <td>-- mi</td>
+            <td>-- mi</td>
+            <td>-- mi</td>
+          </tr>
+          <tr>
+            <td>Alt (avg.)</td>
+            <td><span id="averageAltitude1">--</span> ft</td>
+            <td><span id="averageAltitude2">--</span> ft</td>
+            <td><span id="averageAltitude3">--</span> ft</td>
+          </tr>
+        </table>
+    </div>
+  <script src="jquery.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          setInterval(function(){
+            $.get( "http://localhost/computer/TripStats.py", function( data ) {
+                var data = JSON.parse(data);
+                console.log(data);
+                
+                // populate all the fields with data
+                $( "#time" ).html( data.time );
+                $( "#outsideTemp" ).html( data.outsideTemp );
+                $( "#insideHumidity" ).html( data.insideHumidity );            
+                $( "#insideTemp" ).html( data.insideTemp );
+                $( "#localeInfo" ).html( data.localeInfo );
+                $( "#outsideHumidity" ).html( data.outsideHumidity );
+                $( "#precipIntensity" ).html( data.precipIntensity );
+                $( "#precipProbability" ).html( data.precipProbability );
+                $( "#tracking" ).html( data.tracking );
+                $( "#weatherNextHour" ).html( data.weatherNextHour );
+                $( "#weatherSummary" ).html( data.weatherSummary );
+                $( "#windSpeed" ).html( data.windSpeed );
+                $( "#altitude" ).html( data.altitude );
+                $( "#averageSpeed" ).html( data.averageSpeed );
+                $( "#drivingTime" ).html( data.drivingTime );
+                $( "#inTrafficTime" ).html( data.inTrafficTime ); 
+                
+                // populate altitude history
+                $( "#averageAltitude1" ).html( data.averageAltitude[1] );
+                $( "#averageAltitude2" ).html( data.averageAltitude[2] );
+                $( "#averageAltitude3" ).html( data.averageAltitude[3] );
+            
+                // populate speed history
+                $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
+                $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
+                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );       
+                
+                // populate driving times
+                $( "#drivingTimes1" ).html( data.drivingTimes[1] );
+                $( "#drivingTimes2" ).html( data.drivingTimes[2] );
+                $( "#drivingTimes3" ).html( data.drivingTimes[3] );
+
+                // populate traffic times
+                $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
+                $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
+                $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
+                
+                // show phone message if one is present
+                if (data.phoneMessage != '') {
+                    $( "#phoneMessage" ).html( "<span style='color:#729fcf;'>Phone Message:</span> <br/>" + data.phoneMessage );                
+                } else {
+                    $( "#phoneMessage" ).html( "" );                
+                }
+            });
+          }, 1000);
+      });
+  </script>
+</body>
+</html>
