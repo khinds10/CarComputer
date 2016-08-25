@@ -267,5 +267,9 @@ Add the following lines
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 
 ### Get the screen program working in desktop view
-sudo apt-get install python-tk
-sudo pip install tkinterhtml
+
+sudo vi /etc/kbd/config
+BLANK_TIME=0
+
+vi .config/lxsession/LXDE-pi/autostart
+epiphany-browser -a --profile ~/.config file:///home/pi/CarComputer/computer/trip-stats/index.html
