@@ -50,4 +50,5 @@ while True:
         time.sleep(60)
     except (Exception):
         # data issue, wait 5 seconds
+        data.saveJSONObjToFile('stats.data', drivingStatistics)
         time.sleep(5)
