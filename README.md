@@ -266,10 +266,72 @@ Add the following lines
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 
-### Get the screen program working in desktop view
 
-sudo vi /etc/kbd/config
+###Install the local driving statistics website [http://localhost]
+
+`sudo apt-get update && sudo apt-get upgrade -y`
+
+`sudo apt-get install apache2`
+
+Enable Python CGI Scripting from our own project in http://localhost
+
+`sudo vi /etc/apache2/sites-enabled/000-default.conf`
+
+**Change to the following**
+
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    <Directory /var/www/html>
+        Options +ExecCGI
+        AddHandler cgi-script .py
+    </Directory>
+</VirtualHost>
+
+### Add the symlink to the project in the Apache2 webroot
+
+`cd /var/www/`
+`sudo chmod 777 html`
+`cd /var/www/html`
+`ln -s /home/pi/CarComputer/computer/`
+`cd /home/pi/CarComputer/computer/`
+`chmod +x *.py`
+`sudo a2enmod cgi`
+`sudo service apache2 restart`
+
+You can now visit the local HTTP site to get driving data [http://localhost/computer/TripStats.py]
+
+### Get the small HDMI screen program working in desktop view
+
+Disable Xsession from blanking
+
+`sudo vi /etc/kbd/config`
 BLANK_TIME=0
 
-vi .config/lxsession/LXDE-pi/autostart
-epiphany-browser -a --profile ~/.config file:///home/pi/CarComputer/computer/trip-stats/index.html
+`sudo vi /etc/xdg/lxsession/LXDE/autostart`
+remove
+> @xscreensaver -no-splash
+    
+add: 
+> @xset s noblank
+> @xset s off
+> @xset -dpms
+
+Add the default browser to run in kiosk mode on system startup
+
+`vi ~/.config/lxsession/LXDE-pi/autostart`
+
+add the line
+> @epiphany-browser -a --profile /home/pi/.config http://localhost/computer/trip-stats/
+
+remove the screensave line
+> @xscreensaver -no-splash
+
+Update for HDMI to run in 800x480
+
+`/boot/config.txt`
+
+add the following line:
+`hdmi_cvt=800 480 60 6 0 0 0`
