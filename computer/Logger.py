@@ -10,9 +10,12 @@ while True:
 
     # if all data files are set, then begin to log
     if data.checkFileExists('location.data') and data.checkFileExists('locale.data') and data.checkFileExists('temp.data') and data.checkFileExists('weather.data'):
-        locationInfo = data.getJSONFromDataFile('location.data')
-        localeInfo = data.getJSONFromDataFile('locale.data')
-        tempInfo = data.getJSONFromDataFile('temp.data')
-        weatherInfo = data.getJSONFromDataFile('weather.data')
-        postgres.saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo)    
+        try:
+            locationInfo = data.getJSONFromDataFile('location.data')
+            localeInfo = data.getJSONFromDataFile('locale.data')
+            tempInfo = data.getJSONFromDataFile('temp.data')
+            weatherInfo = data.getJSONFromDataFile('weather.data')
+            postgres.saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo)    
+        except (Exception):
+            pass
     time.sleep(1)
