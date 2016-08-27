@@ -52,8 +52,6 @@ while True:
         # get current heading by track
         tracking = str(data.getHeadingByDegrees(int(completeLocationInfo["track"])))
         
-        tracking = 'NNE'
-        
         # get tracking symbol from direction
         if tracking == 'N' or tracking == 'NNE' or tracking == 'NNW':
             trackingSymbol = '\x05'
