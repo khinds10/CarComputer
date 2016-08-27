@@ -169,15 +169,25 @@ Make sure the command is working
 
 `cgps -s`
 
-Make sure the GPS unit is setup to connect via USB connection
-
-`sudo gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock`
+For testing force your USB device to connect to gpsd
 
 `sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock`
 
 `sudo systemctl stop gpsd.socket`
 
 `sudo killall gpsd`
+
+`sudo dpkg-reconfigure gpsd`
+
+`sudo vi /etc/default/gpsd`
+
+> # Default settings for gpsd.
+> START_DAEMON="false"
+> GPSD_OPTIONS="-n"
+> DEVICES="/dev/ttyUSB0"
+> USBAUTO="false"
+> GPSD_SOCKET="/var/run/gpsd.sock"
+
 
 Verify all connected USB devices
 
@@ -258,7 +268,7 @@ Run the following queries:
 
 Add the following lines 
 
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Display.py > /home/pi/CarComputer/computer/Display.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
@@ -266,6 +276,15 @@ Add the following lines
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 
+###Hack required to get GPSD working with USB connection on reboot
+
+`sudo su`
+
+`crontab -e`
+
+# m h  dom mon dow   command
+@reboot /bin/sleep 10; killall gpsd
+@reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
 
 ###Install the local driving statistics website [http://localhost]
 
@@ -335,3 +354,4 @@ Update for HDMI to run in 800x480
 
 add the following line:
 `hdmi_cvt=800 480 60 6 0 0 0`
+
