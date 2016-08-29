@@ -63,8 +63,11 @@ if __name__ == '__main__':
 
             # convert to imperial units
             gpsInfo.altitude = float(gpsd.fix.altitude * 3.2808)
-            #gpsInfo.speed = float(gpsd.fix.speed * 0.621371)
+            
+            # correct for bad speed value on the device?
             gpsInfo.speed = float(gpsd.fix.speed)
+            if (gpsInfo.speed > 5):
+                gpsInfo.speed = gpsInfo.speed * 2.25
             gpsInfo.climb = float(gpsd.fix.climb * 3.2808)
 
             # create or rewrite data to GPS location data file as JSON
