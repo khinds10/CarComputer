@@ -17,10 +17,12 @@ class TripStatistics:
     insideHumidity = ''
     tracking = ''
     altitude = ''
+    speed = ''
     drivingTime = ''
     averageSpeed = ''
     inTrafficTime = ''
     weatherSummary = ''
+    icon = ''
     windSpeed = ''
     precipProbability = ''
     precipIntensity = ''
@@ -73,7 +75,9 @@ try:
     tripStatistics.outsideHumidity = str(int(weatherInfo['humidity']*100))
     tripStatistics.tracking = str(data.getHeadingByDegrees(locationInfo['track']))
     tripStatistics.altitude = str(int(locationInfo['altitude']))
+    tripStatistics.speed = str(int(locationInfo['speed']))
     tripStatistics.weatherSummary = str(weatherInfo['summary'])
+    tripStatistics.icon = str(weatherInfo['icon'])
     tripStatistics.windSpeed = str(int(weatherInfo['windSpeed']))
     tripStatistics.precipProbability = str(int(weatherInfo['precipProbability']*100))
     tripStatistics.precipIntensity = str(int(weatherInfo['precipIntensity']*100))

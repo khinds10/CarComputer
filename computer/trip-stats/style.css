@@ -6,24 +6,56 @@ body {
     font-weight: bold;
 }
 
+h1, h2 {
+    margin: 0; padding: 0; display:inline;
+}
+
 #wrap {
     width:790px;
     margin:0 auto;
 }
 
 #left_col {
-    height: 270px;
+    height: 250px;
     float:left;
     width:400px;
 }
 
 #right_col {
     float:right;
-    height:270px;
+    height:250px;
     width:400px; 
     font-style:italic;
 }
 
 #stats {
     font-size: 22px;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #999;
+    margin: 1em 0;
+    padding: 0; 
+}
+
+#phoneMessage {
+    min-height: 80px;
+    max-height: 80px;
+    overflow: hidden;
+}
+
+#compass {
+    min-height: 80px; 
+    width:80px; 
+    padding-top: 10px; 
+    border: 0;
+}
+
+#weatherIcon {
+    height: 40px; 
+    padding-top: 10px; 
+    border: 0;
 }

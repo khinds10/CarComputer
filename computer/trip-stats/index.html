@@ -13,28 +13,54 @@
 <body>
     <div id="wrap">
         <div id="left_col">
-            <h1 style="margin: 0; padding: 0; display:inline;"><span id="time">--</span></h1> 
-            <h2 style="margin: 0; padding: 0; display:inline;">[<span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%]</h2>
-            <h2 style="margin: 0; padding: 0; color: #999;">In: <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%</h2> 
-            <h3>Heading: <span style="color: #FFF4AD;"><span id="tracking">--</span></span> <br/><span style="color: #999;">&nbsp;&nbsp;&nbsp;&nbsp;Alt.<span id="altitude">--</span> ft</span></h3>
-            <div id="stats">
-                Driving&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#FFF4AD; font-weight: bolder;"><span id="drivingTime">--</span></span> 
-                <br/>Miles&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#BBEDFF;">-- mi</span>
-                <br/>Speed (avg.)&nbsp;&nbsp;&nbsp;<span style="color:#D6FFBB;"><span id="averageSpeed">--</span> mph</span>
-                <br/>In Traffic: &nbsp;&nbsp;&nbsp;<span style="color:#FFD5BB;"><span id="inTrafficTime">--</span></span>
-            </div>
+            <h1><span id="time">--</span></h1> 
+            <h2 style="color:#FFD5BB;">[<span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%]</h2>
+            <h2 style="color:#CDD9F2;">Inside <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%</h2> 
+            <table style="width:100%;">
+                  <tr>
+                    <td>
+                        <h3>
+                            Heading: <span style="color: #FFF4AD;"><span id="tracking">--</span></span> <br/>
+                            <img id="compass"/><br/>
+                            <div style="color: #7C8FB3;">Alt. <span id="altitude">--</span> ft</div>
+                            <div style="color: #92B37C;">Speed <span id="speed">--</span> mph</div>            
+                        </h3>
+                    </td>
+                    <td>
+                    <table>
+                      <tr>
+                        <td>Driving</th>
+                        <td><span style="color:#FFF4AD;"><span id="drivingTime">--</span></th>
+                      </tr>
+                      <tr>
+                        <td>Miles</td>
+                        <td><span style="color:#BBEDFF;">-- mi</span></td>
+                      </tr>
+                      <tr>
+                        <td>Speed(avg)</td>
+                        <td><span style="color:#92B37C;"><span id="averageSpeed">--</span> mph</span></td>
+                      </tr>
+                      <tr>
+                        <td>Traffic:</td>
+                        <td><span style="color:#FFD5BB;"><span id="inTrafficTime">--</span></span></td>
+                      </tr>
+                    </table>
+                    </td>
+                  </tr>
+            </table>
         </div>
         <div>
-            <br/>
-            <span id="weatherSummary">--</span> / <span id="windSpeed">--</span> mph<br/>
-            Precip: <span id="precipProbability">--</span>% / Intensity: <span id="precipIntensity">--</span><br/><br/>
+            <img id="weatherIcon"/>
+            <span id="weatherSummary">--</span> - <span id="windSpeed">--</span> mph<br/>
+            Precip: <span id="precipProbability">--</span>% - Intensity: <span id="precipIntensity">--</span><br/><br/>
             <span id="weatherNextHour">--</span><br/><br/>
             <span id="localeInfo">--</span><br/>
-            <br/><br/><span style="color: #FFF4AD"><span id="phoneMessage"></span></span>
-        </div>    
+            <br/><br/><span style="color: #FFF4AD"><div id="phoneMessage"></div></span>
+        </div> 
+        <hr style="clear:both;"/>
         <table style="width:100%;">
           <tr>
-            <th></th>
+            <th>Statistics</th>
             <th style="text-align: left; color: #999;">1 Day</th>
             <th style="text-align: left; color: #999;">7 Days</th>
             <th style="text-align: left; color: #999;">30 Days</th>
@@ -52,7 +78,7 @@
             <td><span id="inTrafficTimes3">--</span></td>
           </tr>
           <tr>
-            <td>Speed (avg.)</td>
+            <td>Speed (avg)</td>
             <td><span id="averageSpeeds1">--</span> mph</td>
             <td><span id="averageSpeeds2">--</span> mph</td>
             <td><span id="averageSpeeds3">--</span> mph</td>
@@ -64,7 +90,7 @@
             <td>-- mi</td>
           </tr>
           <tr>
-            <td>Alt (avg.)</td>
+            <td>Alt (avg)</td>
             <td><span id="averageAltitude1">--</span> ft</td>
             <td><span id="averageAltitude2">--</span> ft</td>
             <td><span id="averageAltitude3">--</span> ft</td>
@@ -89,10 +115,15 @@
                 $( "#precipIntensity" ).html( data.precipIntensity );
                 $( "#precipProbability" ).html( data.precipProbability );
                 $( "#tracking" ).html( data.tracking );
+                $( "#compass" ).attr('src', '/computer/trip-stats/img/compass/' + data.tracking + '.png'  );
+
                 $( "#weatherNextHour" ).html( data.weatherNextHour );
                 $( "#weatherSummary" ).html( data.weatherSummary );
+                $( "#weatherIcon" ).attr('src', '/computer/trip-stats/img/weather/' + data.icon + '.png'  );                
                 $( "#windSpeed" ).html( data.windSpeed );
                 $( "#altitude" ).html( data.altitude );
+                $( "#speed" ).html( data.speed );
+                
                 $( "#averageSpeed" ).html( data.averageSpeed );
                 $( "#drivingTime" ).html( data.drivingTime );
                 $( "#inTrafficTime" ).html( data.inTrafficTime ); 
@@ -105,7 +136,7 @@
                 // populate speed history
                 $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
                 $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
-                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );       
+                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
                 
                 // populate driving times
                 $( "#drivingTimes1" ).html( data.drivingTimes[1] );
