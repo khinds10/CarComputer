@@ -9,6 +9,7 @@ class DrivingStatistics:
     """Overall Driving Statistics to save as class to persist as JSON information to file"""
     drivingTimes = []
     inTrafficTimes = []
+    milesTravelled = []
     averageSpeeds = []
     averageAltitude = []
     def to_JSON(self):
@@ -20,6 +21,10 @@ thisTripStartID = postgres.getNewTripStartID()
 def convertHumanReadable(seconds):
     """return days,hours,seconds for seconds in readable form"""
     return data.displayHumanReadableTime(seconds)
+
+def convertNumberHumanReadable(miles):
+    """get the number of miles with comma separation"""
+    return ("{:,.0f} mi".format(miles))
 
 def convertToInt(integer):
     """convert to integer catch for NoneTypes"""
@@ -42,6 +47,7 @@ while True:
         drivingStatistics = DrivingStatistics()
         drivingStatistics.drivingTimes = map(convertHumanReadable, postgres.getDrivingTimes(thisTripStartID))
         drivingStatistics.inTrafficTimes = map(convertHumanReadable, postgres.getInTrafficTimes(thisTripStartID))
+        drivingStatistics.milesTravelled =  map(convertNumberHumanReadable, postgres.getMileageAmounts(thisTripStartID))
         drivingStatistics.averageSpeeds = map(convertToString, map(convertToInt, postgres.getAverageSpeeds(thisTripStartID)))
         drivingStatistics.averageAltitude = map(convertToString, map(convertToInt, postgres.getAverageAlt(thisTripStartID)))
 

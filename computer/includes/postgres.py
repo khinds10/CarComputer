@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # postgres save driving stats from local data objects
 import time, commands, subprocess, re, psycopg2
+from datetime import datetime
 
 # postgresql connection
 postgresConn = psycopg2.connect(database="driving_statistics", user="pi", password="password", host="127.0.0.1", port="5432")
@@ -28,9 +29,15 @@ def getInTrafficTimes(tripStartId):
     """get the driving times for current trip, day, week and month"""
     return [getOneResult("SELECT count(id) FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND id > " + str(tripStartId)), getTrafficTimeByInterval("count(id)", "1 day"), getTrafficTimeByInterval("count(id)", "7 day"), getTrafficTimeByInterval("count(id)", "1 month")]
 
-def getTrafficTimeByInterval(value, internal):
-    """"for given column and date interval retrieve the calculated value"""
-    return getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= (now() - interval '" + str(internal) + "')")
+def getTrafficTimeByInterval(value, interval):
+    """for given column and date interval retrieve the calculated value"""
+    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
+    if (interval == '1 day'):
+        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')        
+        result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= '" + morningTime + "'") 
+    else:
+        result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= (now() - interval '" + str(interval) + "')")
+    return result
 
 def getAverageSpeeds(tripStartId):
     """get the average speed in mph for current trip, day, week and month"""    
@@ -40,13 +47,64 @@ def getAverageAlt(tripStartId):
     """get the average speed in mph for current trip, day, week and month"""    
     return [getOneResult("SELECT AVG(gps_altitude) FROM driving_stats WHERE id > " + str(tripStartId) + "  AND gps_altitude != 'NaN'"), getDrivingAvgByInterval("gps_altitude", "1 day"), getDrivingAvgByInterval("gps_altitude", "7 day"), getDrivingAvgByInterval("gps_altitude", "1 month")]
 
-def getDrivingTimeByInterval(value, internal):
+def getDrivingTimeByInterval(value, interval):
     """"for given column and date interval retrieve the calculated value"""
-    return getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= (now() - interval '" + str(internal) + "')")
+    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
+    if (interval == '1 day'):
+        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= '" + morningTime + "'") 
+    else:
+        result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= (now() - interval '" + str(interval) + "')") 
+    return result
 
-def getDrivingAvgByInterval(value, internal):
-    """"for given column and date interval retrieve the avg value"""
-    return getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= (now() - interval '" + internal + "') AND " + value + " != 'NaN'")
+def getDrivingAvgByInterval(value, interval):
+    """for given column and date interval retrieve the avg value"""
+    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
+    if (interval == '1 day'):
+        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= '" + morningTime + "' AND " + value + " != 'NaN'")
+    else:
+        getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= (now() - interval '" + interval + "') AND " + value + " != 'NaN'")
+
+def getMilesForInterval(interval):
+    """"for given interval get the amount of miles travelled"""
+    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
+    if (interval == '1 day'):
+        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        pointsInTrip = getAllResults("SELECT gps_latitude, gps_longitude FROM driving_stats WHERE gps_latitude IS NOT NULL AND gps_longitude IS NOT NULL AND time >= '" + morningTime + "'")
+    else:
+        pointsInTrip = getAllResults("SELECT gps_latitude, gps_longitude FROM driving_stats WHERE gps_latitude IS NOT NULL AND gps_longitude IS NOT NULL AND time >= (now() - interval '" + str(interval) + "');")
+    return getMilesForPoints(pointsInTrip)
+
+def getMileageAmounts(tripStartId):
+    """get the driving milage amounts for current trip, day, week and month"""
+    postgresConn.set_isolation_level(0)
+    return [getMilesForPoints(getAllResults("SELECT gps_latitude, gps_longitude FROM driving_stats WHERE id > " + str(tripStartId))), getMilesForInterval('1 day'), getMilesForInterval('7 day'), getMilesForInterval('30 day')]
+
+def getMilesForPoints(points):
+    """add up all the miles along the points"""
+    metersTravelled = 0
+    pointPosition = 0
+    for point in points:
+        try:
+            startingPoint = points[pointPosition]
+            endingPoint = points[pointPosition+1]
+            pointPosition = pointPosition + 1
+            metersTravelled = metersTravelled + getDistanceBetweenPoints(startingPoint, endingPoint)
+        except (Exception):
+            pass
+    milesTravelled = metersTravelled * 0.000621371
+    return int(milesTravelled)
+
+def getDistanceBetweenPoints(startPoint, endPoint):
+    """for a set of 2 latitude/longitude points, get the distance in meters between them"""
+    return getOneResult("SELECT ST_Distance(ST_Transform(ST_GeomFromText('POINT(" + str(startPoint[0]) + " " + str(startPoint[1]) + ")',4326),26986),ST_Transform(ST_GeomFromText('POINT(" + str(endPoint[0]) + " " + str(endPoint[1]) + ")',4326),26986))")
+
+def getAllResults(query):
+    """get results rows for query"""
+    dBCursor.execute(query)
+    results = dBCursor.fetchall()
+    return results
 
 def getOneResult(query):
     """get one result row for query"""

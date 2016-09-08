@@ -34,7 +34,7 @@
                       </tr>
                       <tr>
                         <td>Miles</td>
-                        <td><span style="color:#BBEDFF;">-- mi</span></td>
+                        <td><span style="color:#BBEDFF;"><span id="currentTripTime">--</span></span></td>
                       </tr>
                       <tr>
                         <td>Speed(avg)</td>
@@ -61,9 +61,9 @@
         <table style="width:100%;">
           <tr>
             <th>Statistics</th>
-            <th style="text-align: left; color: #999;">1 Day</th>
-            <th style="text-align: left; color: #999;">7 Days</th>
-            <th style="text-align: left; color: #999;">30 Days</th>
+            <th style="text-align: left; color: #999;">Today</th>
+            <th style="text-align: left; color: #999;">Week</th>
+            <th style="text-align: left; color: #999;">Month</th>
           </tr>
           <tr>
             <td>Driving</td>
@@ -85,9 +85,9 @@
           </tr>
           <tr>
             <td>Miles</td>
-            <td>-- mi</td>
-            <td>-- mi</td>
-            <td>-- mi</td>
+            <td><span id="milesTravelled1">--</span></td>
+            <td><span id="milesTravelled2">--</span></td>
+            <td><span id="milesTravelled3">--</span></td>
           </tr>
           <tr>
             <td>Alt (avg)</td>
@@ -124,10 +124,12 @@
                 $( "#altitude" ).html( data.altitude );
                 $( "#speed" ).html( data.speed );
                 
+                // current trip stats
                 $( "#averageSpeed" ).html( data.averageSpeed );
                 $( "#drivingTime" ).html( data.drivingTime );
-                $( "#inTrafficTime" ).html( data.inTrafficTime ); 
-                
+                $( "#inTrafficTime" ).html( data.inTrafficTime );
+                $( "#currentTripTime" ).html( data.tripMilesTravelled ); 
+                 
                 // populate altitude history
                 $( "#averageAltitude1" ).html( data.averageAltitude[1] );
                 $( "#averageAltitude2" ).html( data.averageAltitude[2] );
@@ -147,6 +149,11 @@
                 $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
                 $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
                 $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
+                
+                // populate miles travelled
+                $( "#milesTravelled1" ).html( data.milesTravelled[1] );
+                $( "#milesTravelled2" ).html( data.milesTravelled[2] );
+                $( "#milesTravelled3" ).html( data.milesTravelled[3] );
                 
                 // show phone message if one is present
                 if (data.phoneMessage != '') {

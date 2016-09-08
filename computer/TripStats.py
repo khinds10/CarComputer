@@ -70,6 +70,8 @@ try:
     tripStatistics.inTrafficTimes = drivingStats['inTrafficTimes']
     tripStatistics.averageSpeeds = drivingStats['averageSpeeds']
     tripStatistics.averageAltitude = drivingStats['averageAltitude']
+    tripStatistics.tripMilesTravelled = str(drivingStats['milesTravelled'][0])
+    tripStatistics.milesTravelled = drivingStats['milesTravelled']
     tripStatistics.phoneMessage = str(message)
     tripStatistics.outsideTemp = str(int(weatherInfo['apparentTemperature']))
     tripStatistics.outsideHumidity = str(int(weatherInfo['humidity']*100))

@@ -268,13 +268,14 @@ Run the following queries:
 
 Add the following lines 
 
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Display.py > /home/pi/CarComputer/computer/Display.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Display.py > /home/pi/CarComputer/computer/Display.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Buttons.py > /home/pi/CarComputer/computer/Buttons.log 2>&1`
 
 ###Hack required to get GPSD working with USB connection on reboot
 
@@ -354,4 +355,3 @@ Update for HDMI to run in 800x480
 
 add the following line:
 `hdmi_cvt=800 480 60 6 0 0 0`
-
