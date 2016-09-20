@@ -47,7 +47,9 @@ while True:
         drivingStatistics = DrivingStatistics()
         drivingStatistics.drivingTimes = map(convertHumanReadable, postgres.getDrivingTimes(thisTripStartID))
         drivingStatistics.inTrafficTimes = map(convertHumanReadable, postgres.getInTrafficTimes(thisTripStartID))
-        drivingStatistics.milesTravelled =  map(convertNumberHumanReadable, postgres.getMileageAmounts(thisTripStartID))
+        
+        # todo, get the miles working as separate process, postgis is very expensive
+        drivingStatistics.milesTravelled =  map(convertNumberHumanReadable, [0, 0, 0, 0])
         drivingStatistics.averageSpeeds = map(convertToString, map(convertToInt, postgres.getAverageSpeeds(thisTripStartID)))
         drivingStatistics.averageAltitude = map(convertToString, map(convertToInt, postgres.getAverageAlt(thisTripStartID)))
 

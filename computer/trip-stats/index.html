@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <title>Trip Computer</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
+  <meta name="description" content="Trip Computer">
+  <meta name="author" content="Kevin Hinds">
   <link rel="stylesheet" href="style.css">
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -12,96 +12,108 @@
 </head>
 <body>
     <div id="wrap">
-        <div id="left_col">
-            <h1><span id="time">--</span></h1> 
-            <h2 style="color:#FFD5BB;">[<span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%]</h2>
-            <h2 style="color:#CDD9F2;">Inside <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%</h2> 
+            <h1 style="margin-bottom:10px;"><span id="time">--</span></h1> 
+            <span style="padding-left: 80px;">
+                <h3 style="color:#FFD5BB;"><span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%</h3>
+                <h3 style="color:#CDD9F2;">[In <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%]</h3> 
+            </span>
             <table style="width:100%;">
                   <tr>
                     <td>
-                        <h3>
+                        <h3><br/>
                             Heading: <span style="color: #FFF4AD;"><span id="tracking">--</span></span> <br/>
                             <img id="compass"/><br/>
-                            <div style="color: #7C8FB3;">Alt. <span id="altitude">--</span> ft</div>
+                            <div style="color: #7C8FB3; ">Alt. <span id="altitude">--</span> ft</div>
                             <div style="color: #92B37C;">Speed <span id="speed">--</span> mph</div>            
                         </h3>
                     </td>
                     <td>
-                    <table>
+                    <table id="current-trip-info">
                       <tr>
                         <td>Driving</th>
                         <td><span style="color:#FFF4AD;"><span id="drivingTime">--</span></th>
                       </tr>
-                      <tr>
+                      <!--tr>
                         <td>Miles</td>
                         <td><span style="color:#BBEDFF;"><span id="currentTripTime">--</span></span></td>
+                      </tr-->
+                      <tr>
+                        <td>Traffic</td>
+                        <td><span style="color:#FFD5BB;"><span id="inTrafficTime">--</span></span></td>
                       </tr>
                       <tr>
                         <td>Speed(avg)</td>
                         <td><span style="color:#92B37C;"><span id="averageSpeed">--</span> mph</span></td>
                       </tr>
-                      <tr>
-                        <td>Traffic:</td>
-                        <td><span style="color:#FFD5BB;"><span id="inTrafficTime">--</span></span></td>
+                     <tr>
+                        <td colspan='2'><br/><span id="weatherNextHour" style="color: #999; font-size: 25px;">--</span></td>
                       </tr>
                     </table>
                     </td>
                   </tr>
             </table>
-        </div>
-        <div>
+            <span style="color: #FFF4AD; float:right; text-align:right;"><div id="phoneMessage"></div></span>
+            
+        <!-- weather info to be mapped to the hardware button -->            
+        <div id="weather-stats-info" style="display:none;">
             <img id="weatherIcon"/>
             <span id="weatherSummary">--</span> - <span id="windSpeed">--</span> mph<br/>
             Precip: <span id="precipProbability">--</span>% - Intensity: <span id="precipIntensity">--</span><br/><br/>
-            <span id="weatherNextHour">--</span><br/><br/>
+           <br/><br/>
             <span id="localeInfo">--</span><br/>
-            <br/><br/><span style="color: #FFF4AD"><div id="phoneMessage"></div></span>
+            <br/><br/>
         </div> 
-        <hr style="clear:both;"/>
-        <table style="width:100%;">
-          <tr>
-            <th>Statistics</th>
-            <th style="text-align: left; color: #999;">Today</th>
-            <th style="text-align: left; color: #999;">Week</th>
-            <th style="text-align: left; color: #999;">Month</th>
-          </tr>
-          <tr>
-            <td>Driving</td>
-            <td><span id="drivingTimes1">--</span></td>
-            <td><span id="drivingTimes2">--</span></td>
-            <td><span id="drivingTimes3">--</span></td>
-          </tr>
-          <tr>
-            <td>Traffic</td>
-            <td><span id="inTrafficTimes1">--</span></td>
-            <td><span id="inTrafficTimes2">--</span></td>
-            <td><span id="inTrafficTimes3">--</span></td>
-          </tr>
-          <tr>
-            <td>Speed (avg)</td>
-            <td><span id="averageSpeeds1">--</span> mph</td>
-            <td><span id="averageSpeeds2">--</span> mph</td>
-            <td><span id="averageSpeeds3">--</span> mph</td>
-          </tr>
-          <tr>
-            <td>Miles</td>
-            <td><span id="milesTravelled1">--</span></td>
-            <td><span id="milesTravelled2">--</span></td>
-            <td><span id="milesTravelled3">--</span></td>
-          </tr>
-          <tr>
-            <td>Alt (avg)</td>
-            <td><span id="averageAltitude1">--</span> ft</td>
-            <td><span id="averageAltitude2">--</span> ft</td>
-            <td><span id="averageAltitude3">--</span> ft</td>
-          </tr>
-        </table>
+        
+        <!-- trip status to be mapped to the hardware button -->
+        <div id="trip-stats-table" style="display:none;">
+            
+            <table style="width:100%; display:none;">
+              <tr>
+                <th>Statistics</th>
+                <th style="text-align: left; color: #999;">Today</th>
+                <th style="text-align: left; color: #999;">Week</th>
+                <th style="text-align: left; color: #999;">Month</th>
+              </tr>
+              <tr>
+                <td>Driving</td>
+                <td><span id="drivingTimes1">--</span></td>
+                <td><span id="drivingTimes2">--</span></td>
+                <td><span id="drivingTimes3">--</span></td>
+              </tr>
+              <tr>
+                <td>Traffic</td>
+                <td><span id="inTrafficTimes1">--</span></td>
+                <td><span id="inTrafficTimes2">--</span></td>
+                <td><span id="inTrafficTimes3">--</span></td>
+              </tr>
+              <tr>
+                <td>Speed (avg)</td>
+                <td><span id="averageSpeeds1">--</span> mph</td>
+                <td><span id="averageSpeeds2">--</span> mph</td>
+                <td><span id="averageSpeeds3">--</span> mph</td>
+              </tr>
+              <tr>
+                <td>Miles</td>
+                <td><span id="milesTravelled1">--</span></td>
+                <td><span id="milesTravelled2">--</span></td>
+                <td><span id="milesTravelled3">--</span></td>
+              </tr>
+              <tr>
+                <td>Alt (avg)</td>
+                <td><span id="averageAltitude1">--</span> ft</td>
+                <td><span id="averageAltitude2">--</span> ft</td>
+                <td><span id="averageAltitude3">--</span> ft</td>
+              </tr>
+            </table>
+        </div>
+        
     </div>
+
   <script src="jquery.js"></script>
     <script type="text/javascript">
       $(document).ready(function(){
           setInterval(function(){
-            $.get( "http://localhost/computer/TripStats.py", function( data ) {
+            $.get( "/computer/TripStats.py", function( data ) {
                 var data = JSON.parse(data);
                 console.log(data);
                 
@@ -117,7 +129,7 @@
                 $( "#tracking" ).html( data.tracking );
                 $( "#compass" ).attr('src', '/computer/trip-stats/img/compass/' + data.tracking + '.png'  );
 
-                $( "#weatherNextHour" ).html( data.weatherNextHour );
+                $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
                 $( "#weatherSummary" ).html( data.weatherSummary );
                 $( "#weatherIcon" ).attr('src', '/computer/trip-stats/img/weather/' + data.icon + '.png'  );                
                 $( "#windSpeed" ).html( data.windSpeed );
@@ -157,7 +169,7 @@
                 
                 // show phone message if one is present
                 if (data.phoneMessage != '') {
-                    $( "#phoneMessage" ).html( "<span style='color:#729fcf;'>Phone Message:</span> <br/>" + data.phoneMessage );                
+                    $( "#phoneMessage" ).html( "<span style='color:#729fcf;'>Phone Message</span> <br/>" + data.phoneMessage );                
                 } else {
                     $( "#phoneMessage" ).html( "" );                
                 }

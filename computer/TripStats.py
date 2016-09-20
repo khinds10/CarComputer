@@ -50,10 +50,10 @@ if settings.dashboardServer:
 # get all available info and create HTML output for it
 try: 
     tempInfo = data.getJSONFromDataFile('temp.data')
-    drivingStats = data.getJSONFromDataFile('stats.data')
     locationInfo = data.getJSONFromDataFile('location.data')
     localeInfo = data.getJSONFromDataFile('locale.data')
     weatherInfo = data.getJSONFromDataFile('weather.data')
+    drivingStats = data.getJSONFromDataFile('stats.data')
 except (Exception):
         pass
         

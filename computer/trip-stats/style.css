@@ -2,17 +2,25 @@ body {
     background-color: black; 
     color: white; 
     font-family: 'Courier New', Courier, monospace; 
-    font-size: 18px; 
+    font-size: 28px; 
     font-weight: bold;
 }
 
-h1, h2 {
+table#current-trip-info {
+    font-size: 32px;
+}
+
+h1 {
+    font-size: 50px;
+}
+
+h1, h2, h3 {
     margin: 0; padding: 0; display:inline;
 }
 
 #wrap {
-    width:790px;
-    margin:0 auto;
+    width: 790px;
+    margin: 0 auto;
 }
 
 #left_col {
@@ -48,8 +56,8 @@ hr {
 }
 
 #compass {
-    min-height: 80px; 
-    width:80px; 
+    min-height: 160px; 
+    width:160px; 
     padding-top: 10px; 
     border: 0;
 }
@@ -58,4 +66,8 @@ hr {
     height: 40px; 
     padding-top: 10px; 
     border: 0;
+}
+
+#weatherNextHour {
+    color #999;
 }
