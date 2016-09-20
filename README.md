@@ -330,7 +330,8 @@ Disable Xsession from blanking
 `sudo vi /etc/kbd/config`
 BLANK_TIME=0
 
-`sudo vi /etc/xdg/lxsession/LXDE/autostart`
+`sudo vi /etc/xdg/lxsession/LXDE-pi/autostart`
+
 remove
 > @xscreensaver -no-splash
     
@@ -338,6 +339,14 @@ add:
 > @xset s noblank
 > @xset s off
 > @xset -dpms
+
+
+`sudo vi /etc/lightdm/lightdm.conf`
+
+add the following under SeatDefaults directive
+
+> [SeatDefaults]
+> xserver-command=X -s 0 -dpms
 
 Add the default browser to run in kiosk mode on system startup
 
