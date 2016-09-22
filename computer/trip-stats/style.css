@@ -53,6 +53,8 @@ hr {
     min-height: 80px;
     max-height: 80px;
     overflow: hidden;
+    margin-top:-5px;
+    margin-right:5px;
 }
 
 #compass {

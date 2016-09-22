@@ -13,9 +13,6 @@ gpsd = None
 # start a new trip by inserting the new trip DB entry
 postgres.startNewTrip()
 
-# remove data and start logging GPS
-data.removeJSONFile('location.data')
-
 class GPSInfo:
     '''GPS info as class to persist as JSON information to file'''
     latitude = 0

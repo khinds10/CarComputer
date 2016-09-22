@@ -291,7 +291,7 @@ Add the following lines
 
 `sudo apt-get update && sudo apt-get upgrade -y`
 
-`sudo apt-get install apache2`
+`sudo apt-get install apache2 midori`
 
 Enable Python CGI Scripting from our own project in http://localhost
 
@@ -353,7 +353,7 @@ Add the default browser to run in kiosk mode on system startup
 `vi ~/.config/lxsession/LXDE-pi/autostart`
 
 add the line
-> @epiphany-browser -a --profile /home/pi/.config http://localhost/computer/trip-stats/
+> @midori -e Fullscreen -a http://localhost/computer/trip-stats/
 
 remove the screensave line
 > @xscreensaver -no-splash
