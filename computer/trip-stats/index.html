@@ -13,9 +13,9 @@
 <body>
     <div id="wrap">
             <h1 style="margin-bottom:10px;"><span id="time">--</span></h1> 
-            <span style="padding-left: 80px;">
-                <h3 style="color:#CDD9F2;"><span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%</h3>
-                <h3 style="color:#FFD5BB;">[In <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%]</h3> 
+            <span style="padding-left: 50px;">
+                <h3 style="color:#BBEDFF;"><span id="outsideTemp">--</span>&deg;F / <span id="outsideHumidity">--</span>%</h3>
+                <h3 style="color:#FFD9AD;">[In <span id="insideTemp">--</span>&deg;F / <span id="insideHumidity">--</span>%]</h3> 
             </span>
             <table style="width:100%;">
                   <tr>
@@ -23,8 +23,8 @@
                         <h3><br/>
                             Heading: <span style="color: #FFF4AD;"><span id="tracking">--</span></span> <br/>
                             <img id="compass"/><br/>
-                            <div style="color: #7C8FB3; ">Alt. <span id="altitude">--</span> ft</div>
-                            <div style="color: #83bf54;">Speed <span id="speed">--</span> mph</div>            
+                            <div style="color: #BBEDFF; ">Alt. <span id="altitude">--</span> ft</div>
+                            <div style="color: #BDFFAD;">Speed <span id="speed">--</span> mph</div>            
                         </h3>
                     </td>
                     <td>
@@ -43,16 +43,16 @@
                       </tr>
                       <tr>
                         <td>Speed(avg)</td>
-                        <td><span style="color:#83bf54;"><span id="averageSpeed">--</span> mph</span></td>
+                        <td><span style="color:#BDFFAD;"><span id="averageSpeed">--</span> mph</span></td>
                       </tr>
                      <tr>
-                        <td colspan='2'><br/><span id="weatherNextHour" style="color: #999; font-size: 25px;">--</span></td>
+                        <td colspan='2'><span id="weatherNextHour" style="color: #D0D0D0; font-size: 25px;">clear for the next hour becaus</span></td>
                       </tr>
                     </table>
                     </td>
                   </tr>
             </table>
-            <span style="color: #FFF4AD; float:right; text-align:right;"><div id="phoneMessage"></div></span>
+            <span style="color: #FFF4AD; float:right; text-align:right; margin-right: 8px;"><div id="phoneMessage"><span style='color:#BBEDFF;'>Phone Message</span> <br/>KEVIN KEVIN</div></span>
             
         <!-- weather info to be mapped to the hardware button -->            
         <div id="weather-stats-info" style="display:none;">
@@ -169,7 +169,7 @@
                 
                 // show phone message if one is present
                 if (data.phoneMessage != '') {
-                    $( "#phoneMessage" ).html( "<span style='color:#729fcf;'>Phone Message</span> <br/>" + data.phoneMessage );                
+                    $( "#phoneMessage" ).html( "<span style='color:#BBEDFF;'>Phone Message</span> <br/>" + data.phoneMessage );                
                 } else {
                     $( "#phoneMessage" ).html( "" );                
                 }

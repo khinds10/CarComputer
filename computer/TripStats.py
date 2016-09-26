@@ -72,9 +72,6 @@ try:
     tripStatistics.averageAltitude = drivingStats['averageAltitude']
     tripStatistics.tripMilesTravelled = str(drivingStats['milesTravelled'][0])
     tripStatistics.milesTravelled = drivingStats['milesTravelled']
-    tripStatistics.phoneMessage = str(message)
-    tripStatistics.outsideTemp = str(int(weatherInfo['apparentTemperature']))
-    tripStatistics.outsideHumidity = str(int(weatherInfo['humidity']*100))
     tripStatistics.tracking = str(data.getHeadingByDegrees(locationInfo['track']))
     tripStatistics.altitude = str(int(locationInfo['altitude']))
     tripStatistics.speed = str(int(locationInfo['speed']))
@@ -84,6 +81,9 @@ try:
     tripStatistics.precipProbability = str(int(weatherInfo['precipProbability']*100))
     tripStatistics.precipIntensity = str(int(weatherInfo['precipIntensity']*100))
     tripStatistics.weatherNextHour = str(weatherInfo['nextHour'])
+    tripStatistics.phoneMessage = str(message)
+    tripStatistics.outsideTemp = str(int(weatherInfo['apparentTemperature']))
+    tripStatistics.outsideHumidity = str(int(weatherInfo['humidity']*100))
     tripStatistics.localeInfo = str(localeInfo['zipcode'])
 except (Exception):
         pass
