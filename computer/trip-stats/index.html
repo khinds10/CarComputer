@@ -5,7 +5,6 @@
   <title>LCARS</title>
   <link rel="stylesheet" href="css/lcars.min.css">
   <style>
-
     @font-face {
         font-family: lcars; src: url('font/lcars.otf');
     }
@@ -14,8 +13,7 @@
         background: black;
         font-family: lcars;
         width: 800px; 
-        height: 480px; 
-        border: solid 1px #FFF;
+        height: 480px;
     }
 
     .absolute {
@@ -31,32 +29,32 @@
     }
 
     .medium-text {
-        font-size: 32px;
+        font-size: 30px;
     }
 
     .medium-large-text {
-        font-size: 35px;
-    }
-
-    .large-text {
         font-size: 40px;
     }
 
+    .large-text {
+        font-size: 50px;
+    }
+
     .time-text {
-        font-size: 55px;
+        font-size: 70px;
     }
   </style>
   <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 <body>
     <!-- DATA ELEMENTS -->
-    <span class="absolute black background-text" style="top: 10px; left: 270px;">WIFI</span>
+    <span class="absolute black background-text" style="top: 10px; left: 270px;">WIFI (<span id="internetConnected">offline</span>)</span>
     <span class="absolute black background-text" style="top: 10px; left: 450px;"><span id="weatherSummary"></span></span>
     <h3 class="lcars-red-color absolute medium-large-text" style="top: 360px; left: 270px;"><span id="speed">0</span> MPH</h3>
     <span class="lcars-tan-color absolute" style="top: 40px;  left: 370px;">EXTERIOR</span>
-    <strong class="lcars-purple-color medium-text absolute" style="top: 55px; left: 370px;"><span id="outsideTemp">0</span>&deg;F / <span id="outsideHumidity">0</span>%</strong>
+    <strong class="medium-large-text absolute" style="top: 55px; left: 370px; color: #F2B3FF;"><span id="outsideTemp">0</span>&deg;F / <span id="outsideHumidity">0</span>%</strong>
     <span class="lcars-tan-color absolute" style="top: 40px; left: 540px;">INTERIOR</span>
-    <strong class="lcars-red-color medium-text absolute" style="top: 55px; left: 540px;"><span id="insideTemp">0</span>&deg;F / <span id="insideHumidity">0</span>%</strong>
+    <strong class="medium-large-text absolute" style="top: 55px; left: 540px; color: #FFB3C0;"><span id="insideTemp">0</span>&deg;F / <span id="insideHumidity">0</span>%</strong>
     <span class="lcars-tan-color absolute" style="top: 98px; left: 370px;">STATISTICS</span>
     <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;">HEADING</span>
     <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;"><img id="compass" src="img/compass.png" style="width:220px;"/></span>
@@ -78,9 +76,9 @@
             <td colspan="2"><i class="medium-text"><span id="weatherNextHour"></span></i></td>
         </tr>
     </table>
-     <div class="absolute medium-text" style="left: 370px; top: 300px; width: 320px; height: 92px;  overflow: hidden;"><div id="phoneMessage"></div></div>
+     <div class="absolute medium-text" style="left: 370px; top: 310px; width: 320px; height: 92px;  overflow: hidden;"><div id="phoneMessage"></div></div>
     <span style="font-size: 25px; position: absolute; color: black; top: 410px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
-    <span style="font-size: 25px; position: absolute; color: black; top: 410px; left: 410px;"><span id="latitude">0</span> / -<span id="longitude">0</span></span>
+    <span style="font-size: 25px; position: absolute; color: black; top: 410px; left: 400px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
     <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 410px; left: 165px;">CLB <span id="climb">0</span></span>
     <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 410px; left: 622px;">TRK <span id="track">0.0</span></span> 
 
@@ -167,80 +165,100 @@
  <script type="text/javascript">
  
      // each second update the LCARS UI with the new data 
-      $(document).ready(function(){
-          setInterval(function(){
+      $(document).ready(function() {
+          setInterval(function() {
             $.get( "/computer/TripStats.py", function( data ) {
                 var data = JSON.parse(data);
                 console.log(data);
                 
-                // populate all the fields with data
-                $( "#time" ).html( data.time );
-                $( "#outsideTemp" ).html( data.outsideTemp );
+                // rotate the compass the number of degress
+                rotateCompass( data.track , data.speed );
+                
+                // populate inside temp/humidity
                 $( "#insideHumidity" ).html( data.insideHumidity );            
                 $( "#insideTemp" ).html( data.insideTemp );
-                $( "#localeInfo" ).html( data.localeInfo );
-                $( "#outsideHumidity" ).html( data.outsideHumidity );
-                $( "#precipIntensity" ).html( data.precipIntensity );
-                $( "#precipProbability" ).html( data.precipProbability );
+
+                // populate known GPS data
+                $( "#speed" ).html( data.speed );                
                 $( "#tracking" ).html( data.tracking );
                 $( "#track" ).html( data.track );
                 $( "#climb" ).html( data.climb );
                 $( "#latitude" ).html( data.latitude );
                 $( "#longitude" ).html( data.longitude );
+                $( "#altitude" ).html( data.altitude );
+                
+                // check that the internet is connected                
+                var internetConnected = data.internetConnected;
+                if (internetConnected == "ok") {
+                    $( "#internetConnected" ).html( "connected" );
+                    $( "#time" ).html( data.time );
+                } else {
+                    $( "#internetConnected" ).html( "offline" );
+                    $( "#phoneMessage" ).html( " - Internet Offline - " );
+                    $( "#time" ).html( "00:00PM" );
+                }
+
+                // populate known weather info
                 $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
                 $( "#weatherSummary" ).html( data.weatherSummary );
-                $( "#windSpeed" ).html( data.windSpeed );
-                $( "#altitude" ).html( data.altitude );
-                $( "#speed" ).html( data.speed );
-                
+                $( "#windSpeed" ).html( data.windSpeed );                
+                $( "#outsideTemp" ).html( data.outsideTemp );
+                $( "#outsideHumidity" ).html( data.outsideHumidity );
+                $( "#precipIntensity" ).html( data.precipIntensity );
+                $( "#precipProbability" ).html( data.precipProbability ); 
+                                
                 // current trip stats
                 $( "#averageSpeed" ).html( data.averageSpeed );
                 $( "#drivingTime" ).html( data.drivingTime );
                 $( "#inTrafficTime" ).html( data.inTrafficTime );
                 $( "#currentTripTime" ).html( data.tripMilesTravelled ); 
-                 
+                
+                // show phone message if one is present and we're connected to the internet
+                if (internetConnected == 'ok') {
+                    if (data.phoneMessage != '') {
+                        $( "#phoneMessage" ).html( data.phoneMessage );
+                    } else {
+                        $( "#phoneMessage" ).html( "" );
+                    }                
+                }
+                
+                // populate known local info
+                //$( "#localeInfo" ).html( data.localeInfo );
+                
                 // populate altitude history
-                $( "#averageAltitude1" ).html( data.averageAltitude[1] );
-                $( "#averageAltitude2" ).html( data.averageAltitude[2] );
-                $( "#averageAltitude3" ).html( data.averageAltitude[3] );
+                // $( "#averageAltitude1" ).html( data.averageAltitude[1] );
+                // $( "#averageAltitude2" ).html( data.averageAltitude[2] );
+                // $( "#averageAltitude3" ).html( data.averageAltitude[3] );
             
                 // populate speed history
-                $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
-                $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
-                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
+                // $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
+                // $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
+                // $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
                 
                 // populate driving times
-                $( "#drivingTimes1" ).html( data.drivingTimes[1] );
-                $( "#drivingTimes2" ).html( data.drivingTimes[2] );
-                $( "#drivingTimes3" ).html( data.drivingTimes[3] );
+                // $( "#drivingTimes1" ).html( data.drivingTimes[1] );
+                // $( "#drivingTimes2" ).html( data.drivingTimes[2] );
+                // $( "#drivingTimes3" ).html( data.drivingTimes[3] );
 
                 // populate traffic times
-                $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
-                $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
-                $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
+                // $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
+                // $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
+                // $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
                 
                 // populate miles travelled
                 //$( "#milesTravelled1" ).html( data.milesTravelled[1] );
                 //$( "#milesTravelled2" ).html( data.milesTravelled[2] );
                 //$( "#milesTravelled3" ).html( data.milesTravelled[3] );
-                
-                // show phone message if one is present
-                if (data.phoneMessage != '') {
-                    $( "#phoneMessage" ).html( data.phoneMessage );
-                } else {
-                    $( "#phoneMessage" ).html( "" );                
-                }
-                
-                // rotate the compass the number of degress
-                rotateCompass(data.track);
             });
           }, 1000);
       });
       
-     // rotate the compass image by arbitrary degrees
-     function rotateCompass(deg) {
-            deg = -deg;
-            $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
+     // rotate the compass image by arbitrary degrees but only if we're actually moving for correct GPS readings
+     function rotateCompass(deg, speed) {
+            if (speed > 5) {
+                deg = -deg;
+                $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
+            }
      }
   </script>
 </body>

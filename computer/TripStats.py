@@ -36,7 +36,8 @@ class TripStatistics:
     averageAltitude = ''
     climb = ''
     latitude = ''
-    longitude = ''    
+    longitude = ''
+    internetConnected = ''
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
 
@@ -54,15 +55,35 @@ if settings.dashboardServer:
 # get all available info and create HTML output for it
 try: 
     tempInfo = data.getJSONFromDataFile('temp.data')
+except (Exception):
+        pass
+try:
     locationInfo = data.getJSONFromDataFile('location.data')
+except (Exception):
+        pass
+try:
     localeInfo = data.getJSONFromDataFile('locale.data')
+except (Exception):
+        pass
+try:
     weatherInfo = data.getJSONFromDataFile('weather.data')
+except (Exception):
+        pass
+try:
     drivingStats = data.getJSONFromDataFile('stats.data')
 except (Exception):
         pass
         
 # create JSON output of current trip stats
 tripStatistics = TripStatistics()
+
+# get if the internet is connected or not "ok" / "error"
+try:
+    isConnected = subprocess.check_output(['bash', 'connection.sh'])
+    isConnected = isConnected.strip()
+    tripStatistics.internetConnected = isConnected
+except (Exception):
+        pass
 try:
     tripStatistics.time = datetime.datetime.fromtimestamp(time.time()-timezone).strftime('%I:%M%p').lstrip('0')
 except (Exception):
