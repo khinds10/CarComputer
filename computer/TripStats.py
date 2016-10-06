@@ -173,6 +173,7 @@ except (Exception):
         pass
 try: 
     tripStatistics.weatherNextHour = str(weatherInfo['nextHour'])
+
 except (Exception):
         pass
 try: 

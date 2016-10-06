@@ -17,8 +17,13 @@ class CurrentReadings:
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
 
-# remove temp data and start logging
-data.removeJSONFile('temp.data')
+# reset temp data and start logging
+currentReadings = CurrentReadings()
+currentReadings.temp = 0
+currentReadings.hmidty = 0
+data.saveJSONObjToFile('temp.data', currentReadings)
+
+# start logging temp
 while True:
     humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
     if humidity is not None and temperature is not None:
