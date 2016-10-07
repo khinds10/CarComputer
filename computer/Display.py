@@ -46,7 +46,7 @@ while True:
         # get current heading by track
         tracking = str(data.getHeadingByDegrees(int(completeLocationInfo["track"])))
         
-        setLCDText("\x04 GPS - Fixed " + str(tempInfo["temp"]) + "\x02 "+ str(tempInfo["hmidty"]) + "%" + "\n  \x05 " + tracking + " " + str(int(completeLocationInfo['speed'])) +"mph " + str(int(completeLocationInfo['altitude'])) + "\x01")
+        setLCDText("\x04GPS " + str(tempInfo["temp"]) + "\x02 "+ str(tempInfo["hmidty"]) + "%" + "\n\x05" + tracking + " " + str(int(completeLocationInfo['speed'])) +"mph " + str(int(completeLocationInfo['altitude'])) + "\x01")
 
     except (Exception):
     
@@ -56,7 +56,7 @@ while True:
         try:
             # get temp data to display
             tempInfo = data.getJSONFromDataFile('temp.data')
-            setLCDText("Waiting for GPS Satellite\n" + str(tempInfo["temp"]) + "\x00  "+ str(tempInfo["hmidty"]) + "% hmdty")
+            setLCDText("Waiting for GPS Satellite\n" + str(tempInfo["temp"]) + "\x02  "+ str(tempInfo["hmidty"]) + "% hmdty")
         except (Exception):
             setLCDText("Waiting for GPS Satellite")
 
