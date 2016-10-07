@@ -13,22 +13,16 @@ lcd = LCD.Adafruit_CharLCDPlate()
 lcd.create_char(1, [0,31,18,26,18,18,0,0])
 
 # degrees F
-lcd.create_char(2, [24,24,7,4,6,4,4,0]) 
+lcd.create_char(2, [24,24,7,4,6,4,4,0])
 
 # separator
-lcd.create_char(3, [	0,0,0,4,0,0,0,0]) 
+lcd.create_char(3, [0,0,0,4,0,0,0,0])
 
-#N
-lcd.create_char(5, [4,14,21,4,4,4,0,0])
+# GPS Symbol
+lcd.create_char(4, [0,10,17,21,17,10,0,0])
 
-#E
-lcd.create_char(6, [0,4,2,31,2,4,0,0])
-
-#S
-lcd.create_char(7, [0,0,4,4,21,14,4,0])
-
-#W
-lcd.create_char(8, [0,0,4,8,31,8,4,0])
+# Compass Symbol
+lcd.create_char(5, [0,4,14,31,4,4,4,0])
 
 def setLCDText(text):
     """clear and set new text on LCD screen"""
@@ -52,17 +46,7 @@ while True:
         # get current heading by track
         tracking = str(data.getHeadingByDegrees(int(completeLocationInfo["track"])))
         
-        # get tracking symbol from direction
-        if tracking == 'N' or tracking == 'NNE' or tracking == 'NNW':
-            trackingSymbol = '\x05'
-        if tracking == 'E' or tracking == 'ENE' or tracking == 'ESE' or tracking == 'NE' or tracking == 'SE':
-            trackingSymbol = '\x06'
-        if tracking == 'S' or tracking == 'SSW' or tracking == 'SSE' or tracking == 'SW': 
-            trackingSymbol = '\x07'
-        if tracking == 'W' or tracking == 'WSW' or tracking == 'WNW' or tracking == 'NW':
-            trackingSymbol = '\x08'
-            
-        setLCDText(str(tempInfo["temp"]) + "\x02 "+ str(tempInfo["hmidty"]) + "%"+ " " + trackingSymbol + " " + tracking + "\n" + str(int(completeLocationInfo['speed'])) +"mph " + str(int(completeLocationInfo['altitude'])) + "\x01")
+        setLCDText("\x04 GPS - Fixed " + str(tempInfo["temp"]) + "\x02 "+ str(tempInfo["hmidty"]) + "%" + "\n  \x05 " + tracking + " " + str(int(completeLocationInfo['speed'])) +"mph " + str(int(completeLocationInfo['altitude'])) + "\x01")
 
     except (Exception):
     

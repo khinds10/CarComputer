@@ -14,6 +14,7 @@
         font-family: lcars;
         width: 800px; 
         height: 480px;
+        border: solid 1px #000;
     }
 
     .absolute {
@@ -29,40 +30,48 @@
     }
 
     .medium-text {
-        font-size: 30px;
-    }
-
-    .medium-large-text {
         font-size: 40px;
     }
 
+    .medium-large-text {
+        font-size: 55px;
+    }
+
     .large-text {
-        font-size: 50px;
+        font-size: 60px;
     }
 
     .time-text {
-        font-size: 70px;
+        font-size: 90px;
+    }
+    
+    .light-purple {
+         color: #F2B3FF;
+    }
+    
+    .light-red {
+         color: #FFB3C0;
     }
   </style>
   <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 <body>
     <!-- DATA ELEMENTS -->
-    <span class="absolute black background-text" style="top: 10px; left: 270px;">WIFI (<span id="internetConnected">offline</span>)</span>
-    <span class="absolute black background-text" style="top: 10px; left: 450px;"><span id="weatherSummary"></span></span>
-    <h3 class="lcars-red-color absolute medium-large-text" style="top: 360px; left: 270px;"><span id="speed">0</span> MPH</h3>
+    <span class="absolute black background-text" style="top: 0px; left: 270px;">WIFI (<span id="internetConnected">offline</span>)</span>
+    <span class="absolute black background-text" style="top: 0px; left: 450px;"><span id="weatherSummary"></span></span>
+    <h3 class="lcars-red-color absolute medium-large-text" style="top: 350px; left: 270px; font-weight: 100;"><span id="speed">0</span> MPH</h3>
     <span class="lcars-tan-color absolute" style="top: 40px;  left: 370px;">EXTERIOR</span>
-    <strong class="medium-large-text absolute" style="top: 55px; left: 370px; color: #F2B3FF;"><span id="outsideTemp">0</span>&deg;F / <span id="outsideHumidity">0</span>%</strong>
+    <strong class="medium-large-text absolute light-purple" style="top: 55px; left: 370px;"><span id="outsideTemp">0</span>&deg;F / <span id="outsideHumidity">0</span>%</strong>
     <span class="lcars-tan-color absolute" style="top: 40px; left: 540px;">INTERIOR</span>
-    <strong class="medium-large-text absolute" style="top: 55px; left: 540px; color: #FFB3C0;"><span id="insideTemp">0</span>&deg;F / <span id="insideHumidity">0</span>%</strong>
-    <span class="lcars-tan-color absolute" style="top: 98px; left: 370px;">STATISTICS</span>
+    <strong class="medium-large-text absolute light-red" style="top: 55px; left: 540px;"><span id="insideTemp">0</span>&deg;F / <span id="insideHumidity">0</span>%</strong>
+    <span class="lcars-tan-color absolute" style="top: 115px; left: 370px;">STATISTICS</span>
     <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;">HEADING</span>
     <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;"><img id="compass" src="img/compass.png" style="width:220px;"/></span>
-    <strong class="absolute lcars-purple-color medium-large-text" style="top: 360px; left: 120px;"><span id="tracking"></span></strong>
-    <table class="absolute large-text" style="left: 370px; top: 110px; width: 40%;">
+    <strong class="absolute lcars-purple-color medium-text" style="top: 360px; left: 105px;"><span id="tracking"></span></strong>
+    <table class="absolute large-text" style="left: 370px; top: 130px; width: 40%;">
         <tr>
             <td class="lcars-blue-color" style="width: 170px;">DRIVING</td>
-            <td class="lcars-blue-color"><span id="drivingTime">1 MIN</span></td>
+            <td class="lcars-blue-color"><span id="drivingTime">0 MIN</span></td>
         </tr>
         <tr>
             <td class="lcars-red-color" style="width: 170px;">TRAFFIC</td>
@@ -72,18 +81,17 @@
             <td class="lcars-purple-color" style="width: 170px;">AVG SPEED</td>
             <td class="lcars-purple-color"><span id="averageSpeed">0</span> MPH</td>
         </tr>
-        <tr>
-            <td colspan="2"><i class="medium-text"><span id="weatherNextHour"></span></i></td>
-        </tr>
     </table>
-     <div class="absolute medium-text" style="left: 370px; top: 310px; width: 320px; height: 92px;  overflow: hidden;"><div id="phoneMessage"></div></div>
-    <span style="font-size: 25px; position: absolute; color: black; top: 410px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
-    <span style="font-size: 25px; position: absolute; color: black; top: 410px; left: 400px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
-    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 410px; left: 165px;">CLB <span id="climb">0</span></span>
-    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 410px; left: 622px;">TRK <span id="track">0.0</span></span> 
+    
+    <i class="medium-text absolute" style="left: 380px; top: 320px; width: 350px; height: 35px; overflow: hidden;"><span id="weatherNextHour" ></span></i>
+    <div class="absolute medium-text" style="left: 10px; top: 430px; width: 800px; height: 45px;  overflow: hidden;"><div id="phoneMessage"></div></div>
+    <span style="font-size: 25px; position: absolute; color: black; top: 400px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
+    <span style="font-size: 25px; position: absolute; color: black; top: 400px; left: 380px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
+    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 400px; left: 165px;">CLB <span id="climb">0</span></span>
+    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 400px; left: 612px;">TRK <span id="track">0.0</span></span> 
 
   <!-- LCARS INTERFACE -->
-  <div class="lcars-container">
+  <div class="lcars-container" style="padding:0; margin:0;">
     <div class="lcars-row spaced">
       <div class="lcars-column u-1-8 lcars-elbow left bottom lcars-orange-bg"></div>
       <div class="lcars-column u-6-8 lcars-divider lcars-orange-tan-divide">
@@ -124,8 +132,8 @@
           <li class="lcars-tan-bg">&nbsp;</li>
           <li class="lcars-tan-bg tall large-gap">&nbsp;</li>
           <li class="lcars-orange-bg">&nbsp;</li>
-          <li class="lcars-orange-bg tall" style="position: relative;"><span style="font-size: 20px; position: absolute; bottom: 0;">WIND<span id="windSpeed">0</span> MPH<br/>RAIN <span id="precipProbability">0</span>%</span></li>
-          <li class="lcars-orange-bg"><span style="font-size: 20px;">INT <span id="precipIntensity"></span></span></li>
+          <li class="lcars-orange-bg tall" style="position: relative;"><span style="font-size: 20px; position: absolute; bottom: 0; font-weight: 100;">WIND <span id="windSpeed">0</span> MPH<br/>RAIN <span id="precipProbability">0</span>%</span></li>
+          <li class="lcars-orange-bg"><span style="font-size: 20px; font-weight: 100;">INT <span id="precipIntensity"></span></span></li>
         </ul>
       </div>
     </div>
@@ -179,8 +187,13 @@
                 $( "#insideTemp" ).html( data.insideTemp );
 
                 // populate known GPS data
-                $( "#speed" ).html( data.speed );                
-                $( "#tracking" ).html( data.tracking );
+                $( "#speed" ).html( data.speed );
+                
+                // if the speed is above 5 we can accurately display the direction
+                if (data.speed > 5) {
+                    $( "#tracking" ).html( data.tracking );
+                }
+                
                 $( "#track" ).html( data.track );
                 $( "#climb" ).html( data.climb );
                 $( "#latitude" ).html( data.latitude );
@@ -255,10 +268,10 @@
       
      // rotate the compass image by arbitrary degrees but only if we're actually moving for correct GPS readings
      function rotateCompass(deg, speed) {
-            if (speed > 5) {
-                deg = -deg;
-                $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
-            }
+        if (speed > 5) {
+            deg = -deg;
+            $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
+        }
      }
   </script>
 </body>
