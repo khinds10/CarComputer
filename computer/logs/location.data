@@ -1,8 +1,8 @@
 {
     "altitude": 55, 
     "climb": 0.0, 
-    "latitude": 42.408596667, 
-    "longitude": -71.145638333, 
-    "speed": 55, 
-    "track": 246
+    "latitude": 42.4085965555667, 
+    "longitude": -71.1456383355553, 
+    "speed": 15, 
+    "track": 100
 }

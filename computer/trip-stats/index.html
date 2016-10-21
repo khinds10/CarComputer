@@ -4,91 +4,119 @@
   <meta charset="UTF-8">
   <title>LCARS</title>
   <link rel="stylesheet" href="css/lcars.min.css">
-  <style>
-    @font-face {
-        font-family: lcars; src: url('font/lcars.otf');
-    }
-    
-    html, body {
-        background: black;
-        font-family: lcars;
-        width: 780px; 
-        height: 460px;
-        border: solid 1px #000;
-    }
-
-    .absolute {
-        position: absolute;
-    }
-
-    .black {
-        color: black;
-    }
-
-    .background-text {
-        font-size: 25px;
-    }
-
-    .medium-text {
-        font-size: 40px;
-    }
-
-    .medium-large-text {
-        font-size: 55px;
-    }
-
-    .large-text {
-        font-size: 60px;
-    }
-
-    .time-text {
-        font-size: 90px;
-    }
-    
-    .light-purple {
-         color: #F2B3FF;
-    }
-    
-    .light-red {
-         color: #FFB3C0;
-    }
-  </style>
+  <link rel="stylesheet" href="css/carcomputer.css">
   <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
-<body>
+<body id="car-computer">
+
     <!-- DATA ELEMENTS -->
     <span class="absolute black background-text" style="top: 0px; left: 270px;">WIFI (<span id="internetConnected">offline</span>)</span>
-    <span class="absolute black background-text" style="top: 0px; left: 450px;"><span id="weatherSummary"></span></span>
-    <h3 class="lcars-red-color absolute medium-large-text" style="top: 350px; left: 270px; font-weight: 100;"><span id="speed">0</span> MPH</h3>
     <span class="lcars-tan-color absolute" style="top: 40px;  left: 370px;">EXTERIOR</span>
-    <strong class="medium-large-text absolute light-purple" style="top: 55px; left: 370px;"><span id="outsideTemp">0</span>&deg;F/<span id="outsideHumidity">0</span>%</strong>
+    <strong class="medium-large-text absolute lcars-purple-color" style="top: 55px; left: 370px;"><span id="outsideTemp">0</span>&deg;F/<span id="outsideHumidity">0</span>%</strong>
     <span class="lcars-tan-color absolute" style="top: 40px; left: 540px;">INTERIOR</span>
-    <strong class="medium-large-text absolute light-red" style="top: 55px; left: 540px;"><span id="insideTemp">0</span>&deg;F/<span id="insideHumidity">0</span>%</strong>
-    <span class="lcars-tan-color absolute" style="top: 115px; left: 370px;">STATISTICS</span>
-    <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;">HEADING</span>
-    <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;"><img id="compass" src="img/compass.png" style="width:220px;"/></span>
-    <strong class="absolute lcars-purple-color medium-text" style="top: 360px; left: 105px;"><span id="tracking"></span></strong>
-    <table class="absolute large-text" style="left: 370px; top: 130px; width: 40%;">
-        <tr>
-            <td class="lcars-blue-color" style="width: 170px;">DRIVING</td>
-            <td class="lcars-blue-color"><span id="drivingTime">0 MIN</span></td>
-        </tr>
-        <tr>
-            <td class="lcars-red-color" style="width: 170px;">TRAFFIC</td>
-            <td class="lcars-red-color"><span id="inTrafficTime">0 MIN</span></td>
-        </tr>
-        <tr>
-            <td class="lcars-purple-color" style="width: 170px;">AVG SPEED</td>
-            <td class="lcars-purple-color"><span id="averageSpeed">0</span> MPH</td>
-        </tr>
-    </table>
+    <strong class="medium-large-text absolute lcars-red-color" style="top: 55px; left: 540px;"><span id="insideTemp">0</span>&deg;F/<span id="insideHumidity">0</span>%</strong>
+    <span class="absolute black background-text" style="top: 0px; left: 450px;"><span id="weatherSummary"></span></span>
     
-    <i class="medium-text absolute" style="left: 380px; top: 320px; width: 350px; height: 35px; overflow: hidden;"><span id="weatherNextHour" ></span></i>
+    <div id="heading-info" style="display:block">
+        <span class="lcars-tan-color absolute" style="top: 115px; left: 370px;">STATISTICS</span>
+        <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;">HEADING</span>
+        <span class="lcars-tan-color absolute" style="top: 150px; left: 100px;"><img id="compass" src="img/compass.png" style="width:220px;"/></span>
+        <strong class="absolute lcars-purple-color medium-text" style="top: 360px; left: 105px;"><span id="tracking"></span></strong>
+         <h3 class="lcars-red-color absolute medium-large-text" style="top: 350px; left: 270px; font-weight: 100;"><span id="speed">0</span> MPH</h3>
+         <i class="medium-text absolute" style="left: 380px; top: 320px; width: 350px; height: 35px; overflow: hidden;"><span id="weatherNextHour" ></span></i>
+    </div>
+
+    <!-- 'Up' button pressed, show weather info -->
+    <div id="weather-info-view" style="display:none;">
+        <div class="absolute medium-small-text" style="left: 370px; top: 130px; width: 40%;">
+            <span id="outsideTempSummary"></span> &deg;F / <span id="outsideHumiditySummary"></span> %<br/>
+            Precip Probability: <span id="precipProbabilitySummary"></span> % / Intensity: <span id="precipIntensitySummary"></span><br/>
+            <span id="weatherSummarySummary"></span><br/>
+            <span id="weatherNextHourSummary"></span><br/>
+            Wind Speed: <span id="windSpeedSummary"></span> MPH
+        </div>
+    </div>    
+
+    <!--  'Left' button pressed, show locale info -->
+    <div id="locale-info-view" style="display:none;">
+        <div class="absolute small-text" style="left: 370px; top: 130px; width: 70%;">
+            <div id="address"></div>
+            <div id="area"></div>
+            <div id="city"></div>
+            <div id="country"></div>
+            <div id="county"></div>
+            <div id="zipcode"></div>
+        </div>
+    </div>    
+
+    <!-- 'Right' button pressed, show full stats view -->    
+    <div id="driving-stats-view" style="display:none;">
+        <table id="driving-stats-table" class="absolute medium-text" style="left: 120px; top: 130px; width: 70%;">
+        
+            <tr>
+                <td class="no-text-wrap">&nbsp;</td>
+                <td class="no-text-wrap">Today</td>
+                <td class="no-text-wrap">Week</td>
+                <td class="no-text-wrap">Month</td>
+            </tr>
+        
+            <tr>
+                <td class="lcars-blue-color no-text-wrap">DRIVING</td>
+                <td class="lcars-blue-color no-text-wrap"><span id="drivingTimes1"></span></td>
+                <td class="lcars-blue-color no-text-wrap"><span id="drivingTimes2"></span></td>
+                <td class="lcars-blue-color no-text-wrap"><span id="drivingTimes3"></span></td>
+            </tr>
+            <tr>
+                <td class="lcars-red-color no-text-wrap">TRAFFIC</td>
+                <td class="lcars-red-color no-text-wrap"><span id="inTrafficTimes1"></span></td>
+                <td class="lcars-red-color no-text-wrap"><span id="inTrafficTimes2"></span></td>
+                <td class="lcars-red-color no-text-wrap"><span id="inTrafficTimes3"></span></td>
+            </tr>
+            <tr>
+                <td class="lcars-purple-color no-text-wrap">AVG SPEED</td>
+                <td class="lcars-purple-color no-text-wrap"><span id="averageSpeeds1"></span></td>
+                <td class="lcars-purple-color no-text-wrap"><span id="averageSpeeds2"></span></td>
+                <td class="lcars-purple-color no-text-wrap"><span id="averageSpeeds3"></span></td>
+            </tr>
+            <tr>
+                <td class="lcars-tan-color no-text-wrap">MILES</td>
+                <td class="lcars-tan-color no-text-wrap"><span id="averageAltitude1"></span></td>
+                <td class="lcars-tan-color no-text-wrap"><span id="averageAltitude2"></span></td>
+                <td class="lcars-tan-color no-text-wrap"><span id="averageAltitude3"></span></td>
+            </tr>
+        </table>
+    </div>    
+
+    <!-- Default or 'Down' button pressed -->
+    <div id="default-driving-view" style="display:block;">
+        <table class="absolute large-text" style="left: 370px; top: 130px; width: 40%;">
+            <tr>
+                <td class="lcars-blue-color no-text-wrap" style="width: 170px;">DRIVING</td>
+                <td class="lcars-blue-color"><span id="drivingTime" class="no-text-wrap">0 MIN</span></td>
+            </tr>
+            <tr>
+                <td class="lcars-red-color no-text-wrap" style="width: 170px;">TRAFFIC</td>
+                <td class="lcars-red-color"><span id="inTrafficTime" class="no-text-wrap">0 MIN</span></td>
+            </tr>
+            <tr>
+                <td class="lcars-purple-color no-text-wrap" style="width: 170px;">AVG SPEED</td>
+                <td class="lcars-purple-color"><span id="averageSpeed" class="no-text-wrap">0</span> MPH</td>
+            </tr>
+            
+            <!--  TODO
+            <tr>
+                <td class="lcars-tan-color no-text-wrap" style="width: 170px;">MILES</td>
+                <td class="lcars-tan-color"><span id="currentTripMiles" class="no-text-wrap">0</span> MILES</td>
+            </tr>
+            -->
+        </table>
+    </div>    
+    
     <div class="absolute medium-text" style="left: 10px; top: 420px; width: 800px; height: 45px;  overflow: hidden;"><div id="phoneMessage"></div></div>
-    <span style="font-size: 25px; position: absolute; color: black; top: 400px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
-    <span style="font-size: 25px; position: absolute; color: black; top: 400px; left: 380px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
-    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 400px; left: 165px;">CLB <span id="climb">0</span></span>
-    <span style="font-size: 25px; position: absolute; color: black; position: absolute; top: 400px; left: 612px;">TRK <span id="track">0.0</span></span> 
+    <span class="small-text" style="position: absolute; color: black; top: 400px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
+    <span class="small-text" style="position: absolute; color: black; top: 400px; left: 380px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
+    <span class="small-text" style="position: absolute; color: black; position: absolute; top: 400px; left: 165px;">CLB <span id="climb">0</span></span>
+    <span class="small-text" style="position: absolute; color: black; position: absolute; top: 400px; left: 612px;">TRK <span id="track">0.0</span></span> 
 
   <!-- LCARS INTERFACE -->
   <div class="lcars-container" style="padding:0; margin:0;">
@@ -132,8 +160,8 @@
           <li class="lcars-tan-bg">&nbsp;</li>
           <li class="lcars-tan-bg tall large-gap">&nbsp;</li>
           <li class="lcars-orange-bg">&nbsp;</li>
-          <li class="lcars-orange-bg tall" style="position: relative;"><span style="font-size: 20px; position: absolute; bottom: 0; font-weight: 100;">WIND <span id="windSpeed">0</span> MPH<br/>RAIN <span id="precipProbability">0</span>%</span></li>
-          <li class="lcars-orange-bg"><span style="font-size: 20px; font-weight: 100;">INT <span id="precipIntensity"></span></span></li>
+          <li class="lcars-orange-bg tall" style="position: relative;"><span class="micro-text" style="position: absolute; bottom: 0; font-weight: 100;">WIND <span id="windSpeed">0</span> MPH<br/>RAIN <span id="precipProbability">0</span>%</span></li>
+          <li class="lcars-orange-bg"><span class="micro-text" style="font-weight: 100;">INT <span id="precipIntensity"></span></span></li>
         </ul>
       </div>
     </div>
@@ -148,28 +176,7 @@
       <div class="lcars-column u-1-8 lcars-elbow right top lcars-orange-bg"></div>
     </div>
   </div>
-  
-  <!-- 
-    TODO
-    <span id="drivingTimes1">--</span>
-    <span id="drivingTimes2">--</span>
-    <span id="drivingTimes3">--</span>
-    <span id="inTrafficTimes1">--</span>
-    <span id="inTrafficTimes2">--</span>
-    <span id="inTrafficTimes3">--</span>
-    <span id="averageSpeeds1">--</span> mph
-    <span id="averageSpeeds2">--</span> mph
-    <span id="averageSpeeds3">--</span> mph
-    <span id="milesTravelled1">--</span>
-    <span id="milesTravelled2">--</span>
-    <span id="milesTravelled3">--</span>
-    <span id="averageAltitude1">--</span> ft
-    <span id="averageAltitude2">--</span> ft
-    <span id="averageAltitude3">--</span> ft
-    <span id="localeInfo">--</span>
-    <span id="currentTripTime">--</span>
-  -->
-  
+
  <script type="text/javascript">
  
      // each second update the LCARS UI with the new data 
@@ -177,7 +184,6 @@
           setInterval(function() {
             $.get( "/computer/TripStats.py", function( data ) {
                 var data = JSON.parse(data);
-                console.log(data);
                 
                 // rotate the compass the number of degress
                 rotateCompass( data.track , data.speed );
@@ -193,7 +199,6 @@
                 if (data.speed > 5) {
                     $( "#tracking" ).html( data.tracking );
                 }
-                
                 $( "#track" ).html( data.track );
                 $( "#climb" ).html( data.climb );
                 $( "#latitude" ).html( data.latitude );
@@ -224,44 +229,76 @@
                 $( "#averageSpeed" ).html( data.averageSpeed );
                 $( "#drivingTime" ).html( data.drivingTime );
                 $( "#inTrafficTime" ).html( data.inTrafficTime );
-                $( "#currentTripTime" ).html( data.tripMilesTravelled ); 
+                //$( "#currentTripMiles" ).html( data.tripMilesTravelled ); 
                 
+                // complete locale info
+                $( "#address" ).html( data.address );
+                $( "#area" ).html( data.area );
+                $( "#city" ).html( data.city );
+                $( "#country" ).html( data.country );
+                $( "#county" ).html( data.county );
+                $( "#zipcode" ).html( data.zipcode );
+
                 // show phone message if one is present and we're connected to the internet
                 if (internetConnected == 'ok') {
                     if (data.phoneMessage != '') {
                         $( "#phoneMessage" ).html( data.phoneMessage );
                     } else {
                         $( "#phoneMessage" ).html( "" );
-                    }                
+                    } 
                 }
                 
-                // populate known local info
-                //$( "#localeInfo" ).html( data.localeInfo );
-                
+                // complete weather info
+                $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
+                $( "#outsideTempSummary" ).html( data.outsideTemp );
+                $( "#precipIntensitySummary" ).html( data.precipIntensity );
+                $( "#precipProbabilitySummary" ).html( data.precipProbability );
+                $( "#weatherNextHourSummary" ).html( data.weatherNextHour );
+                $( "#weatherSummarySummary" ).html( data.weatherSummary );
+                $( "#windSpeedSummary" ).html( data.windSpeed );
+            
                 // populate altitude history
-                // $( "#averageAltitude1" ).html( data.averageAltitude[1] );
-                // $( "#averageAltitude2" ).html( data.averageAltitude[2] );
-                // $( "#averageAltitude3" ).html( data.averageAltitude[3] );
+                $( "#averageAltitude1" ).html( data.averageAltitude[1] );
+                $( "#averageAltitude2" ).html( data.averageAltitude[2] );
+                $( "#averageAltitude3" ).html( data.averageAltitude[3] );
             
                 // populate speed history
-                // $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
-                // $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
-                // $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
+                $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
+                $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
+                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
                 
                 // populate driving times
-                // $( "#drivingTimes1" ).html( data.drivingTimes[1] );
-                // $( "#drivingTimes2" ).html( data.drivingTimes[2] );
-                // $( "#drivingTimes3" ).html( data.drivingTimes[3] );
+                $( "#drivingTimes1" ).html( data.drivingTimes[1] );
+                $( "#drivingTimes2" ).html( data.drivingTimes[2] );
+                $( "#drivingTimes3" ).html( data.drivingTimes[3] );
 
                 // populate traffic times
-                // $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
-                // $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
-                // $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
+                $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
+                $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
+                $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
                 
                 // populate miles travelled
-                //$( "#milesTravelled1" ).html( data.milesTravelled[1] );
-                //$( "#milesTravelled2" ).html( data.milesTravelled[2] );
-                //$( "#milesTravelled3" ).html( data.milesTravelled[3] );
+                $( "#milesTravelled1" ).html( data.milesTravelled[1] );
+                $( "#milesTravelled2" ).html( data.milesTravelled[2] );
+                $( "#milesTravelled3" ).html( data.milesTravelled[3] );
+                
+                // based on button pressed, hide or show elements on the output screen
+                var buttonPressed = data.buttonPressed;
+                $( "#heading-info" ).show();
+                $( "#weather-info-view" ).hide();
+                $( "#locale-info-view" ).hide();
+                $( "#driving-stats-view" ).hide();
+                $( "#default-driving-view" ).hide();
+                if ( buttonPressed == 'down' ) {
+                    $( "#default-driving-view" ).show();
+                } else if ( buttonPressed == 'up' ) {
+                    $( "#weather-info-view" ).show();
+                } else if ( buttonPressed == 'left' ) {
+                    $( "#locale-info-view" ).show();
+                } else if ( buttonPressed == 'right' ) {
+                    $( "#heading-info" ).hide();
+                    $( "#driving-stats-view" ).show();
+                }
             });
           }, 1000);
       });

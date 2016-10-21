@@ -28,7 +28,13 @@ class TripStatistics:
     precipProbability = ''
     precipIntensity = ''
     weatherNextHour = ''
-    localeInfo = ''
+    zipcode = ''
+    address = ''
+    area = ''
+    city = ''
+    country = ''
+    county = ''
+    zipcode = ''
     phoneMessage = ''
     drivingTimes = ''
     inTrafficTimes = ''
@@ -38,6 +44,7 @@ class TripStatistics:
     latitude = ''
     longitude = ''
     internetConnected = ''
+    buttonPressed = 'Down'
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
 
@@ -73,7 +80,11 @@ try:
     drivingStats = data.getJSONFromDataFile('stats.data')
 except (Exception):
         pass
-        
+try:
+    buttonPressed = data.getJSONFromDataFile('button.data')
+except (Exception):
+        pass
+
 # create JSON output of current trip stats
 tripStatistics = TripStatistics()
 
@@ -194,12 +205,36 @@ except (Exception):
         pass
 try: 
     tripStatistics.weatherNextHour = str(weatherInfo['nextHour'])
-
 except (Exception):
         pass
-try: 
-    tripStatistics.localeInfo = str(localeInfo['zipcode'])
+try:
+    tripStatistics.address = str(localeInfo['address'])
 except (Exception):
+        pass
+try:
+    tripStatistics.area = str(localeInfo['area'])
+except (Exception):
+        pass
+try:
+    tripStatistics.city = str(localeInfo['city'])
+except (Exception):
+        pass
+try:
+    tripStatistics.country = str(localeInfo['country'])
+except (Exception):
+        pass
+try:
+    tripStatistics.county = str(localeInfo['county'])
+except (Exception):
+        pass
+try:
+    tripStatistics.zipcode = str(localeInfo['zipcode'])
+except (Exception):
+        pass
+try:
+    tripStatistics.buttonPressed = buttonPressed['button']
+except (Exception):
+        tripStatistics.buttonPressed = 'down'
         pass
         
 # produce JSON/Output
