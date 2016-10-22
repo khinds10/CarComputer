@@ -16,21 +16,21 @@ while True:
         if lcd.is_pressed(button[0]):
         
             # 'Select' button pressed, reset the trip meter by inserting the new trip DB entry
-            if button[1] == 'Select'
+            if button[1] == 'Select':
                 postgres.startNewTrip()
                 
             # 'Left' button pressed, show locale info
-            if button[1] == 'Left'
+            if button[1] == 'Left':
                 data.saveJSONObjToFile('button.data', '{"button":"left"}')
                 
             # 'Up' button pressed, show weather info
-            if button[1] == 'Up'
+            if button[1] == 'Up':
                 data.saveJSONObjToFile('button.data', '{"button":"up"}')
                 
             # 'Down' button pressed, show default driving status view
-            if button[1] == 'Down'
+            if button[1] == 'Down':
                 data.saveJSONObjToFile('button.data', '{"button":"down"}')
                 
             # 'Right' button pressed, show full stats view
-            if button[1] == 'Right'
+            if button[1] == 'Right':
                 data.saveJSONObjToFile('button.data', '{"button":"right"}')
