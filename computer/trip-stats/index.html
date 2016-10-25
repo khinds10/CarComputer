@@ -52,14 +52,12 @@
     <!-- 'Right' button pressed, show full stats view -->    
     <div id="driving-stats-view" style="display:none;">
         <table id="driving-stats-table" class="absolute medium-text" style="left: 120px; top: 130px; width: 70%;">
-        
             <tr>
                 <td class="no-text-wrap">&nbsp;</td>
                 <td class="no-text-wrap">Today</td>
                 <td class="no-text-wrap">Week</td>
                 <td class="no-text-wrap">Month</td>
             </tr>
-        
             <tr>
                 <td class="lcars-blue-color no-text-wrap">DRIVING</td>
                 <td class="lcars-blue-color no-text-wrap"><span id="drivingTimes1"></span></td>
@@ -102,7 +100,6 @@
                 <td class="lcars-purple-color no-text-wrap" style="width: 170px;">AVG SPEED</td>
                 <td class="lcars-purple-color"><span id="averageSpeed" class="no-text-wrap">0</span> MPH</td>
             </tr>
-            
             <!--  TODO
             <tr>
                 <td class="lcars-tan-color no-text-wrap" style="width: 170px;">MILES</td>
@@ -112,7 +109,7 @@
         </table>
     </div>    
     
-    <div class="absolute medium-text" style="left: 10px; top: 420px; width: 800px; height: 45px;  overflow: hidden;"><div id="phoneMessage"></div></div>
+    <div id="phone-message-container" class="absolute medium-text"><div id="phoneMessage"></div></div>
     <span class="small-text" style="position: absolute; color: black; top: 400px; left: 250px;">Altitude <span id="altitude">0</span> ft</span>
     <span class="small-text" style="position: absolute; color: black; top: 400px; left: 380px;"><span id="latitude">0</span> / <span id="longitude">0</span></span>
     <span class="small-text" style="position: absolute; color: black; position: absolute; top: 400px; left: 165px;">CLB <span id="climb">0</span></span>
@@ -124,7 +121,6 @@
       <div class="lcars-column u-1-8 lcars-elbow left bottom lcars-orange-bg"></div>
       <div class="lcars-column u-6-8 lcars-divider lcars-orange-tan-divide">
         <div class="lcars-row">
-          
           <div class="lcars-column u-1-2">                  
           <span class="absolute lcars-tan-color" style="top: 35px;">SYSTEM TIME</span>
           <h1 class="absolute time-text" style="top: 42px;"><span id="time">00:00PM</span></h1>
@@ -178,18 +174,46 @@
   </div>
 
  <script type="text/javascript">
- 
      // each second update the LCARS UI with the new data 
       $(document).ready(function() {
           setInterval(function() {
             $.get( "/computer/TripStats.py", function( data ) {
                 var data = JSON.parse(data);
                 
+                // based on button pressed, hide or show elements on the output screen
+                var buttonPressed = data.buttonPressed;
+                $( "#heading-info" ).show();
+                $( "#weather-info-view" ).hide();
+                $( "#locale-info-view" ).hide();
+                $( "#driving-stats-view" ).hide();
+                $( "#default-driving-view" ).hide();
+                if ( buttonPressed == 'Down' ) {
+                    $( "#default-driving-view" ).show();
+                } else if ( buttonPressed == 'Up' ) {
+                    $( "#weather-info-view" ).show();
+                } else if ( buttonPressed == 'Left' ) {
+                    $( "#locale-info-view" ).show();
+                } else if ( buttonPressed == 'Right' ) {
+                    $( "#heading-info" ).hide();
+                    $( "#driving-stats-view" ).show();
+                }
+
+                // check that the internet is connected                
+                var internetConnected = data.internetConnected;
+                if (internetConnected == "ok") {
+                    $( "#internetConnected" ).html( "connected" );
+                    $( "#time" ).html( data.time );
+                } else {
+                    $( "#internetConnected" ).html( "offline" );
+                    $( "#phoneMessage" ).html( " - Internet Offline - " );
+                    $( "#time" ).html( "00:00PM" );
+                }
+                
                 // rotate the compass the number of degress
                 rotateCompass( data.track , data.speed );
                 
                 // populate inside temp/humidity
-                $( "#insideHumidity" ).html( data.insideHumidity );            
+                $( "#insideHumidity" ).html( data.insideHumidity );
                 $( "#insideTemp" ).html( data.insideTemp );
 
                 // populate known GPS data
@@ -204,59 +228,13 @@
                 $( "#latitude" ).html( data.latitude );
                 $( "#longitude" ).html( data.longitude );
                 $( "#altitude" ).html( data.altitude );
-                
-                // check that the internet is connected                
-                var internetConnected = data.internetConnected;
-                if (internetConnected == "ok") {
-                    $( "#internetConnected" ).html( "connected" );
-                    $( "#time" ).html( data.time );
-                } else {
-                    $( "#internetConnected" ).html( "offline" );
-                    $( "#phoneMessage" ).html( " - Internet Offline - " );
-                    $( "#time" ).html( "00:00PM" );
-                }
-
-                // populate known weather info
-                $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
-                $( "#weatherSummary" ).html( data.weatherSummary );
-                $( "#windSpeed" ).html( data.windSpeed );                
-                $( "#outsideTemp" ).html( data.outsideTemp );
-                $( "#outsideHumidity" ).html( data.outsideHumidity );
-                $( "#precipIntensity" ).html( data.precipIntensity );
-                $( "#precipProbability" ).html( data.precipProbability ); 
-                                
+                                                
                 // current trip stats
                 $( "#averageSpeed" ).html( data.averageSpeed );
                 $( "#drivingTime" ).html( data.drivingTime );
                 $( "#inTrafficTime" ).html( data.inTrafficTime );
                 //$( "#currentTripMiles" ).html( data.tripMilesTravelled ); 
                 
-                // complete locale info
-                $( "#address" ).html( data.address );
-                $( "#area" ).html( data.area );
-                $( "#city" ).html( data.city );
-                $( "#country" ).html( data.country );
-                $( "#county" ).html( data.county );
-                $( "#zipcode" ).html( data.zipcode );
-
-                // show phone message if one is present and we're connected to the internet
-                if (internetConnected == 'ok') {
-                    if (data.phoneMessage != '') {
-                        $( "#phoneMessage" ).html( data.phoneMessage );
-                    } else {
-                        $( "#phoneMessage" ).html( "" );
-                    } 
-                }
-                
-                // complete weather info
-                $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
-                $( "#outsideTempSummary" ).html( data.outsideTemp );
-                $( "#precipIntensitySummary" ).html( data.precipIntensity );
-                $( "#precipProbabilitySummary" ).html( data.precipProbability );
-                $( "#weatherNextHourSummary" ).html( data.weatherNextHour );
-                $( "#weatherSummarySummary" ).html( data.weatherSummary );
-                $( "#windSpeedSummary" ).html( data.windSpeed );
-            
                 // populate altitude history
                 $( "#averageAltitude1" ).html( data.averageAltitude[1] );
                 $( "#averageAltitude2" ).html( data.averageAltitude[2] );
@@ -281,23 +259,40 @@
                 $( "#milesTravelled1" ).html( data.milesTravelled[1] );
                 $( "#milesTravelled2" ).html( data.milesTravelled[2] );
                 $( "#milesTravelled3" ).html( data.milesTravelled[3] );
+
+                // complete weather info
+                $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
+                $( "#outsideTempSummary" ).html( data.outsideTemp );
+                $( "#precipIntensitySummary" ).html( data.precipIntensity );
+                $( "#precipProbabilitySummary" ).html( data.precipProbability );
+                $( "#weatherNextHourSummary" ).html( data.weatherNextHour );
+                $( "#weatherSummarySummary" ).html( data.weatherSummary );
+                $( "#windSpeedSummary" ).html( data.windSpeed );
+            
+                // populate known weather info
+                $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
+                $( "#weatherSummary" ).html( data.weatherSummary );
+                $( "#windSpeed" ).html( data.windSpeed );
+                $( "#outsideTemp" ).html( data.outsideTemp );
+                $( "#outsideHumidity" ).html( data.outsideHumidity );
+                $( "#precipIntensity" ).html( data.precipIntensity );
+                $( "#precipProbability" ).html( data.precipProbability );
                 
-                // based on button pressed, hide or show elements on the output screen
-                var buttonPressed = data.buttonPressed;
-                $( "#heading-info" ).show();
-                $( "#weather-info-view" ).hide();
-                $( "#locale-info-view" ).hide();
-                $( "#driving-stats-view" ).hide();
-                $( "#default-driving-view" ).hide();
-                if ( buttonPressed == 'down' ) {
-                    $( "#default-driving-view" ).show();
-                } else if ( buttonPressed == 'up' ) {
-                    $( "#weather-info-view" ).show();
-                } else if ( buttonPressed == 'left' ) {
-                    $( "#locale-info-view" ).show();
-                } else if ( buttonPressed == 'right' ) {
-                    $( "#heading-info" ).hide();
-                    $( "#driving-stats-view" ).show();
+                // complete locale info
+                $( "#address" ).html( data.address );
+                $( "#area" ).html( data.area );
+                $( "#city" ).html( data.city );
+                $( "#country" ).html( data.country );
+                $( "#county" ).html( data.county );
+                $( "#zipcode" ).html( data.zipcode );
+                
+                // show phone message if one is present and we're connected to the internet
+                if (internetConnected == 'ok') {
+                    if (data.phoneMessage != '') {
+                        $( "#phoneMessage" ).html( data.phoneMessage );
+                    } else {
+                        $( "#phoneMessage" ).html( "" );
+                    } 
                 }
             });
           }, 1000);

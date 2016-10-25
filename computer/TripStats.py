@@ -232,9 +232,9 @@ try:
 except (Exception):
         pass
 try:
-    tripStatistics.buttonPressed = buttonPressed['button']
+    tripStatistics.buttonPressed = buttonPressed['name']
 except (Exception):
-        tripStatistics.buttonPressed = 'down'
+        tripStatistics.buttonPressed = 'Down'
         pass
         
 # produce JSON/Output
