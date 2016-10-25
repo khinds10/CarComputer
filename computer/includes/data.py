@@ -6,7 +6,7 @@ import includes.settings as settings
 
 def convertHumanReadable(seconds):
     """return days,hours,seconds for seconds in readable form"""
-    return data.displayHumanReadableTime(seconds)
+    return displayHumanReadableTime(seconds)
 
 def convertNumberHumanReadable(miles):
     """get the number of miles with comma separation"""
