@@ -181,7 +181,7 @@ For testing force your USB device to connect to gpsd
 
 `sudo vi /etc/default/gpsd`
 
-> # Default settings for gpsd.
+> \# Default settings for gpsd.
 > START_DAEMON="false"
 > GPSD_OPTIONS="-n"
 > DEVICES="/dev/ttyUSB0"
@@ -276,6 +276,7 @@ Add the following lines
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Buttons.py > /home/pi/CarComputer/computer/Buttons.log 2>&1`
+`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/MileageStats.py > /home/pi/CarComputer/computer/MileageStats.log 2>&1`
 
 ###Hack required to get GPSD working with USB connection on reboot
 
@@ -283,7 +284,7 @@ Add the following lines
 
 `crontab -e`
 
-# m h  dom mon dow   command
+\# m h  dom mon dow   command
 @reboot /bin/sleep 10; killall gpsd
 @reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
 
@@ -303,7 +304,7 @@ Enable Python CGI Scripting from our own project in http://localhost
         ServerAdmin webmaster@localhost
         DocumentRoot /var/www/html
         ErrorLog ${APACHE_LOG_DIR}/error.log
-        CustomLog ${APACHE_LOG_DIR}/access.log combined
+        CustomLog \${APACHE_LOG_DIR}/access.log combined
     <Directory /var/www/html>
         Options +ExecCGI
         AddHandler cgi-script .py

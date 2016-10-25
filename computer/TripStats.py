@@ -81,6 +81,10 @@ try:
 except (Exception):
         pass
 try:
+    mileageStats = data.getJSONFromDataFile('miles.data')
+except (Exception):
+        pass
+try:
     buttonPressed = data.getJSONFromDataFile('button.data')
 except (Exception):
         pass
@@ -136,11 +140,11 @@ try:
 except (Exception):
         pass
 try: 
-    tripStatistics.tripMilesTravelled = str(drivingStats['milesTravelled'][0])
+    tripStatistics.tripMilesTravelled = str(mileageStats['milesTravelled'][0])
 except (Exception):
         pass    
 try: 
-    tripStatistics.milesTravelled = drivingStats['milesTravelled']
+    tripStatistics.milesTravelled = mileageStats['milesTravelled']
 except (Exception):
         pass
 try: 

@@ -4,6 +4,28 @@
 import time, json, string, cgi, subprocess, os
 import includes.settings as settings
 
+def convertHumanReadable(seconds):
+    """return days,hours,seconds for seconds in readable form"""
+    return data.displayHumanReadableTime(seconds)
+
+def convertNumberHumanReadable(miles):
+    """get the number of miles with comma separation"""
+    return ("{:,.0f} mi".format(miles))
+
+def convertToInt(integer):
+    """convert to integer catch for NoneTypes"""
+    try:
+        return int(integer)
+    except (Exception):
+        return 0
+
+def convertToString(value):
+    """convert to string catch for NoneTypes"""
+    try:
+        return str(value)
+    except (Exception):
+        return ""
+
 def displayHumanReadableTime(seconds, granularity=3):
     """display human readable units of time for given seconds"""
     intervals = (('days', 86400),('hrs', 3600),('min', 60),)
@@ -55,9 +77,12 @@ def removeJSONFile(fileName):
 def getHeadingByDegrees(heading):
     """get compass rose value from heading in degrees"""
 
-    if heading > 348.75 and heading <= 11.25:
+    if heading <= 11.25:
         return 'N'
-
+        
+    if heading > 348.75:
+        return 'N'
+        
     if heading > 11.25 and heading <= 33.75:
         return 'NNE'
       
