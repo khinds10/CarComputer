@@ -254,11 +254,6 @@
                 $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
                 $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
                 $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
-                
-                // populate miles travelled
-                $( "#milesTravelled1" ).html( data.milesTravelled[1] );
-                $( "#milesTravelled2" ).html( data.milesTravelled[2] );
-                $( "#milesTravelled3" ).html( data.milesTravelled[3] );
 
                 // complete weather info
                 $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
@@ -294,6 +289,11 @@
                         $( "#phoneMessage" ).html( "" );
                     } 
                 }
+                
+                // populate miles travelled
+                $( "#milesTravelled1" ).html( data.milesTravelled[1] );
+                $( "#milesTravelled2" ).html( data.milesTravelled[2] );
+                $( "#milesTravelled3" ).html( data.milesTravelled[3] );
             });
           }, 1000);
       });

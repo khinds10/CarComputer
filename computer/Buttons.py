@@ -8,6 +8,11 @@ import includes.data as data
 lcd = LCD.Adafruit_CharLCDPlate()
 buttons = ((LCD.SELECT, 'Select'), (LCD.LEFT, 'Left'), (LCD.UP, 'Up'), (LCD.DOWN, 'Down'),(LCD.RIGHT, 'Right'))
 
+def saveButtonClick(buttonPressed):
+    '''save which button was pressed to file'''
+    myButton.name = buttonPressed
+    data.saveJSONObjToFile('button.data', myButton)
+
 class Button:
     '''Button pressed as a class to persist to data file'''
     name = 'Down'
@@ -17,11 +22,6 @@ class Button:
 # reset what button was pressed and start waiting for button press
 myButton = Button()
 saveButtonClick('Down')
-
-def saveButtonClick(buttonPressed):
-    '''save which button was pressed to file'''
-    myButton.name = buttonPressed
-    data.saveJSONObjToFile('button.data', myButton)
 
 # Loop through each button and save to file if any of them are pressed
 while True:
