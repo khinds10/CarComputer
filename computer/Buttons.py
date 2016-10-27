@@ -3,6 +3,7 @@
 import Adafruit_CharLCD as LCD
 import includes.postgres as postgres
 import includes.data as data
+import json
 
 # Initialize the LCD using the pins and the mapped buttons you can press
 lcd = LCD.Adafruit_CharLCDPlate()
