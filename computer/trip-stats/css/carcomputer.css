@@ -72,7 +72,6 @@ html, body {
 }
 
 #driving-stats-table table, #driving-stats-table th, #driving-stats-table td {
-    border: 1px solid #333;
     padding: 4px;
 }
 
