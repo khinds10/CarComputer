@@ -172,34 +172,22 @@
       <div class="lcars-column u-1-8 lcars-elbow right top lcars-orange-bg"></div>
     </div>
   </div>
-
  <script type="text/javascript">
  
-      // each second update the LCARS UI with the GPS known data
-      $(document).ready(function() {
-          setInterval(function() {
-            $.get( "/computer/TripStats.py", function( data ) {
-                var data = JSON.parse(data);
-                
-                // rotate the compass the number of degress
-                rotateCompass( data.track , data.speed );
-          
-                // populate known GPS data
-                $( "#speed" ).html( data.speed );
-                
-                // if the speed is above 5 we can accurately display the direction
-                if (data.speed > 5) {
-                    $( "#tracking" ).html( data.tracking );
-                }
-                $( "#track" ).html( data.track );
-                $( "#climb" ).html( data.climb );
-                $( "#latitude" ).html( data.latitude );
-                $( "#longitude" ).html( data.longitude );
-                $( "#altitude" ).html( data.altitude );
-            });
-          }, 1000);
-      });
- 
+    // rotate the compass image by arbitrary degrees but only if we're actually moving for correct GPS readings
+    function rotateCompass(deg, speed) {
+        if (speed > 5) {
+            deg = -deg;
+            $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
+        }
+    }
+
+    // check if the value is undefined
+    function isset(value) {
+        if (typeof(value) == 'undefined') return false;
+        return true;
+    }
+
      // each second update the LCARS UI with the Inside temp and internet connected data data 
       $(document).ready(function() {
           setInterval(function() {
@@ -228,127 +216,194 @@
                 }
 
                 // populate inside temp/humidity
-                $( "#insideHumidity" ).html( data.insideHumidity );
-                $( "#insideTemp" ).html( data.insideTemp );
-
-                // check that the internet is connected                
-                var internetConnected = data.internetConnected;
-                if (internetConnected == "ok") {
-                    $( "#internetConnected" ).html( "connected" );
-                    $( "#time" ).html( data.time );
-                    
-                    // show phone message if one is present and we're connected to the internet
-                    if (data.phoneMessage != '') {
-                        $( "#phoneMessage" ).html( data.phoneMessage );
-                    } else {
-                        $( "#phoneMessage" ).html( "" );
-                    }   
-                } else {
-                    $( "#internetConnected" ).html( "offline" );
-                    $( "#phoneMessage" ).html( " - Internet Offline - " );
-                    $( "#time" ).html( "00:00PM" );
+                if (isset(data.insideHumidity) && isset(data.insideTemp)) {
+                    $( "#insideHumidity" ).html( data.insideHumidity );
+                    $( "#insideTemp" ).html( data.insideTemp );                
                 }
+                
+                // check that the internet is connected
+                if (isset(data.internetConnected)) {
+                    var internetConnected = data.internetConnected;
+                    if (internetConnected == "ok") {
+                        $( "#internetConnected" ).html( "connected" );
+                        $( "#time" ).html( data.time );
+                        
+                        // show phone message if one is present and we're connected to the internet
+                        if (data.phoneMessage != '') {
+                            $( "#phoneMessage" ).html( data.phoneMessage );
+                        } else {
+                            $( "#phoneMessage" ).html( "" );
+                        }
+                    } else {
+                        $( "#internetConnected" ).html( "offline" );
+                        $( "#phoneMessage" ).html( " - Internet Offline - " );
+                        $( "#time" ).html( "00:00PM" );
+                    }
+                 }
+                
+                // rotate the compass the number of degress
+                if (isset(data.track) && isset(data.speed)) {
+                    rotateCompass( data.track , data.speed );
+                    
+                    // populate known GPS data
+                    $( "#speed" ).html( data.speed );
+                    
+                    // if the speed is above 5 we can accurately display the direction
+                    if (data.speed > 5) {
+                        $( "#tracking" ).html( data.tracking );
+                    }
+                    $( "#track" ).html( data.track );
+                }
+                
+                if (isset(data.climb)) {
+                    $( "#climb" ).html( data.climb );
+                }
+                if (isset(data.latitude)) {
+                    $( "#latitude" ).html( data.latitude );
+                }
+                if (isset(data.longitude)) {
+                    $( "#longitude" ).html( data.longitude );
+                }
+                if (isset(data.altitude)) {
+                    $( "#altitude" ).html( data.altitude );
+                }
+
+                // current trip stats
+                if (isset(data.averageSpeed)) {
+                    $( "#averageSpeed" ).html( data.averageSpeed );
+                }
+                if (isset(data.drivingTime)) {
+                    $( "#drivingTime" ).html( data.drivingTime );            
+                }
+                if (isset(data.inTrafficTime)) {
+                    $( "#inTrafficTime" ).html( data.inTrafficTime );            
+                }
+
+                // populate altitude history                
+                if (isset(data.averageAltitude[1])) {
+                    $( "#averageAltitude1" ).html( data.averageAltitude[1] );
+                }
+                if (isset(data.averageAltitude[2])) {
+                    $( "#averageAltitude2" ).html( data.averageAltitude[2] );
+                }
+                if (isset(data.averageAltitude[3])) {
+                    $( "#averageAltitude3" ).html( data.averageAltitude[3] );
+                }
+                
+                // populate speed history                
+                if (isset(data.averageSpeeds[1])) {
+                    $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
+                }
+                if (isset(data.averageSpeeds[2])) {
+                    $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
+                }
+                if (isset(data.averageSpeeds[3])) {
+                    $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
+                }          
+                
+                // populate driving times
+                if (isset(data.drivingTimes[1])) {
+                    $( "#drivingTimes1" ).html( data.drivingTimes[1] );
+                }
+                if (isset(data.drivingTimes[2])) {
+                    $( "#drivingTimes2" ).html( data.drivingTimes[2] );
+                }
+                if (isset(data.drivingTimes[3])) {
+                    $( "#drivingTimes3" ).html( data.drivingTimes[3] );
+                }
+                
+                // populate traffic times
+                if (isset(data.inTrafficTimes[1])) {
+                    $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
+                }
+                if (isset(data.inTrafficTimes[2])) {
+                    $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
+                }
+                if (isset(data.inTrafficTimes[3])) {
+                    $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );
+                }
+
+                // complete weather info
+                if (isset(data.outsideHumidity)) {
+                    $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
+                }
+                if (isset(data.outsideTemp)) {
+                    $( "#outsideTempSummary" ).html( data.outsideTemp );
+                }
+                if (isset(data.precipIntensity)) {
+                    $( "#precipIntensitySummary" ).html( data.precipIntensity );
+                }
+                if (isset(data.precipProbability)) {
+                    $( "#precipProbabilitySummary" ).html( data.precipProbability );
+                }
+                if (isset(data.weatherSummary)) {
+                    $( "#weatherSummarySummary" ).html( data.weatherSummary );
+                }
+
+                if (isset(data.windSpeed)) {
+                    $( "#windSpeedSummary" ).html( data.windSpeed );
+                }
+                    
+                // populate known weather info            
+                if (isset(data.weatherNextHour)) {
+                    $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
+                }
+                if (isset(data.weatherSummary)) {
+                    $( "#weatherSummary" ).html( data.weatherSummary );
+                }
+                if (isset(data.windSpeed)) {
+                    $( "#windSpeed" ).html( data.windSpeed );
+                }
+                if (isset(data.outsideTemp)) {
+                    $( "#outsideTemp" ).html( data.outsideTemp );
+                }
+                if (isset(data.outsideHumidity)) {
+                    $( "#outsideHumidity" ).html( data.outsideHumidity );
+                }
+                if (isset(data.precipIntensity)) {
+                    $( "#precipIntensity" ).html( data.precipIntensity );
+                }
+                if (isset(data.precipProbability)) {
+                    $( "#precipProbability" ).html( data.precipProbability );
+                }
+                
+                // complete locale info            
+                if (isset(data.address)) {
+                    $( "#address" ).html( data.address );
+                }
+                if (isset(data.area)) {
+                    $( "#area" ).html( data.area );
+                }
+                if (isset(data.city)) {
+                    $( "#city" ).html( data.city );
+                }
+                if (isset(data.country)) {
+                    $( "#country" ).html( data.country );
+                }
+                if (isset(data.county)) {
+                    $( "#county" ).html( data.county );
+                }
+                if (isset(data.zipcode)) {
+                    $( "#zipcode" ).html( data.zipcode );
+                }
+
+                // populate miles travelled
+                if (isset(data.milesTravelled[1])) {
+                    $( "#milesTravelled1" ).html( data.milesTravelled[1] );
+                }
+                if (isset(data.milesTravelled[2])) {
+                    $( "#milesTravelled2" ).html( data.milesTravelled[2] );
+                }
+                if (isset(data.milesTravelled[3])) {
+                    $( "#milesTravelled3" ).html( data.milesTravelled[3] );
+                }
+                // TODO
+                //if (isset(data.tripMilesTravelled)) {
+                     //$( "#currentTripMiles" ).html( data.tripMilesTravelled );
+                //}                
             });
           }, 1000);
       });
- 
-     // each second update the LCARS UI with the outside weather data 
-      $(document).ready(function() {
-          setInterval(function() {
-            $.get( "/computer/TripStats.py", function( data ) {
-                var data = JSON.parse(data);
-                
-                 // complete weather info
-                $( "#outsideHumiditySummary" ).html( data.outsideHumidity );
-                $( "#outsideTempSummary" ).html( data.outsideTemp );
-                $( "#precipIntensitySummary" ).html( data.precipIntensity );
-                $( "#precipProbabilitySummary" ).html( data.precipProbability );
-                $( "#weatherNextHourSummary" ).html( data.weatherNextHour );
-                $( "#weatherSummarySummary" ).html( data.weatherSummary );
-                $( "#windSpeedSummary" ).html( data.windSpeed );
-            
-                // populate known weather info
-                $( "#weatherNextHour" ).html( data.weatherNextHour.substring(0, 30) );
-                $( "#weatherSummary" ).html( data.weatherSummary );
-                $( "#windSpeed" ).html( data.windSpeed );
-                $( "#outsideTemp" ).html( data.outsideTemp );
-                $( "#outsideHumidity" ).html( data.outsideHumidity );
-                $( "#precipIntensity" ).html( data.precipIntensity );
-                $( "#precipProbability" ).html( data.precipProbability );
-            });
-          }, 10000);
-      });
- 
-     // each 5 seconds update the LCARS UI with the current location found data 
-      $(document).ready(function() {
-          setInterval(function() {
-            $.get( "/computer/TripStats.py", function( data ) {
-                var data = JSON.parse(data);
-                // complete locale info
-                $( "#address" ).html( data.address );
-                $( "#area" ).html( data.area );
-                $( "#city" ).html( data.city );
-                $( "#country" ).html( data.country );
-                $( "#county" ).html( data.county );
-                $( "#zipcode" ).html( data.zipcode );
-            });
-          }, 10000);
-      });
- 
-     // each second update the LCARS UI with the trip averages data 
-      $(document).ready(function() {
-          setInterval(function() {
-            $.get( "/computer/TripStats.py", function( data ) {
-                var data = JSON.parse(data);
-                // current trip stats
-                $( "#averageSpeed" ).html( data.averageSpeed );
-                $( "#drivingTime" ).html( data.drivingTime );
-                $( "#inTrafficTime" ).html( data.inTrafficTime );
-                
-                // populate altitude history
-                $( "#averageAltitude1" ).html( data.averageAltitude[1] );
-                $( "#averageAltitude2" ).html( data.averageAltitude[2] );
-                $( "#averageAltitude3" ).html( data.averageAltitude[3] );
-            
-                // populate speed history
-                $( "#averageSpeeds1" ).html( data.averageSpeeds[1] );
-                $( "#averageSpeeds2" ).html( data.averageSpeeds[2] );            
-                $( "#averageSpeeds3" ).html( data.averageSpeeds[3] );
-                
-                // populate driving times
-                $( "#drivingTimes1" ).html( data.drivingTimes[1] );
-                $( "#drivingTimes2" ).html( data.drivingTimes[2] );
-                $( "#drivingTimes3" ).html( data.drivingTimes[3] );
-
-                // populate traffic times
-                $( "#inTrafficTimes1" ).html( data.inTrafficTimes[1] );
-                $( "#inTrafficTimes2" ).html( data.inTrafficTimes[2] );
-                $( "#inTrafficTimes3" ).html( data.inTrafficTimes[3] );               
-            });
-          }, 10000);
-      });
- 
-     // each second update the LCARS UI with the miles travelled data 
-      $(document).ready(function() {
-          setInterval(function() {
-            $.get( "/computer/TripStats.py", function( data ) {
-                var data = JSON.parse(data);
-                // populate miles travelled
-                //$( "#currentTripMiles" ).html( data.tripMilesTravelled ); 
-                $( "#milesTravelled1" ).html( data.milesTravelled[1] );
-                $( "#milesTravelled2" ).html( data.milesTravelled[2] );
-                $( "#milesTravelled3" ).html( data.milesTravelled[3] );
-            });
-          }, 10000);
-      });
-      
-     // rotate the compass image by arbitrary degrees but only if we're actually moving for correct GPS readings
-     function rotateCompass(deg, speed) {
-        if (speed > 5) {
-            deg = -deg;
-            $( "#compass" ).css({"-webkit-transform": "rotate("+deg+"deg)","-moz-transform": "rotate("+deg+"deg)","transform": "rotate("+deg+"deg)"});
-        }
-     }
   </script>
 </body>
 </html>
