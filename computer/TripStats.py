@@ -5,9 +5,6 @@ import includes.data as data
 import includes.settings as settings
 print "Access-Control-Allow-Origin: *\n\n"
 
-# adjust time in UTC to Eastern Standard Time
-timezone=4*60*60
-
 class TripStatistics:
     '''JSON Info to show on the HTML output of the display monitor'''
     time = ''
@@ -100,7 +97,7 @@ try:
 except (Exception):
         pass
 try:
-    tripStatistics.time = datetime.datetime.fromtimestamp(time.time()-timezone).strftime('%I:%M%p').lstrip('0')
+    tripStatistics.time = datetime.datetime.fromtimestamp(time.time()).strftime('%I:%M%p').lstrip('0')
 except (Exception):
         pass
 try: 

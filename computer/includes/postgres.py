@@ -31,9 +31,9 @@ def getInTrafficTimes(tripStartId):
 
 def getTrafficTimeByInterval(value, interval):
     """for given column and date interval retrieve the calculated value"""
-    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
+    # if one day is specified it means since 7am
     if (interval == '1 day'):
-        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')        
+        morningTime = datetime.now().strftime('%Y-%m-%d 07:00:00')        
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= '" + morningTime + "'") 
     else:
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND time >= (now() - interval '" + str(interval) + "')")
