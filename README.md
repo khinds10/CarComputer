@@ -94,6 +94,12 @@ Add the following lines to have your raspberrypi automatically connect to your h
 >
 >$ `sudo pip install RPi.GPIO`
 
+**Update local timezone settings**
+
+>$ `sudo dpkg-reconfigure tzdata`
+
+`select your timezone using the interface`
+
 **Setup the simple directory `l` command [optional]**
 
 >`vi ~/.bashrc`
