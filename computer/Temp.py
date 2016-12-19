@@ -27,7 +27,6 @@ data.saveJSONObjToFile('temp.data', currentReadings)
 while True:
     humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
     if humidity is not None and temperature is not None:
-    
         # convert to imperial units, save to JSON file and wait one second
         temperature = 9.0/5.0 * temperature + 32
         currentReadings = CurrentReadings()

@@ -29,7 +29,6 @@ while True:
         
         # get current forecast from location
         weatherInfo = json.loads(subprocess.check_output(['curl', 'https://api.forecast.io/forecast/' + settings.weatherAPIKey + '/' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude']) + '?lang=en']))
-        
         hourlyConditions = weatherInfo['minutely']
         currentConditions = weatherInfo['currently']
         
@@ -50,5 +49,5 @@ while True:
         time.sleep(300)
         
     except (Exception):
-        # GPS is not fixed or network issue, wait 5 seconds
-        time.sleep(5)
+        # GPS is not fixed or network issue, wait 30 seconds
+        time.sleep(30)

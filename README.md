@@ -2,7 +2,7 @@
 
 ####Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
 
-Download "RASPBIAN JESSIE FULL VERSION"
+Download "RASPBIAN JESSIE LITE VERSION"
 https://www.raspberrypi.org/downloads/raspbian/
 
 **Create your new hard disk for DashboardPI**
@@ -20,7 +20,7 @@ https://www.raspberrypi.org/downloads/raspbian/
 > *if=location of RASPBIAN JESSIE FULL VERSION image file*
 > *of=location of your microSD card*
 > 
-> $ `sudo dd bs=4M if=/path/to/raspbian-jessie.img of=/dev/sdb`
+> $ `sudo dd bs=4M if=/path/to/raspbian-jessie-lite.img of=/dev/sdb`
 > *(note: in this case, it's /dev/sdb, /dev/sdb1 was an existing factory partition on the microSD)*
 
 **Setting up your RaspberriPi**
@@ -90,7 +90,7 @@ Add the following lines to have your raspberrypi automatically connect to your h
 
 >$ `sudo apt-get update && sudo apt-get upgrade`
 >
->$ `sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim`
+>$ `sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools libi2c-dev python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim`
 >
 >$ `sudo pip install RPi.GPIO`
 
@@ -117,23 +117,6 @@ Add the following lines to have your raspberrypi automatically connect to your h
 >uncomment the following line:
 >
 >_syntax on_
-
-####16x2 plate installation
-
-`sudo i2cdetect -y 1`
-> the 16x2 plate should be at address 20
-
-`git clone https://github.com/adafruit/Adafruit_Python_CharLCD.git`
-
-`cd Adafruit_Python_CharLCD`
-
-`sudo python setup.py install`
-
-`cd examples`
-
-`python char_lcd_plate.py`
-
-> the LCD display should be showing a random assortment of colors and symbols
 
 ####DHT11 Install
 
@@ -293,81 +276,3 @@ Add the following lines
 \# m h  dom mon dow   command
 @reboot /bin/sleep 10; killall gpsd
 @reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
-
-###Install the local driving statistics website [http://localhost]
-
-`sudo apt-get update && sudo apt-get upgrade -y`
-
-`sudo apt-get install apache2 midori`
-
-Enable Python CGI Scripting from our own project in http://localhost
-
-`sudo vi /etc/apache2/sites-enabled/000-default.conf`
-
-**Change to the following**
-
-<VirtualHost *:80>
-        ServerAdmin webmaster@localhost
-        DocumentRoot /var/www/html
-        ErrorLog ${APACHE_LOG_DIR}/error.log
-        CustomLog \${APACHE_LOG_DIR}/access.log combined
-    <Directory /var/www/html>
-        Options +ExecCGI
-        AddHandler cgi-script .py
-    </Directory>
-</VirtualHost>
-
-### Add the symlink to the project in the Apache2 webroot
-
-`cd /var/www/`
-`sudo chmod 777 html`
-`cd /var/www/html`
-`ln -s /home/pi/CarComputer/computer/`
-`cd /home/pi/CarComputer/computer/`
-`chmod +x *.py`
-`sudo a2enmod cgi`
-`sudo service apache2 restart`
-
-You can now visit the local HTTP site to get driving data [http://localhost/computer/TripStats.py]
-
-### Get the small HDMI screen program working in desktop view
-
-Disable Xsession from blanking
-
-`sudo vi /etc/kbd/config`
-BLANK_TIME=0
-
-`sudo vi /etc/xdg/lxsession/LXDE-pi/autostart`
-
-remove
-> @xscreensaver -no-splash
-    
-add: 
-> @xset s noblank
-> @xset s off
-> @xset -dpms
-
-
-`sudo vi /etc/lightdm/lightdm.conf`
-
-add the following under SeatDefaults directive
-
-> [SeatDefaults]
-> xserver-command=X -s 0 -dpms
-
-Add the default browser to run in kiosk mode on system startup
-
-`vi ~/.config/lxsession/LXDE-pi/autostart`
-
-add the line
-> @midori -e Fullscreen -a http://localhost/computer/trip-stats/
-
-remove the screensave line
-> @xscreensaver -no-splash
-
-Update for HDMI to run in 800x480
-
-`/boot/config.txt`
-
-add the following line:
-`hdmi_cvt=800 480 60 6 0 0 0`

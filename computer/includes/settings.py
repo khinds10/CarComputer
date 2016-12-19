@@ -6,6 +6,7 @@
 logFilesLocation = '/home/pi/CarComputer/computer/logs/';
 
 # forecast.io API key for local weather information
+weatherAPIURL = 'https://api.forecast.io/forecast/'
 weatherAPIKey = 'API KEY HERE - developer.forecast.io'
 
 # if you have the dashboard phone project running (https://github.com/khinds10/RetroDashboard)
