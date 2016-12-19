@@ -28,7 +28,7 @@ def convertToString(value):
 
 def displayHumanReadableTime(seconds, granularity=3):
     """display human readable units of time for given seconds"""
-    intervals = (('days', 86400),('hrs', 3600),('min', 60),)
+    intervals = (('d', 86400),('h', 3600),('m', 60),)
     result = []
     for name, count in intervals:
         value = seconds // count
@@ -36,8 +36,8 @@ def displayHumanReadableTime(seconds, granularity=3):
             seconds -= value * count
             if value == 1:
                 name = name.rstrip('s')
-            result.append("{} {}".format(value, name))
-    return ', '.join(result[:granularity])
+            result.append("{}{}".format(value, name))
+    return ''.join(result[:granularity])
     
 def getJSONFromDataFile(fileName):
     """get JSON contents from file in question"""
