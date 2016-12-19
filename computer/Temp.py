@@ -3,7 +3,6 @@
 # License: GPL 2.0
 import Adafruit_DHT
 import os, time, json
-import Adafruit_CharLCD as LCD
 import includes.data as data
 
 # set to use DHT11 sensor
