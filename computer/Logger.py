@@ -13,7 +13,7 @@ import info.LocaleDetails as LocaleDetails
 
 # save full datasets to DB each second
 while True:
-    #try:
+    try:
         locationInfo = data.getJSONFromDataFile('location.data')
         if locationInfo == "":
             locationInfo = GPSInfo.GPSInfo()
@@ -35,6 +35,6 @@ while True:
             weatherInfo = json.loads(weatherInfo.to_JSON())
             
         postgres.saveDrivingStats(locationInfo, localeInfo, tempInfo, weatherInfo)    
-    #except (Exception):
-    #    pass
-        time.sleep(1)
+    except (Exception):
+        pass
+    time.sleep(1)
