@@ -8,7 +8,7 @@ import info.LocaleDetails as LocaleDetails
 # get local locale info every 1 minutes to file to be further processed
 while True:
     try: 
-        currentLocationInfo = data.getCurrentLatLong()
+        currentLocationInfo = data.getLastKnownLatLong()
         localeURL = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude'])
         localeInfo = json.loads(subprocess.check_output(['curl', localeURL]))
 

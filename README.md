@@ -262,20 +262,8 @@ Run the following queries:
 @reboot /bin/sleep 10; killall gpsd
 @reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
 
-
-
-
-
-
-
-
-
-FINISH STARTING HERE......
-
-
 ###Create the logs folder for the data to be saved
 mkdir /home/pi/CarComputer/computer/logs
-
 
 ###Setup the scripts to run at boot
 
@@ -284,11 +272,17 @@ mkdir /home/pi/CarComputer/computer/logs
 Add the following lines 
 
 `@reboot /bin/sleep 5; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 5; nohup python /home/pi/CarComputer/computer/Indicators.py > /home/pi/CarComputer/computer/Indicators.log 2>&1`
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
 `@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
 `@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
 
 
+###Building the CarComputer
 
+Connect 2 LEDs with a 270ohm resistor to the RPi pins 15 and 16 respectively, connect the other leads on both LEDs to the RPi GND pin.
+
+The LED for pin 15 will be for if the internet is connected or not, pin 16 will be for if the GPS is currently tracking your location or not

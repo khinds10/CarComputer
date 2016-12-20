@@ -56,6 +56,20 @@ def checkFileExists(fileName):
     """check if data file by name exists or not"""
     return os.path.exists(settings.logFilesLocation + fileName)
       
+def getLastKnownLatLong():
+    """get the last known lat/long from location data"""
+    currentLocation = getJSONFromDataFile('last-location.data')
+    
+    # if we don't have
+    if str(currentLocation['track']) == 'nan' or str(currentLocation['altitude']) == 'nan' or str(currentLocation['longitude']) == '0.0' or str(currentLocation['latitude']) == '0.0' or str(currentLocation['climb']) == 'nan' or str(currentLocation['speed']) == 'nan':
+        raise ValueError('GPS is not fixed')
+    
+    # return lat/long as simple object
+    currentLatLong = {}
+    currentLatLong['latitude'] = currentLocation['latitude']
+    currentLatLong['longitude'] = currentLocation['longitude']
+    return currentLatLong
+      
 def getCurrentLatLong():
     """get the current lat/long from location data"""
     currentLocation = getJSONFromDataFile('location.data')

@@ -13,6 +13,7 @@ gpsd = None
 
 # start a new trip by inserting the new trip DB entry
 postgres.startNewTrip()
+data.removeJSONFile('location.data')
 
 class GpsPoller(threading.Thread):
   '''create a threaded class for polling on the GPS sensor '''
@@ -57,6 +58,7 @@ if __name__ == '__main__':
 
             # create or rewrite data to GPS location data file as JSON
             data.saveJSONObjToFile('location.data', gpsInfo)
+            data.saveJSONObjToFile('last-location.data', gpsInfo)
             time.sleep(1)
 
     except (KeyboardInterrupt, SystemExit):

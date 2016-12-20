@@ -12,7 +12,7 @@ while True:
 
     try:
         # get current location from GPS
-        currentLocationInfo = data.getCurrentLatLong()
+        currentLocationInfo = data.getLastKnownLatLong()
         
         # get current forecast from location
         weatherInfo = json.loads(subprocess.check_output(['curl', 'https://api.forecast.io/forecast/' + settings.weatherAPIKey + '/' + str(currentLocationInfo['latitude']) + ',' + str(currentLocationInfo['longitude']) + '?lang=en']))
