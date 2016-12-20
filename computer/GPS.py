@@ -5,6 +5,7 @@ import os, time, threading, pprint, json
 import includes.postgres as postgres
 from gps import *
 import includes.data as data
+import json.GPSInfo as GPSInfo
 pp = pprint.PrettyPrinter(indent=4)
 
 # setting the global variable
@@ -12,18 +13,6 @@ gpsd = None
 
 # start a new trip by inserting the new trip DB entry
 postgres.startNewTrip()
-
-class GPSInfo:
-    '''GPS info as class to persist as JSON information to file'''
-    latitude = 0
-    longitude = 0
-    altitude = 0
-    speed = 0
-    climb = 0
-    track = 0
-    mode = 0
-    def to_JSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
 
 class GpsPoller(threading.Thread):
   '''create a threaded class for polling on the GPS sensor '''
@@ -47,13 +36,12 @@ if __name__ == '__main__':
 
     # create the thread & start it up
     gpsp = GpsPoller()
-
     try:
         gpsp.start()
         while True:
         
             # save JSON object of GPS info to file system
-            gpsInfo = GPSInfo()
+            gpsInfo = GPSInfo.GPSInfo()
             gpsInfo.latitude = float(gpsd.fix.latitude)
             gpsInfo.longitude = float(gpsd.fix.longitude)
             gpsInfo.track = float(gpsd.fix.track)

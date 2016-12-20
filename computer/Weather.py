@@ -4,20 +4,7 @@
 import time, json, string, cgi, subprocess
 import includes.data as data
 import includes.settings as settings
-
-class WeatherDetails:
-    '''Weather Information as class to persist as JSON information to file'''
-    time = 0
-    summary = 0
-    nextHour = ''
-    icon = 0
-    apparentTemperature = 0
-    humidity = 0
-    precipIntensity = 0
-    precipProbability = 0
-    windSpeed = 0
-    def to_JSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
+import json.WeatherDetails as WeatherDetails
 
 # remove old file and start logging weather
 data.removeJSONFile('weather.data')
@@ -33,7 +20,7 @@ while True:
         currentConditions = weatherInfo['currently']
         
         # gather info in serializable object to store as JSON file
-        weatherDetails = WeatherDetails()
+        weatherDetails = WeatherDetails.WeatherDetails()
         weatherDetails.time = int(currentConditions['time'])
         weatherDetails.summary = str(currentConditions['summary'])
         weatherDetails.nextHour = str(hourlyConditions['summary'])

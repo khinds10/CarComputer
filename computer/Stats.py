@@ -4,27 +4,17 @@
 import os, time, json
 import includes.data as data
 import includes.postgres as postgres
+import json.DrivingStatistics as DrivingStatistics
 
-class DrivingStatistics:
-    """Overall Driving Statistics to save as class to persist as JSON information to file"""
-    drivingTimes = []
-    inTrafficTimes = []
-    averageSpeeds = []
-    averageAltitude = []
-    milesTravelled = []
-    def to_JSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
-        
 # get the beginning of the trip
 thisTripStartID = postgres.getNewTripStartID()
 
 # remove stats data and start calculating
 data.removeJSONFile('stats.data')
 
-
 while True:
     try:
-	drivingStatistics = DrivingStatistics()
+	drivingStatistics = DrivingStatistics.DrivingStatistics()
 	drivingTimes = postgres.getDrivingTimes(thisTripStartID)
 	avgSpeeds = postgres.getAverageSpeeds(thisTripStartID)
 	drivingStatistics.drivingTimes = map(data.convertHumanReadable, drivingTimes)

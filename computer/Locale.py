@@ -3,17 +3,7 @@
 # License: GPL 2.0
 import time, json, string, cgi, subprocess
 import includes.data as data
-
-class LocaleDetails:
-    '''Locale Information as class to persist as JSON information to file'''
-    address = ''
-    area = ''
-    city = ''
-    zipcode = ''
-    county = ''
-    country = ''
-    def to_JSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)
+import json.LocaleDetails as LocaleDetails
 
 # get local locale info every 1 minutes to file to be further processed
 while True:
@@ -23,7 +13,7 @@ while True:
         localeInfo = json.loads(subprocess.check_output(['curl', localeURL]))
 
         # create serializeable class for use to save locale info to JSON file object
-        localeDetails = LocaleDetails()
+        localeDetails = LocaleDetails.LocaleDetails()
         localeDetails.address = str(localeInfo['results'][0]['formatted_address'])
         localeDetails.area = str(localeInfo['results'][1]['formatted_address'])
         localeDetails.city = str(localeInfo['results'][2]['formatted_address'])

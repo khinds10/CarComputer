@@ -38,12 +38,15 @@ def displayHumanReadableTime(seconds, granularity=3):
                 name = name.rstrip('s')
             result.append("{}{}".format(value, name))
     return ''.join(result[:granularity])
-    
+
 def getJSONFromDataFile(fileName):
     """get JSON contents from file in question"""
-    with open(settings.logFilesLocation + fileName) as locationFile:    
-        return json.load(locationFile)
-		
+    try:
+        with open(settings.logFilesLocation + fileName) as locationFile:    
+            return json.load(locationFile)
+    except (Exception):
+        return ""
+
 def saveJSONObjToFile(fileName, JSONObj):
     """create or rewrite object to data file as JSON"""
     f = file(settings.logFilesLocation + fileName, "w")
