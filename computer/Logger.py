@@ -16,23 +16,23 @@ while True:
     #try:
         locationInfo = data.getJSONFromDataFile('location.data')
         if locationInfo == "":
-            gPSInfo = GPSInfo.GPSInfo()
-            locationInfo =  gPSInfo.to_JSON()
+            locationInfo = GPSInfo.GPSInfo()
+            locationInfo = json.loads(locationInfo.to_JSON())
         
         localeInfo = data.getJSONFromDataFile('locale.data')
         if localeInfo == "":
-            localeDetails = LocaleDetails.LocaleDetails()
-            localeInfo = localeDetails.to_JSON()
+            localeInfo = LocaleDetails.LocaleDetails()
+            localeInfo = json.loads(localeDetails.to_JSON())
         
         tempInfo = data.getJSONFromDataFile('temp.data')
         if tempInfo == "":
-            currentReadings = CurrentReadings.CurrentReadings()
-            tempInfo = currentReadings.to_JSON()
+            tempInfo = CurrentReadings.CurrentReadings()
+            tempInfo = json.loads(currentReadings.to_JSON())
         
         weatherInfo = data.getJSONFromDataFile('weather.data')
         if weatherInfo == "":
-            weatherDetails = WeatherDetails.WeatherDetails()
-            weatherInfo = weatherDetails.to_JSON()
+            weatherInfo = WeatherDetails.WeatherDetails()
+            weatherInfo = json.loads(weatherDetails.to_JSON())
         
         print locationInfo
         print localeInfo
