@@ -251,21 +251,6 @@ Run the following queries:
 >);
 >CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
 
-###Setup the scripts to run at boot
-
-`crontab -e`
-
-Add the following lines 
-
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Display.py > /home/pi/CarComputer/computer/Display.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Buttons.py > /home/pi/CarComputer/computer/Buttons.log 2>&1`
-`@reboot /bin/sleep 30; nohup python /home/pi/CarComputer/computer/MileageStats.py > /home/pi/CarComputer/computer/MileageStats.log 2>&1`
 
 ###Hack required to get GPSD working with USB connection on reboot
 
@@ -276,3 +261,34 @@ Add the following lines
 \# m h  dom mon dow   command
 @reboot /bin/sleep 10; killall gpsd
 @reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
+
+
+
+
+
+
+
+
+
+FINISH STARTING HERE......
+
+
+###Create the logs folder for the data to be saved
+mkdir /home/pi/CarComputer/computer/logs
+
+
+###Setup the scripts to run at boot
+
+`crontab -e`
+
+Add the following lines 
+
+`@reboot /bin/sleep 5; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
+`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
+`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+
+
+

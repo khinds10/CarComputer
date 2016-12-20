@@ -4,7 +4,7 @@
 import os, time, json
 import includes.data as data
 import includes.postgres as postgres
-import json.DrivingStatistics as DrivingStatistics
+import info.DrivingStatistics as DrivingStatistics
 
 # get the beginning of the trip
 thisTripStartID = postgres.getNewTripStartID()

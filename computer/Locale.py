@@ -3,7 +3,7 @@
 # License: GPL 2.0
 import time, json, string, cgi, subprocess
 import includes.data as data
-import json.LocaleDetails as LocaleDetails
+import info.LocaleDetails as LocaleDetails
 
 # get local locale info every 1 minutes to file to be further processed
 while True:

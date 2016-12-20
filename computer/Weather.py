@@ -4,7 +4,7 @@
 import time, json, string, cgi, subprocess
 import includes.data as data
 import includes.settings as settings
-import json.WeatherDetails as WeatherDetails
+import info.WeatherDetails as WeatherDetails
 
 # remove old file and start logging weather
 data.removeJSONFile('weather.data')

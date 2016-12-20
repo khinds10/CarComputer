@@ -4,7 +4,7 @@
 import Adafruit_DHT
 import os, time, json
 import includes.data as data
-import json.CurrentReadings as CurrentReadings
+import info.CurrentReadings as CurrentReadings
 
 # set to use DHT11 sensor
 sensor = Adafruit_DHT.DHT11

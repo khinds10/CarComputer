@@ -5,7 +5,7 @@ import os, time, threading, pprint, json
 import includes.postgres as postgres
 from gps import *
 import includes.data as data
-import json.GPSInfo as GPSInfo
+import info.GPSInfo as GPSInfo
 pp = pprint.PrettyPrinter(indent=4)
 
 # setting the global variable
