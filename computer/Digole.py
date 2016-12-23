@@ -4,28 +4,38 @@
 import datetime as dt
 import time, json, string, cgi, subprocess, json
 
-# clear and rotate screen
-#subprocess.call(["/home/pi/CarComputer/computer/digole", "clear"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setRot90"])
 
 
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "0"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "123"])
-
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "0", "0", "##############################################################################################"])
-
-exit()
-
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "255"])
+def resetScreen():
+    """clear and rotate screen"""
+    subprocess.call(["/home/pi/CarComputer/computer/digole", "clear"])
+    subprocess.call(["/home/pi/CarComputer/computer/digole", "setRot90"])
 
 
-# make a function that doesn't have to clear the screen just writes empty spaces over the whole screen???
+resetScreen()
+
+# show today driving stats
+subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "120"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "249"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "35", "Today: 1.5h / 6m"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "70", "       12.3 mi / 17MPH"])
+
+# show week driving stats
+subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "252"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "115", "Week: 7.2h / 36m"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "150", "      123.3 mi / 14MPH"])
+
+# show month driving stats
+subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "240"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "195", "Month: 46.5h / 35.5h"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "230", "       655.3 mi / 13MPH"])
 
 
-
+resetScreen()
 
 # show weather / phone summary
 subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "51"])
+subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "255"])
 subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "75", "Sunshine for the hour"])
 
 # inside/outside tempurature
@@ -50,3 +60,8 @@ subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "250"])
 subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "105", "175", "22mph [Avg]"])
 subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "222"])
 subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "150", "225", "65.4 mi [Est]"])
+
+
+
+
+
