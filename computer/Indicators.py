@@ -2,7 +2,8 @@
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import time, subprocess
-import RPi.GPIO as GPIO  
+import RPi.GPIO as GPIO
+import includes.data as data
 
 # to use Raspberry Pi board pin numbers  
 GPIO.setmode(GPIO.BOARD)
@@ -27,7 +28,7 @@ while True:
         # get if the internet is connected or not "ok" / "error"
         isConnected = subprocess.check_output(['bash', 'connection.sh'])
         isConnected = isConnected.strip()
-        
+       
         # turn on/off internet connected indicator
         if isConnected == "ok":
             setLight(15, 1)
@@ -36,6 +37,8 @@ while True:
 
         # check GPS status and turn on light if no issues
         currentLocationInfo = data.getCurrentLatLong()
+
+	print currentLocationInfo
         setLight(16, 1)
         
     except (Exception):
