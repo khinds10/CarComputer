@@ -68,8 +68,6 @@ resetScreen()
 
 # weather.data
 weatherNextHour = ''
-weatherApparentTemperature = ''
-weatherHumidity = ''
 weatherOutside = ''
 
 # temp.data
@@ -77,12 +75,14 @@ tempHmidty = ''
 
 # location.data  (use equation)
 locationTrack = ''
+currentTime = ''
 
 # stats.data (get the first of each)
 statsDrivingTimes = ''
 statsInTrafficTimes = ''
 statsAverageSpeeds = ''
 statsMilesTravelled = ''
+
 
 # begin loop through main default screen
 while True:
@@ -95,11 +95,11 @@ while True:
 
     # next hour weather
     if weatherNextHour != weatherInfo['nextHour']:
-        printByFontColorPosition("51", "255", "5", "75", weatherInfo['nextHour'], weatherNextHour)
+        printByFontColorPosition("51", "255", "5", "75", weatherInfo['nextHour'][:25], weatherNextHour)
         weatherNextHour = weatherInfo['nextHour']
 
     # outside temp/humidity
-    weatherOutsideUpdated = '[' + str(weatherInfo['apparentTemperature']) + '*F ' + str(weatherInfo['humidity']) + '%]'
+    weatherOutsideUpdated = '[' + str(int(weatherInfo['apparentTemperature'])) + '*F ' + str(int(weatherInfo['humidity']*100)) + '%]'
     if weatherOutside != weatherOutsideUpdated:
         printByFontColorPosition("120", "240", "150", "35", weatherOutsideUpdated, weatherOutside)
         weatherOutside = weatherOutsideUpdated
@@ -131,19 +131,19 @@ while True:
     # current in-traffic time
     statsInTrafficTimesUpdated = str(drivingStatistics['inTrafficTimes'][0]) + ' [Traffic]'
     if statsInTrafficTimes != statsInTrafficTimesUpdated:
-        printByFontColorPosition("120", "252", "110", "125", statsInTrafficTimesUpdated, statsInTrafficTimes)
+        printByFontColorPosition("120", "252", "120", "125", statsInTrafficTimesUpdated, statsInTrafficTimes)
         statsInTrafficTimes = statsInTrafficTimesUpdated
     
     # average speed
     statsAverageSpeedsUpdated = str(drivingStatistics['averageSpeeds'][0]) + 'mph [Avg]'
     if statsAverageSpeeds != statsAverageSpeedsUpdated:
-        printByFontColorPosition("120", "250", "105", "175", statsAverageSpeedsUpdated, statsAverageSpeeds)
+        printByFontColorPosition("120", "250", "5", "175", statsAverageSpeedsUpdated, statsAverageSpeeds)
         statsAverageSpeeds = statsAverageSpeedsUpdated
 
     # miles travelled
-    statsMilesTravelledUpdated = str(drivingStatistics['milesTravelled'][0]) + ' mi [Est]'
+    statsMilesTravelledUpdated = str(drivingStatistics['milesTravelled'][0]) + ' mi Est.'
     if statsMilesTravelled != statsMilesTravelledUpdated:
-        printByFontColorPosition("120", "222", "150", "225", statsMilesTravelledUpdated, statsMilesTravelled)
+        printByFontColorPosition("120", "222", "190", "175", statsMilesTravelledUpdated[:10], statsMilesTravelled)
         statsMilesTravelled = statsMilesTravelledUpdated
     
     # location.data
@@ -152,11 +152,8 @@ while True:
         locationInfo = GPSInfo.GPSInfo()
         locationInfo = json.loads(locationInfo.to_JSON())
     
-    # compass direction
-    locationTrackUpdated = str(data.getHeadingByDegrees(locationInfo['track']))
-    if locationTrack != locationTrackUpdated:
-        printByFontColorPosition("120", "255", "5", "175", locationTrackUpdated, locationTrack)
-        locationTrack = locationTrackUpdated
+    currentTimeUpdated = ''
+    printByFontColorPosition("120", "249", "150", "225", " - 11:09pm - ", '')
     
     # if button pressed go to the 2nd screen for 5 seconds
     # showStatisticsScreen()
