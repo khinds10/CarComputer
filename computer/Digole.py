@@ -3,65 +3,162 @@
 # License: GPL 2.0
 import datetime as dt
 import time, json, string, cgi, subprocess, json
-
-
+import includes.data as data
+import info.CurrentReadings as CurrentReadings
+import info.WeatherDetails as WeatherDetails
+import info.GPSInfo as GPSInfo
+import info.DrivingStatistics as DrivingStatistics
+import info.CurrentReadings as CurrentReadings
+import info.LocaleDetails as LocaleDetails
 
 def resetScreen():
     """clear and rotate screen"""
-    subprocess.call(["/home/pi/CarComputer/computer/digole", "clear"])
-    subprocess.call(["/home/pi/CarComputer/computer/digole", "setRot90"])
+    subprocess.call([digoleDriveLocation, "clear"])
+    subprocess.call([digoleDriveLocation, "setRot90"])
+    pass
 
+def defaultScreen():
+    """show default screen"""
+    resetScreen()
 
+def statisticsScreen():
+    """show statistics screen"""
+    resetScreen()
+
+def setFont(fontSize):
+    """set font size for screen"""
+    subprocess.call([digoleDriveLocation, "setFont", fontSize])
+    
+def setColor(fontColor):
+    """set font color for screen"""
+    subprocess.call([digoleDriveLocation, "setColor", fontColor])
+
+def printByFontColorPosition(fontSize, fontColor, x, y, text, previousText):
+    """erase existing text and print at x,y """
+    setFont(fontSize)
+    
+    # print the previous text in black to then print the new text
+    setColor("0")
+    subprocess.call([digoleDriveLocation, "printxy_abs", x, y, previousText])
+    
+    # print the new text at the desired color, x, y and font size
+    setColor(fontColor)
+    subprocess.call([digoleDriveLocation, "printxy_abs", x, y, text])
+    
+    print fontSize, fontColor, x, y, text, previousText
+    
+def showStatisticsScreen():
+    """show statistics screen by button press"""
+    resetScreen()
+    printByFontColorPosition("120", "249", "5", "35", "Today: 1.5h / 6m", "")  # stats.data
+    printByFontColorPosition("120", "249", "5", "70", "       12.3 mi / 17MPH", "")
+    printByFontColorPosition("120", "252", "5", "115", "Week: 7.2h / 36m", "")
+    printByFontColorPosition("120", "252", "5", "150", "      123.3 mi / 14MPH", "")
+    printByFontColorPosition("120", "240", "5", "195", "Month: 46.5h / 35.5h", "")
+    printByFontColorPosition("120", "240", "5", "230", "       655.3 mi / 13MPH", "")
+    time.sleep(5)
+
+# reset screen and load beginning driving statistics using the configured digole driver
+digoleDriveLocation = "/home/pi/CarComputer/computer/digole"
 resetScreen()
 
-# show today driving stats
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "120"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "249"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "35", "Today: 1.5h / 6m"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "70", "       12.3 mi / 17MPH"])
+########################
+# default screen
+########################
 
-# show week driving stats
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "252"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "115", "Week: 7.2h / 36m"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "150", "      123.3 mi / 14MPH"])
+# weather.data
+weatherNextHour = ''
+weatherApparentTemperature = ''
+weatherHumidity = ''
+weatherOutside = ''
 
-# show month driving stats
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "240"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "195", "Month: 46.5h / 35.5h"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "230", "       655.3 mi / 13MPH"])
+# temp.data
+tempHmidty = ''
 
+# location.data  (use equation)
+locationTrack = ''
 
-resetScreen()
+# stats.data (get the first of each)
+statsDrivingTimes = ''
+statsInTrafficTimes = ''
+statsAverageSpeeds = ''
+statsMilesTravelled = ''
 
-# show weather / phone summary
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "51"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "255"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "75", "Sunshine for the hour"])
+# begin loop through main default screen
+while True:
 
-# inside/outside tempurature
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setFont", "120"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "249"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "35", "131*F 18%"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "240"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "150", "35", "[164*F 23%]"])
+    # weather.data
+    weatherInfo = data.getJSONFromDataFile('weather.data')
+    if weatherInfo == "":
+        weatherInfo = WeatherDetails.WeatherDetails()
+        weatherInfo = json.loads(weatherInfo.to_JSON())
 
-# driving times
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "28"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "125", "1h28m"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "252"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "110", "125", "1h28m [Traffic]"])
+    # next hour weather
+    if weatherNextHour != weatherInfo['nextHour']:
+        printByFontColorPosition("51", "255", "5", "75", weatherInfo['nextHour'], weatherNextHour)
+        weatherNextHour = weatherInfo['nextHour']
 
-# compass
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "255"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "5", "175", "\ NW"])
+    # outside temp/humidity
+    weatherOutsideUpdated = '[' + str(weatherInfo['apparentTemperature']) + '*F ' + str(weatherInfo['humidity']) + '%]'
+    if weatherOutside != weatherOutsideUpdated:
+        printByFontColorPosition("120", "240", "150", "35", weatherOutsideUpdated, weatherOutside)
+        weatherOutside = weatherOutsideUpdated
+    
+    # temp.data
+    tempInfo = data.getJSONFromDataFile('temp.data')
+    if tempInfo == "":
+        tempInfo = CurrentReadings.CurrentReadings()
+        tempInfo = json.loads(tempInfo.to_JSON())
+    
+    # inside temp / humidity
+    tempHmidtyUpdated =  str(tempInfo['temp']) + "*F " + str(tempInfo['hmidty']) + "%"
+    if tempHmidty != tempHmidtyUpdated:
+        printByFontColorPosition("120", "249", "5", "35", tempHmidtyUpdated, tempHmidty)        
+        tempHmidty = tempHmidtyUpdated
 
-# MPH and distance travelled
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "250"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "105", "175", "22mph [Avg]"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "setColor", "222"])
-subprocess.call(["/home/pi/CarComputer/computer/digole", "printxy_abs", "150", "225", "65.4 mi [Est]"])
+    # stats.data
+    drivingStatistics = data.getJSONFromDataFile('stats.data')
+    if drivingStatistics == "":
+        drivingStatistics = DrivingStatistics.DrivingStatistics()
+        drivingStatistics = json.loads(tempInfo.to_JSON())
+    
+    # current driving time
+    statsDrivingTimesUpdated = str(drivingStatistics['drivingTimes'][0])
+    if statsDrivingTimes != statsDrivingTimesUpdated:
+        printByFontColorPosition("120", "28", "5", "125", statsDrivingTimesUpdated, statsDrivingTimes)
+        statsDrivingTimes = statsDrivingTimesUpdated
+        
+    # current in-traffic time
+    statsInTrafficTimesUpdated = str(drivingStatistics['inTrafficTimes'][0]) + ' [Traffic]'
+    if statsInTrafficTimes != statsInTrafficTimesUpdated:
+        printByFontColorPosition("120", "252", "110", "125", statsInTrafficTimesUpdated, statsInTrafficTimes)
+        statsInTrafficTimes = statsInTrafficTimesUpdated
+    
+    # average speed
+    statsAverageSpeedsUpdated = str(drivingStatistics['averageSpeeds'][0]) + 'mph [Avg]'
+    if statsAverageSpeeds != statsAverageSpeedsUpdated:
+        printByFontColorPosition("120", "250", "105", "175", statsAverageSpeedsUpdated, statsAverageSpeeds)
+        statsAverageSpeeds = statsAverageSpeedsUpdated
 
-
-
-
-
+    # miles travelled
+    statsMilesTravelledUpdated = str(drivingStatistics['milesTravelled'][0]) + ' mi [Est]'
+    if statsMilesTravelled != statsMilesTravelledUpdated:
+        printByFontColorPosition("120", "222", "150", "225", statsMilesTravelledUpdated, statsMilesTravelled)
+        statsMilesTravelled = statsMilesTravelledUpdated
+    
+    # location.data
+    locationInfo = data.getJSONFromDataFile('location.data')
+    if locationInfo == "":
+        locationInfo = GPSInfo.GPSInfo()
+        locationInfo = json.loads(locationInfo.to_JSON())
+    
+    # compass direction
+    locationTrackUpdated = str(data.getHeadingByDegrees(locationInfo['track']))
+    if locationTrack != locationTrackUpdated:
+        printByFontColorPosition("120", "255", "5", "175", locationTrackUpdated, locationTrack)
+        locationTrack = locationTrackUpdated
+    
+    # if button pressed go to the 2nd screen for 5 seconds
+    # showStatisticsScreen()
+    
+    time.sleep(1)
