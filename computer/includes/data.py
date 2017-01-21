@@ -95,52 +95,52 @@ def getHeadingByDegrees(heading):
     """get compass rose value from heading in degrees"""
 
     if heading <= 11.25:
-        return '| N'
+        return 'N'
         
     if heading > 348.75:
-        return '| N'
+        return 'N'
         
     if heading > 11.25 and heading <= 33.75:
-        return '/ NNE'
+        return 'NNE'
       
     if heading > 33.75 and heading <= 56.25:
-        return '/ NE'
+        return 'NE'
 
     if heading > 56.25 and heading <= 78.75:
-        return '/ ENE'
+        return 'ENE'
 
     if heading > 78.75 and heading <= 101.25:
-        return '-> E'
+        return 'E'
 
     if heading > 101.25 and heading <= 123.75:
-        return '\ ESE'
+        return 'ESE'
 
     if heading > 123.75 and heading <= 146.25:
-        return '\ SE'
+        return 'SE'
 
     if heading > 146.25 and heading <= 168.75:
-        return '\ SSE'
+        return 'SSE'
 
     if heading > 168.75 and heading <= 191.25:
-        return '| S'
+        return 'S'
 
     if heading > 191.25 and heading <= 213.75:
-        return '/ SSW'
+        return 'SSW'
 
     if heading > 213.75 and heading <= 236.25:
-        return '/ SW'
+        return 'SW'
 
     if heading > 236.25 and heading <= 258.75:
-        return '/ WSW'
+        return 'WSW'
 
     if heading > 258.75 and heading <= 281.25:
-        return '<- W'
+        return 'W'
 
     if heading > 281.25 and heading <= 303.75:
-        return '\ WNW'
+        return 'WNW'
 
     if heading > 303.75 and heading <= 326.25:
-        return '\ NW'
+        return 'NW'
 
     if heading > 326.25 and heading <= 348.75:
-        return '\ NNW'
+        return 'NNW'

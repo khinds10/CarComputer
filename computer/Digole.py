@@ -10,6 +10,7 @@ import info.GPSInfo as GPSInfo
 import info.DrivingStatistics as DrivingStatistics
 import info.CurrentReadings as CurrentReadings
 import info.LocaleDetails as LocaleDetails
+import info.ButtonPressed as ButtonPressed
 
 def resetScreen():
     """clear and rotate screen"""
@@ -57,28 +58,42 @@ def showStatisticsScreen():
         drivingStatistics = DrivingStatistics.DrivingStatistics()
         drivingStatistics = json.loads(tempInfo.to_JSON())
     
-    printByFontColorPosition("120", "249", "5", "35", "Today: " + str(drivingStatistics['drivingTimes'][1]) + "/" + str(drivingStatistics['inTrafficTimes'][1]), "")
-    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][1]) + " mi / " + drivingStatistics['averageSpeeds'][1] + " mph", "")
+    printByFontColorPosition("120", "255", "5", "35", "Today: " + str(drivingStatistics['drivingTimes'][1]) + "/" + str(drivingStatistics['inTrafficTimes'][1]), "")
+    printByFontColorPosition("120", "255", "5", "70", "         " + str(drivingStatistics['milesTravelled'][1]) + " mi / " + drivingStatistics['averageSpeeds'][1] + " mph", "")
     
-    printByFontColorPosition("120", "249", "5", "35", "Week: " + str(drivingStatistics['drivingTimes'][2]) + "/" + str(drivingStatistics['inTrafficTimes'][2]), "")
-    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][2]) + " mi / " + drivingStatistics['averageSpeeds'][2] + " mph", "")
+    printByFontColorPosition("120", "252", "5", "115", "Week: " + str(drivingStatistics['drivingTimes'][2]) + "/" + str(drivingStatistics['inTrafficTimes'][2]), "")
+    printByFontColorPosition("120", "252", "5", "150", "         " + str(drivingStatistics['milesTravelled'][2]) + " mi / " + drivingStatistics['averageSpeeds'][2] + " mph", "")
     
-    printByFontColorPosition("120", "249", "5", "35", "Month: " + str(drivingStatistics['drivingTimes'][3]) + "/" + str(drivingStatistics['inTrafficTimes'][3]), "")
-    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][3]) + " mi / " + drivingStatistics['averageSpeeds'][3] + " mph", "")
+    printByFontColorPosition("120", "244", "5", "195", "Month: " + str(drivingStatistics['drivingTimes'][3]) + "/" + str(drivingStatistics['inTrafficTimes'][3]), "")
+    printByFontColorPosition("120", "244", "5", "225", "         " + str(drivingStatistics['milesTravelled'][3]) + " mi / " + drivingStatistics['averageSpeeds'][3] + " mph", "")
     
     time.sleep(5)
-    # set the button press back to zero
+    
+    # set the button press back to not pressed
+    buttonPressed = ButtonPressed.ButtonPressed()
+    buttonPressed.buttonName = ''
+    data.saveJSONObjToFile('button.data', buttonPressed)
     resetScreen()
     
     # reset the current driving condition values
+    global weatherNextHour
     weatherNextHour = ''
+    global weatherOutside
     weatherOutside = ''
+    global tempHmidty
     tempHmidty = ''
+    global locationTrack
     locationTrack = ''
+    global statsDrivingTimes
     statsDrivingTimes = ''
+    global statsInTrafficTimes
     statsInTrafficTimes = ''
+    global statsAverageSpeeds
     statsAverageSpeeds = ''
+    global statsMilesTravelled
     statsMilesTravelled = ''
+    global timeNow
+    timeNow = ''
 
 # weather.data
 weatherNextHour = ''
@@ -96,6 +111,9 @@ statsDrivingTimes = ''
 statsInTrafficTimes = ''
 statsAverageSpeeds = ''
 statsMilesTravelled = ''
+
+# current time
+timeNow = ''
 
 # reset screen and load beginning driving statistics using the configured digole driver
 digoleDriveLocation = "/home/pi/CarComputer/computer/digole"
@@ -173,10 +191,18 @@ while True:
         locationInfo = GPSInfo.GPSInfo()
         locationInfo = json.loads(locationInfo.to_JSON())
     
-    currentTimeUpdated = ''
-    printByFontColorPosition("120", "249", "150", "225", " - 11:09pm - ", '')
+    # current time
+    timeUpdated = dt.datetime.now().time().strftime('%I:%M%p').lstrip('0')
+    if timeNow != timeUpdated:
+        printByFontColorPosition("120", "249", "150", "225", " - " + timeUpdated + " - ", " - " + timeNow + " - ")        
+        timeNow = timeUpdated
     
     # if button pressed go to the 2nd screen for 5 seconds
-    # showStatisticsScreen()
+    buttonInfo = data.getJSONFromDataFile('button.data')
+    if buttonInfo == "":
+        buttonInfo = CurrentReadings.CurrentReadings()
+        buttonInfo = json.loads(buttonInfo.to_JSON())
+    if buttonInfo['buttonName'] == 'button1':
+        showStatisticsScreen()   
     
     time.sleep(1)

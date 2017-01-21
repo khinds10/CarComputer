@@ -10,7 +10,6 @@ import info.ButtonPressed as ButtonPressed
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(25, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-
 # listen for button press and save to file if it happened
 while True:
     input_state = GPIO.input(25)
