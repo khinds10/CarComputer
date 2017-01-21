@@ -37,8 +37,6 @@ while True:
 
         # check GPS status and turn on light if no issues
         currentLocationInfo = data.getCurrentLatLong()
-
-	print currentLocationInfo
         setLight(16, 1)
         
     except (Exception):
