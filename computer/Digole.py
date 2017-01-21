@@ -46,30 +46,42 @@ def printByFontColorPosition(fontSize, fontColor, x, y, text, previousText):
     subprocess.call([digoleDriveLocation, "printxy_abs", x, y, text])
     
     print fontSize, fontColor, x, y, text, previousText
-    
+
 def showStatisticsScreen():
     """show statistics screen by button press"""
     resetScreen()
-    printByFontColorPosition("120", "249", "5", "35", "Today: 1.5h / 6m", "")  # stats.data
-    printByFontColorPosition("120", "249", "5", "70", "       12.3 mi / 17MPH", "")
-    printByFontColorPosition("120", "252", "5", "115", "Week: 7.2h / 36m", "")
-    printByFontColorPosition("120", "252", "5", "150", "      123.3 mi / 14MPH", "")
-    printByFontColorPosition("120", "240", "5", "195", "Month: 46.5h / 35.5h", "")
-    printByFontColorPosition("120", "240", "5", "230", "       655.3 mi / 13MPH", "")
+    
+    # stats.data
+    drivingStatistics = data.getJSONFromDataFile('stats.data')
+    if drivingStatistics == "":
+        drivingStatistics = DrivingStatistics.DrivingStatistics()
+        drivingStatistics = json.loads(tempInfo.to_JSON())
+    
+    printByFontColorPosition("120", "249", "5", "35", "Today: " + str(drivingStatistics['drivingTimes'][1]) + "/" + str(drivingStatistics['inTrafficTimes'][1]), "")
+    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][1]) + " mi / " + drivingStatistics['averageSpeeds'][1] + " mph", "")
+    
+    printByFontColorPosition("120", "249", "5", "35", "Week: " + str(drivingStatistics['drivingTimes'][2]) + "/" + str(drivingStatistics['inTrafficTimes'][2]), "")
+    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][2]) + " mi / " + drivingStatistics['averageSpeeds'][2] + " mph", "")
+    
+    printByFontColorPosition("120", "249", "5", "35", "Month: " + str(drivingStatistics['drivingTimes'][3]) + "/" + str(drivingStatistics['inTrafficTimes'][3]), "")
+    printByFontColorPosition("120", "249", "5", "70", "       " + str(drivingStatistics['milesTravelled'][3]) + " mi / " + drivingStatistics['averageSpeeds'][3] + " mph", "")
+    
     time.sleep(5)
-
-# reset screen and load beginning driving statistics using the configured digole driver
-digoleDriveLocation = "/home/pi/CarComputer/computer/digole"
-resetScreen()
-
-########################
-# default screen
-########################
+    # set the button press back to zero
+    resetScreen()
+    
+    # reset the current driving condition values
+    weatherNextHour = ''
+    weatherOutside = ''
+    tempHmidty = ''
+    locationTrack = ''
+    statsDrivingTimes = ''
+    statsInTrafficTimes = ''
+    statsAverageSpeeds = ''
+    statsMilesTravelled = ''
 
 # weather.data
 weatherNextHour = ''
-weatherApparentTemperature = ''
-weatherHumidity = ''
 weatherOutside = ''
 
 # temp.data
@@ -83,6 +95,14 @@ statsDrivingTimes = ''
 statsInTrafficTimes = ''
 statsAverageSpeeds = ''
 statsMilesTravelled = ''
+
+# reset screen and load beginning driving statistics using the configured digole driver
+digoleDriveLocation = "/home/pi/CarComputer/computer/digole"
+resetScreen()
+
+########################
+# default screen
+########################
 
 # begin loop through main default screen
 while True:
