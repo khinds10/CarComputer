@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# postgres save driving stats from local data objects
+# Postgres save driving stats from local data objects
+# Kevin Hinds http://www.kevinhinds.com
+# License: GPL 2.0
 import time, commands, subprocess, re, psycopg2
 from datetime import datetime
 

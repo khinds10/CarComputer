@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Current Humidity and Tempurature from DHT11 sensor
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import json

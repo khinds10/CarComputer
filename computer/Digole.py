@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Show current trip info and summarized/other trip info (by button presses) to Digole display
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import datetime as dt
@@ -16,15 +17,6 @@ def resetScreen():
     """clear and rotate screen"""
     subprocess.call([digoleDriveLocation, "clear"])
     subprocess.call([digoleDriveLocation, "setRot90"])
-    pass
-
-def defaultScreen():
-    """show default screen"""
-    resetScreen()
-
-def statisticsScreen():
-    """show statistics screen"""
-    resetScreen()
 
 def setFont(fontSize):
     """set font size for screen"""
@@ -45,8 +37,6 @@ def printByFontColorPosition(fontSize, fontColor, x, y, text, previousText):
     # print the new text at the desired color, x, y and font size
     setColor(fontColor)
     subprocess.call([digoleDriveLocation, "printxy_abs", x, y, text])
-    
-    print fontSize, fontColor, x, y, text, previousText
 
 def showStatisticsScreen():
     """show statistics screen by button press"""
@@ -67,7 +57,7 @@ def showStatisticsScreen():
     printByFontColorPosition("120", "244", "5", "195", "Month: " + str(drivingStatistics['drivingTimes'][3]) + "/" + str(drivingStatistics['inTrafficTimes'][3]), "")
     printByFontColorPosition("120", "244", "5", "225", "         " + str(drivingStatistics['milesTravelled'][3]) + " mi / " + drivingStatistics['averageSpeeds'][3] + " mph", "")
     
-    time.sleep(5)
+    time.sleep(10)
     
     # set the button press back to not pressed
     buttonPressed = ButtonPressed.ButtonPressed()

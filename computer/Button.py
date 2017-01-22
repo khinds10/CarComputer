@@ -1,4 +1,5 @@
 #! /usr/bin/python
+# Listen for button local presses
 # Kevin Hinds http://www.kevinhinds.com / Dan Mandle http://dan.mandle.me
 # License: GPL 2.0
 import RPi.GPIO as GPIO

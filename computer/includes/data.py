@@ -1,4 +1,5 @@
 #! /usr/bin/python
+# Data helper functions to save and show human readable info
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import time, json, string, cgi, subprocess, os

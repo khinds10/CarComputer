@@ -1,4 +1,5 @@
 #! /usr/bin/python
+# Get GPS readings and save to file
 # Kevin Hinds http://www.kevinhinds.com / Dan Mandle http://dan.mandle.me
 # License: GPL 2.0
 import os, time, threading, pprint, json
