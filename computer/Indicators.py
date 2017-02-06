@@ -9,6 +9,8 @@ import includes.data as data
 GPIO.setmode(GPIO.BOARD)
  
 # set up GPIO output channel
+GPIO.setup(13, GPIO.OUT)
+GPIO.output(13,GPIO.LOW)
 GPIO.setup(15, GPIO.OUT)
 GPIO.output(15,GPIO.LOW)
 GPIO.setup(16, GPIO.OUT)
