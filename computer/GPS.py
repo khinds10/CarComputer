@@ -50,22 +50,17 @@ if __name__ == '__main__':
 
             # convert to imperial units
             gpsInfo.altitude = float(gpsd.fix.altitude * 3.2808)
+            gpsInfo.climb = float(gpsd.fix.climb * 3.2808)
             
-            # correct for bad speed value on the device?
+            # correct for bad speed value on the device
+            #   also save to last location because it must be good with a valid speed present
             gpsInfo.speed = float(gpsd.fix.speed)
             if (gpsInfo.speed > 5):
                 gpsInfo.speed = gpsInfo.speed * 2.25
-            gpsInfo.climb = float(gpsd.fix.climb * 3.2808)
-
+                data.saveJSONObjToFile('last-location.data', gpsInfo)
+            
             # create or rewrite data to GPS location data file as JSON
             data.saveJSONObjToFile('location.data', gpsInfo)
-            
-            # if we have a valid latitude then we know for sure we have a location for last location            
-            if math.isnan(gpsInfo.latitude):
-                pass
-            else:
-                data.saveJSONObjToFile('last-location.data', gpsInfo)
-
             time.sleep(1)
 
     except (KeyboardInterrupt, SystemExit):
