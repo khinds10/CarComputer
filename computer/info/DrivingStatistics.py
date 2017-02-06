@@ -7,16 +7,16 @@ class DrivingStatistics:
     """Overall Driving Statistics to save as class to persist as JSON information to file"""
     drivingTimes = ['','','','']
     inTrafficTimes = ['','','','']
-    averageSpeeds = [-1,-1,-1,-1]
-    averageAltitude = [-1,-1,-1,-1]
-    milesTravelled = [-1,-1,-1,-1]
+    averageSpeeds = [0,0,0,0]
+    averageAltitude = [0,0,0,0]
+    milesTravelled = [0,0,0,0]
     
     def __init__(self):
         self.drivingTimes = ['','','','']
         self.inTrafficTimes = ['','','','']
-        self.milesTravelled = [-1,-1,-1,-1]
-        self.averageSpeeds = [-1,-1,-1,-1]
-        self.averageAltitude = [-1,-1,-1,-1]
+        self.milesTravelled = [0,0,0,0]
+        self.averageSpeeds = [0,0,0,0]
+        self.averageAltitude = [0,0,0,0]
             
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)

@@ -5,22 +5,22 @@
 import json
 class GPSInfo:
     '''GPS info as class to persist as JSON information to file'''
-    latitude = -1
-    longitude = -1
-    altitude = -1
-    speed = -1
-    climb = -1
-    track = -1
-    mode = -1
+    latitude = 0
+    longitude = 0
+    altitude = 0
+    speed = 0
+    climb = 0
+    track = 0
+    mode = 0
     
     def __init__(self):
-        self.latitude = -1
-        self.longitude = -1
-        self.altitude = -1
-        self.speed = -1
-        self.climb = -1
-        self.track = -1
-        self.mode = -1
+        self.latitude = 0
+        self.longitude = 0
+        self.altitude = 0
+        self.speed = 0
+        self.climb = 0
+        self.track = 0
+        self.mode = 0
         
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)

@@ -18,28 +18,29 @@ bodyFont = ImageFont.truetype('/home/pi/CarComputer/computer/fonts/TheNextFont.t
 device = ssd1306()
 displayIterations = 3
 iteration = 0
+currentDirection = 0
 while True:
     try:
         with canvas(device) as draw:
         
             # location.data
             locationInfo = data.getJSONFromDataFile('location.data')
-     
             if locationInfo != "":
-                draw.text((70, 2), str(int(locationInfo['track'])) + "*", font=titleFont, fill=255)
-                draw.text((70, 40), str(data.getHeadingByDegrees(locationInfo['track'])), font=bodyFont, fill=255)
-                draw.ellipse((2, 2 , 60, 60), outline=255, fill=0)
-                
-                # calculate line angle from GPS degrees convert to radians
-                degrees = locationInfo['track']
-                r = radians(degrees)
+                        
+                # calculate line angle from GPS degrees convert to radians, but only if we're moving more than 5mph
+                if (int(locationInfo['speed']) > 5):
+                    currentDirection = locationInfo['track']
+                draw.text((70, 2), str(int(currentDirection)) + "*", font=titleFont, fill=255)
+                draw.text((70, 40), str(data.getHeadingByDegrees(currentDirection)), font=bodyFont, fill=255)
+                draw.ellipse((2, 2 , 60, 60), outline=255, fill=0)       
+                r = radians(currentDirection)
                 radius = 30
                 px = round(32 + radius * sin(r))
                 py = round(32 - radius * cos(r))
                 draw.line((32, 32, px, py), fill=255)
             else:
                 draw.text((10, 5), str('GPS'), font=titleFont, fill=255)
-                draw.text((10, 30), str(' Starting'), font=titleFont, fill=255)
+                draw.text((10, 30), str(' Searching'), font=titleFont, fill=255)
     except:
         pass   
     time.sleep(1)

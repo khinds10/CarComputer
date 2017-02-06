@@ -5,12 +5,12 @@
 import json
 class CurrentReadings:
     '''Current Humidity and Tempurature Readings from DHT11 Sensor'''
-    temp = -1
-    hmidty = -1
+    temp = 0
+    hmidty = 0
 
     def __init__(self):
-        self.temp = -1
-        self.hmidty = -1
+        self.temp = 0
+        self.hmidty = 0
         
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)

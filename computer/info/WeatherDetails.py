@@ -9,22 +9,22 @@ class WeatherDetails:
     summary = ''
     nextHour = ''
     icon = ''
-    apparentTemperature = -1
-    humidity = -1
-    precipIntensity = -1
-    precipProbability = -1
-    windSpeed = -1
+    apparentTemperature = 0
+    humidity = 0
+    precipIntensity = 0
+    precipProbability = 0
+    windSpeed = 0
     
     def __init__(self):
         self.time = 0
         self.summary = ''
         self.nextHour = ''
         self.icon = ''
-        self.apparentTemperature = -1
-        self.humidity = -1
-        self.precipIntensity = -1
-        self.precipProbability = -1
-        self.windSpeed = -1
+        self.apparentTemperature = 0
+        self.humidity = 0
+        self.precipIntensity = 0
+        self.precipProbability = 0
+        self.windSpeed = 0
         
     def to_JSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,sort_keys=True, indent=4)

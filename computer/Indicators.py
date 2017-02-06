@@ -29,21 +29,21 @@ while True:
     try:
 
         # get if the internet is connected or not "ok" / "error"
-        isConnected = subprocess.check_output(['bash', 'connection.sh'])
+        isConnected = subprocess.check_output(['bash', '/home/pi/CarComputer/computer/connection.sh'])
         isConnected = isConnected.strip()
        
         # turn on/off internet connected indicator
         if isConnected == "ok":
-            setLight(15, 1)
+            setLight(13, 1)
         else:
-            setLight(15, 0)
+            setLight(13, 0)
 
         # check GPS status and turn on light if no issues
         currentLocationInfo = data.getCurrentLatLong()
-        setLight(16, 1)
+        setLight(15, 1)
         
     except (Exception):
         # GPS issue, turn off light
-        setLight(16, 0)
+        setLight(15, 0)
     
     time.sleep(1)

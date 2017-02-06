@@ -115,84 +115,85 @@ resetScreen()
 
 # begin loop through main default screen
 while True:
+    try:
+        # weather.data
+        weatherInfo = data.getJSONFromDataFile('weather.data')
+        if weatherInfo == "":
+            weatherInfo = WeatherDetails.WeatherDetails()
+            weatherInfo = json.loads(weatherInfo.to_JSON())
 
-    # weather.data
-    weatherInfo = data.getJSONFromDataFile('weather.data')
-    if weatherInfo == "":
-        weatherInfo = WeatherDetails.WeatherDetails()
-        weatherInfo = json.loads(weatherInfo.to_JSON())
+        # next hour weather
+        if weatherNextHour != weatherInfo['nextHour']:
+            printByFontColorPosition("51", "255", "5", "75", weatherInfo['nextHour'][:25], weatherNextHour)
+            weatherNextHour = weatherInfo['nextHour']
 
-    # next hour weather
-    if weatherNextHour != weatherInfo['nextHour']:
-        printByFontColorPosition("51", "255", "5", "75", weatherInfo['nextHour'][:25], weatherNextHour)
-        weatherNextHour = weatherInfo['nextHour']
-
-    # outside temp/humidity
-    weatherOutsideUpdated = '[' + str(int(weatherInfo['apparentTemperature'])) + '*F ' + str(int(weatherInfo['humidity']*100)) + '%]'
-    if weatherOutside != weatherOutsideUpdated:
-        printByFontColorPosition("120", "240", "150", "35", weatherOutsideUpdated, weatherOutside)
-        weatherOutside = weatherOutsideUpdated
-    
-    # temp.data
-    tempInfo = data.getJSONFromDataFile('temp.data')
-    if tempInfo == "":
-        tempInfo = CurrentReadings.CurrentReadings()
-        tempInfo = json.loads(tempInfo.to_JSON())
-    
-    # inside temp / humidity
-    tempHmidtyUpdated =  str(tempInfo['temp']) + "*F " + str(tempInfo['hmidty']) + "%"
-    if tempHmidty != tempHmidtyUpdated:
-        printByFontColorPosition("120", "249", "5", "35", tempHmidtyUpdated, tempHmidty)        
-        tempHmidty = tempHmidtyUpdated
-
-    # stats.data
-    drivingStatistics = data.getJSONFromDataFile('stats.data')
-    if drivingStatistics == "":
-        drivingStatistics = DrivingStatistics.DrivingStatistics()
-        drivingStatistics = json.loads(tempInfo.to_JSON())
-    
-    # current driving time
-    statsDrivingTimesUpdated = str(drivingStatistics['drivingTimes'][0])
-    if statsDrivingTimes != statsDrivingTimesUpdated:
-        printByFontColorPosition("120", "28", "5", "125", statsDrivingTimesUpdated, statsDrivingTimes)
-        statsDrivingTimes = statsDrivingTimesUpdated
+        # outside temp/humidity
+        weatherOutsideUpdated = '[' + str(int(weatherInfo['apparentTemperature'])) + '*F ' + str(int(weatherInfo['humidity']*100)) + '%]'
+        if weatherOutside != weatherOutsideUpdated:
+            printByFontColorPosition("120", "240", "150", "35", weatherOutsideUpdated, weatherOutside)
+            weatherOutside = weatherOutsideUpdated
         
-    # current in-traffic time
-    statsInTrafficTimesUpdated = str(drivingStatistics['inTrafficTimes'][0]) + ' [Traffic]'
-    if statsInTrafficTimes != statsInTrafficTimesUpdated:
-        printByFontColorPosition("120", "252", "120", "125", statsInTrafficTimesUpdated, statsInTrafficTimes)
-        statsInTrafficTimes = statsInTrafficTimesUpdated
-    
-    # average speed
-    statsAverageSpeedsUpdated = str(drivingStatistics['averageSpeeds'][0]) + 'mph [Avg]'
-    if statsAverageSpeeds != statsAverageSpeedsUpdated:
-        printByFontColorPosition("120", "250", "5", "175", statsAverageSpeedsUpdated, statsAverageSpeeds)
-        statsAverageSpeeds = statsAverageSpeedsUpdated
+        # temp.data
+        tempInfo = data.getJSONFromDataFile('temp.data')
+        if tempInfo == "":
+            tempInfo = CurrentReadings.CurrentReadings()
+            tempInfo = json.loads(tempInfo.to_JSON())
+        
+        # inside temp / humidity
+        tempHmidtyUpdated =  str(tempInfo['temp']) + "*F " + str(tempInfo['hmidty']) + "%"
+        if tempHmidty != tempHmidtyUpdated:
+            printByFontColorPosition("120", "249", "5", "35", tempHmidtyUpdated, tempHmidty)        
+            tempHmidty = tempHmidtyUpdated
 
-    # miles travelled
-    statsMilesTravelledUpdated = str(drivingStatistics['milesTravelled'][0]) + ' mi Est.'
-    if statsMilesTravelled != statsMilesTravelledUpdated:
-        printByFontColorPosition("120", "222", "190", "175", statsMilesTravelledUpdated[:10], statsMilesTravelled)
-        statsMilesTravelled = statsMilesTravelledUpdated
-    
-    # location.data
-    locationInfo = data.getJSONFromDataFile('location.data')
-    if locationInfo == "":
-        locationInfo = GPSInfo.GPSInfo()
-        locationInfo = json.loads(locationInfo.to_JSON())
-    
-    # current time
-    timeUpdated = dt.datetime.now().time().strftime('%I:%M%p').lstrip('0')
-    if timeNow != timeUpdated:
-        printByFontColorPosition("120", "249", "150", "225", " - " + timeUpdated + " - ", " - " + timeNow + " - ")        
-        timeNow = timeUpdated
-    
-    # if button pressed go to the 2nd screen for 5 seconds
-    buttonInfo = data.getJSONFromDataFile('button.data')
-    if buttonInfo == "":
-        buttonInfo = CurrentReadings.CurrentReadings()
-        buttonInfo = json.loads(buttonInfo.to_JSON())
-    if buttonInfo['buttonName'] == 'button1':
-        showStatisticsScreen()   
-    
+        # stats.data
+        drivingStatistics = data.getJSONFromDataFile('stats.data')
+        if drivingStatistics == "":
+            drivingStatistics = DrivingStatistics.DrivingStatistics()
+            drivingStatistics = json.loads(tempInfo.to_JSON())
+        
+        # current driving time
+        statsDrivingTimesUpdated = str(drivingStatistics['drivingTimes'][0])
+        if statsDrivingTimes != statsDrivingTimesUpdated:
+            printByFontColorPosition("120", "28", "5", "125", statsDrivingTimesUpdated, statsDrivingTimes)
+            statsDrivingTimes = statsDrivingTimesUpdated
+            
+        # current in-traffic time
+        statsInTrafficTimesUpdated = str(drivingStatistics['inTrafficTimes'][0]) + ' [Traffic]'
+        if statsInTrafficTimes != statsInTrafficTimesUpdated:
+            printByFontColorPosition("120", "252", "120", "125", statsInTrafficTimesUpdated, statsInTrafficTimes)
+            statsInTrafficTimes = statsInTrafficTimesUpdated
+        
+        # average speed
+        statsAverageSpeedsUpdated = str(drivingStatistics['averageSpeeds'][0]) + 'mph [Avg]'
+        if statsAverageSpeeds != statsAverageSpeedsUpdated:
+            printByFontColorPosition("120", "250", "5", "175", statsAverageSpeedsUpdated, statsAverageSpeeds)
+            statsAverageSpeeds = statsAverageSpeedsUpdated
+
+        # miles travelled
+        statsMilesTravelledUpdated = str(drivingStatistics['milesTravelled'][0]) + ' mi Est.'
+        if statsMilesTravelled != statsMilesTravelledUpdated:
+            printByFontColorPosition("120", "222", "190", "175", statsMilesTravelledUpdated[:10], statsMilesTravelled)
+            statsMilesTravelled = statsMilesTravelledUpdated
+        
+        # location.data
+        locationInfo = data.getJSONFromDataFile('location.data')
+        if locationInfo == "":
+            locationInfo = GPSInfo.GPSInfo()
+            locationInfo = json.loads(locationInfo.to_JSON())
+        
+        # current time
+        timeUpdated = dt.datetime.now().time().strftime('%I:%M%p').lstrip('0')
+        if timeNow != timeUpdated:
+            printByFontColorPosition("120", "249", "150", "225", " - " + timeUpdated + " - ", " - " + timeNow + " - ")        
+            timeNow = timeUpdated
+        
+        # if button pressed go to the 2nd screen for 5 seconds
+        buttonInfo = data.getJSONFromDataFile('button.data')
+        if buttonInfo == "":
+            buttonInfo = CurrentReadings.CurrentReadings()
+            buttonInfo = json.loads(buttonInfo.to_JSON())
+        if buttonInfo['buttonName'] == 'button1':
+            showStatisticsScreen()   
+    except:
+        pass
     time.sleep(1)
