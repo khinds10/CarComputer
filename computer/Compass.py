@@ -40,7 +40,7 @@ while True:
                 draw.line((32, 32, px, py), fill=255)
             else:
                 draw.text((10, 5), str('GPS'), font=titleFont, fill=255)
-                draw.text((10, 30), str(' Searching'), font=titleFont, fill=255)
+                draw.text((10, 30), str('Searching'), font=titleFont, fill=255)
     except:
         pass   
     time.sleep(1)
