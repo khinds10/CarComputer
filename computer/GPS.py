@@ -2,7 +2,7 @@
 # Get GPS readings and save to file
 # Kevin Hinds http://www.kevinhinds.com / Dan Mandle http://dan.mandle.me
 # License: GPL 2.0
-import os, time, threading, pprint, json
+import os, time, threading, pprint, json, math
 import includes.postgres as postgres
 from gps import *
 import includes.data as data
@@ -61,7 +61,9 @@ if __name__ == '__main__':
             data.saveJSONObjToFile('location.data', gpsInfo)
             
             # if we have a valid latitude then we know for sure we have a location for last location            
-            if gpsInfo.latitude == gpsInfo.latitude:
+            if math.isnan(gpsInfo.latitude):
+                pass
+            else:
                 data.saveJSONObjToFile('last-location.data', gpsInfo)
 
             time.sleep(1)

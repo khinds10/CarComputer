@@ -8,7 +8,7 @@ class GPSInfo:
     latitude = 0
     longitude = 0
     altitude = 0
-    speed = 0
+    speed = -1
     climb = 0
     track = 0
     mode = 0

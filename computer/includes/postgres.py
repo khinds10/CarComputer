@@ -33,9 +33,8 @@ def getInTrafficTimes(tripStartId):
 
 def getTrafficTimeByInterval(value, interval):
     """for given column and date interval retrieve the calculated value, gps_speed = 'NaN' or -1 means that GPS is not currently found"""
-    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
     if (interval == '1 day'):
-        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')        
+        morningTime = datetime.now().strftime('%Y-%m-%d 07:00:00')        
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND gps_speed > -1 AND time >= '" + morningTime + "'") 
     else:
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE gps_speed < 2 AND gps_speed != 'NaN' AND gps_speed > -1 AND time >= (now() - interval '" + str(interval) + "')")
@@ -51,9 +50,8 @@ def getAverageAlt(tripStartId):
 
 def getDrivingTimeByInterval(value, interval):
     """"for given column and date interval retrieve the calculated value"""
-    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
     if (interval == '1 day'):
-        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        morningTime = datetime.now().strftime('%Y-%m-%d 07:00:00')
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= '" + morningTime + "'") 
     else:
         result = getOneResult("SELECT " + str(value) + " FROM driving_stats WHERE time >= (now() - interval '" + str(interval) + "')") 
@@ -61,9 +59,8 @@ def getDrivingTimeByInterval(value, interval):
 
 def getDrivingAvgByInterval(value, interval):
     """for given column and date interval retrieve the avg value, gps_speed = 'NaN' or -1 means that GPS is not currently found"""
-    # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
     if (interval == '1 day'):
-        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        morningTime = datetime.now().strftime('%Y-%m-%d 07:00:00')
         return getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= '" + morningTime + "' AND " + value + " != 'NaN' AND gps_speed > -1")
     else:
         return getOneResult("SELECT AVG(" + value + ") FROM driving_stats WHERE time >= (now() - interval '" + interval + "') AND " + value + " != 'NaN' AND gps_speed > -1")
@@ -72,7 +69,7 @@ def getMilesForInterval(interval):
     """"for given interval get the amount of miles travelled"""
     # if one day is specified it means since 7am, since we're in UTC add 4 hours to it to match EST
     if (interval == '1 day'):
-        morningTime = datetime.now().strftime('%Y-%m-%d 11:00:00')
+        morningTime = datetime.now().strftime('%Y-%m-%d 07:00:00')
         pointsInTrip = getAllResults("SELECT gps_latitude, gps_longitude FROM driving_stats WHERE gps_latitude IS NOT NULL AND gps_longitude IS NOT NULL AND time >= '" + morningTime + "'")
     else:
         pointsInTrip = getAllResults("SELECT gps_latitude, gps_longitude FROM driving_stats WHERE gps_latitude IS NOT NULL AND gps_longitude IS NOT NULL AND time >= (now() - interval '" + str(interval) + "');")
