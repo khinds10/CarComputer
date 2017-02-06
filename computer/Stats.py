@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Summarize driving statistics to file once per minute
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import os, time, json

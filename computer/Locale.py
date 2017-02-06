@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Get complete current location details about known lat/long from Google Maps API
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import time, json, string, cgi, subprocess

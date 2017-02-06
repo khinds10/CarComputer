@@ -90,7 +90,7 @@ Add the following lines to have your raspberrypi automatically connect to your h
 
 >$ `sudo apt-get update && sudo apt-get upgrade`
 >
->$ `sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools libi2c-dev python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim`
+>$ `sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools libi2c-dev python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim python-psutil`
 >
 >$ `sudo pip install RPi.GPIO`
 
@@ -151,6 +151,16 @@ Run the test
 `python simpletest.py`
 
 > You should see a metric reading of Temp and Humidity displayed on the command line.
+
+###SSD1306 Display Driver
+
+Download and install drivers for ssd1306 Display
+
+`sudo apt-get install i2c-tools python-smbus python-pip ifstat git python-imaging`
+`git clone https://github.com/rm-hull/ssd1306.git`
+`cd ssd1306`
+`sudo python setup.py install`
+`sudo pip install pillow`
 
 ####GPS Module Install
 
@@ -276,13 +286,12 @@ Add the following lines
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
 `@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
-`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
-`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
-`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
-
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
 
 ###Building the CarComputer
 
 Connect 2 LEDs with a 270ohm resistor to the RPi pins 15 and 16 respectively, connect the other leads on both LEDs to the RPi GND pin.
 
-The LED for pin 15 will be for if the internet is connected or not, pin 16 will be for if the GPS is currently tracking your location or not
+The LED for pin 15 will be for if the internet is connected or not, pin 16 will be for if the GPS is currently tracking your location or not.

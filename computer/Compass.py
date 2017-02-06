@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# CarComputer SSD1306 Display Driver
+# Show current travel direction as compass reading to ssd1306 display
 # @author khinds
 # @license http://opensource.org/licenses/gpl-license.php GNU Public License
 from math import cos, sin, pi, radians

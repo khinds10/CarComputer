@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Get local temp from DHT11 humidistat 
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import Adafruit_DHT

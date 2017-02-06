@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Current location specific information 
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import json

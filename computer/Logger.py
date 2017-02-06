@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Log to database the current readings for all known info each second
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import os, time, json

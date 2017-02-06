@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Show on/off indicator lights for if internet connected and if GPS location found
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import time, subprocess

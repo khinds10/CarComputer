@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# Get current forecast from forecast.io using lat/long
 # Kevin Hinds http://www.kevinhinds.com
 # License: GPL 2.0
 import time, json, string, cgi, subprocess
