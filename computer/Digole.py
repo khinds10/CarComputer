@@ -187,11 +187,11 @@ while True:
        
         # turn on/off time if the internet is not present, it's needed for time, @todo: get from GPS itself
         if isConnected == "ok":
-            timeUpdated = dt.datetime.now().time().strftime('%I:%M%p').lstrip('0')
+            timeUpdated = " - " + dt.datetime.now().time().strftime('%I:%M%p').lstrip('0') + " - "
         else:
             timeUpdated = "             "
         if timeNow != timeUpdated:
-            printByFontColorPosition("120", "249", "150", "225", " - " + timeUpdated + " - ", " - " + timeNow + " - ")        
+            printByFontColorPosition("120", "249", "150", "225", timeUpdated, timeNow)
             timeNow = timeUpdated
 
         
