@@ -59,7 +59,11 @@ if __name__ == '__main__':
 
             # create or rewrite data to GPS location data file as JSON
             data.saveJSONObjToFile('location.data', gpsInfo)
-            data.saveJSONObjToFile('last-location.data', gpsInfo)
+            
+            # if we have a valid latitude then we know for sure we have a location for last location            
+            if gpsInfo.latitude == gpsInfo.latitude:
+                data.saveJSONObjToFile('last-location.data', gpsInfo)
+
             time.sleep(1)
 
     except (KeyboardInterrupt, SystemExit):

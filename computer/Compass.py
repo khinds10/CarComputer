@@ -16,8 +16,6 @@ bodyFont = ImageFont.truetype('/home/pi/CarComputer/computer/fonts/TheNextFont.t
 
 # device and screen settings
 device = ssd1306()
-displayIterations = 3
-iteration = 0
 currentDirection = 0
 while True:
     try:
@@ -26,7 +24,6 @@ while True:
             # location.data
             locationInfo = data.getJSONFromDataFile('location.data')
             if locationInfo != "":
-                        
                 # calculate line angle from GPS degrees convert to radians, but only if we're moving more than 5mph
                 if (int(locationInfo['speed']) > 5):
                     currentDirection = locationInfo['track']
@@ -42,5 +39,7 @@ while True:
                 draw.text((10, 5), str('GPS'), font=titleFont, fill=255)
                 draw.text((10, 30), str('Searching'), font=titleFont, fill=255)
     except:
-        pass   
+        with canvas(device) as draw:
+            draw.text((10, 5), str('GPS'), font=titleFont, fill=255)
+            draw.text((10, 30), str('Searching'), font=titleFont, fill=255)
     time.sleep(1)
