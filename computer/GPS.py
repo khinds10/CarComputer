@@ -41,28 +41,30 @@ if __name__ == '__main__':
     try:
         gpsp.start()
         while True:
-        
-            # save JSON object of GPS info to file system
-            gpsInfo = GPSInfo.GPSInfo()
-            gpsInfo.latitude = float(gpsd.fix.latitude)
-            gpsInfo.longitude = float(gpsd.fix.longitude)
-            gpsInfo.track = float(gpsd.fix.track)
+            try:
+                # save JSON object of GPS info to file system
+                gpsInfo = GPSInfo.GPSInfo()
+                gpsInfo.latitude = float(gpsd.fix.latitude)
+                gpsInfo.longitude = float(gpsd.fix.longitude)
+                gpsInfo.track = float(gpsd.fix.track)
 
-            # convert to imperial units
-            gpsInfo.altitude = float(gpsd.fix.altitude * 3.2808)
-            gpsInfo.climb = float(gpsd.fix.climb * 3.2808)
+                # convert to imperial units
+                gpsInfo.altitude = float(gpsd.fix.altitude * 3.2808)
+                gpsInfo.climb = float(gpsd.fix.climb * 3.2808)
+                
+                # correct for bad speed value on the device
+                #   also save to last location because it must be good with a valid speed present
+                gpsInfo.speed = float(gpsd.fix.speed)
+                if (gpsInfo.speed > 5):
+                    gpsInfo.speed = gpsInfo.speed * 2.25
+                    data.saveJSONObjToFile('last-location.data', gpsInfo)
+                
+                # create or rewrite data to GPS location data file as JSON
+                data.saveJSONObjToFile('location.data', gpsInfo)
+                time.sleep(1)
             
-            # correct for bad speed value on the device
-            #   also save to last location because it must be good with a valid speed present
-            gpsInfo.speed = float(gpsd.fix.speed)
-            if (gpsInfo.speed > 5):
-                gpsInfo.speed = gpsInfo.speed * 2.25
-                data.saveJSONObjToFile('last-location.data', gpsInfo)
-            
-            # create or rewrite data to GPS location data file as JSON
-            data.saveJSONObjToFile('location.data', gpsInfo)
-            time.sleep(1)
-
+            except (Exception):
+                pass
     except (KeyboardInterrupt, SystemExit):
         print "\nKilling Thread..."
         gpsp.running = False
