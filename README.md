@@ -118,6 +118,82 @@ Add the following lines to have your raspberrypi automatically connect to your h
 >
 >_syntax on_
 
+###Supplied needed
+
+`(list here)`
+
+###Building the CarComputer
+
+`(schmatic here)`
+
+Digole:         3v / GND / SDA / SCL
+
+SSD1306:        3v / GND / SDA / SCL
+
+DHT11:          5v / GPIO 16 (36) / GND
+
+Push Button 1:  GND / GPIO 18 (24)
+
+Push Button 2:  GND / GPIO 11 (17)
+
+Power LED:      330ohm resistor - 3v / GND
+
+LEDs
+
+LED Blue:       330ohm resistor - GPIO 27 (13) / GND
+
+LED Orange:     330ohm resistor - GPIO 22 (15) / GND
+
+LED Yellow:     330ohm resistor - GPIO 23 (16) / GND
+
+`The Blue LED, for pin 13 will be for if the internet is connected or not.  The Orange LED, pin 15 will be for if the GPS is currently tracking your location or not.`
+
+###Connect the USB Module to RPi HW UART
+
+Using HW UART for the GPS module requires the following to free the UART connection up on your Pi.
+
+"Cross"-Connect the TX and RX pins from the GPS module to the RPi TX (GPIO 14/8 pin) and RX (GPIO 15/10 pin) -- [TX goes to RX on the device and vice versa.]
+Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
+
+####Configure your Pi to use the GPS Modeul on UART
+
+sudo vi /boot/cmdline.txt
+change:
+`dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait`
+to:
+`dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait`
+(eg, remove console=ttyAMA0,115200 and if there, kgdboc=ttyAMA0,115200)
+
+Note you might see console=serial0,115200 or console=ttyS0,115200 and should remove those parts of the line if present.
+Run the following commands:
+`sudo systemctl stop serial-getty@ttyAMA0.service`
+`sudo systemctl disable serial-getty@ttyAMA0.service`
+
+####GPS Module Install
+
+For testing force your USB device to connect to gpsd
+
+`sudo gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock`
+
+`sudo systemctl stop gpsd.socket`
+
+`sudo killall gpsd`
+
+`sudo dpkg-reconfigure gpsd`
+
+`sudo vi /etc/default/gpsd`
+
+> \# Default settings for gpsd.
+> START_DAEMON="true"
+> GPSD_OPTIONS="-n"
+> DEVICES="/dev/ttyAMA0"
+> USBAUTO="false"
+> GPSD_SOCKET="/var/run/gpsd.sock"
+
+Make sure the command is working
+
+`cgps -s`
+
 ####DHT11 Install
 
 `cd ~`
@@ -161,36 +237,6 @@ Download and install drivers for ssd1306 Display
 `cd ssd1306`
 `sudo python setup.py install`
 `sudo pip install pillow`
-
-####GPS Module Install
-
-Make sure the command is working
-
-`cgps -s`
-
-For testing force your USB device to connect to gpsd
-
-`sudo gpsd /dev/ttyUSB0 -F /var/run/gpsd.sock`
-
-`sudo systemctl stop gpsd.socket`
-
-`sudo killall gpsd`
-
-`sudo dpkg-reconfigure gpsd`
-
-`sudo vi /etc/default/gpsd`
-
-> \# Default settings for gpsd.
-> START_DAEMON="false"
-> GPSD_OPTIONS="-n"
-> DEVICES="/dev/ttyUSB0"
-> USBAUTO="false"
-> GPSD_SOCKET="/var/run/gpsd.sock"
-
-
-Verify all connected USB devices
-
-`sudo lsusb`
 
 ####Setup and Run the scripts
 
@@ -262,36 +308,33 @@ Run the following queries:
 >CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
 
 
-###Hack required to get GPSD working with USB connection on reboot
+###Hack required to get GPSD working with UART connection on reboot
 
 `sudo su`
 
 `crontab -e`
 
 \# m h  dom mon dow   command
-@reboot /bin/sleep 10; killall gpsd
-@reboot /bin/sleep 15; /usr/sbin/gpsd -F /var/run/gpsd.sock -n /dev/ttyUSB0
+@reboot /bin/sleep 5; killall gpsd
+@reboot /bin/sleep 10; /usr/sbin/gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock
 
 ###Create the logs folder for the data to be saved
-mkdir /home/pi/CarComputer/computer/logs
+`mkdir /home/pi/CarComputer/computer/logs`
 
 ###Setup the scripts to run at boot
-
 `crontab -e`
 
 Add the following lines 
 
-`@reboot /bin/sleep 5; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
-`@reboot /bin/sleep 5; nohup python /home/pi/CarComputer/computer/Indicators.py > /home/pi/CarComputer/computer/Indicators.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
-`@reboot /bin/sleep 10; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
+`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
+`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Indicators.py > /home/pi/CarComputer/computer/Indicators.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Button.py > /home/pi/CarComputer/computer/Button.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Compass.py > /home/pi/CarComputer/computer/Compass.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
+`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
 
-###Building the CarComputer
-
-Connect 2 LEDs with a 270ohm resistor to the RPi pins 15 and 16 respectively, connect the other leads on both LEDs to the RPi GND pin.
-
-The LED for pin 15 will be for if the internet is connected or not, pin 16 will be for if the GPS is currently tracking your location or not.
+###Reboot your RPi and you should be ready for driving!
