@@ -181,11 +181,19 @@ while True:
             locationInfo = GPSInfo.GPSInfo()
             locationInfo = json.loads(locationInfo.to_JSON())
         
-        # current time
-        timeUpdated = dt.datetime.now().time().strftime('%I:%M%p').lstrip('0')
+        # get if the internet is connected or not "ok" / "error"
+        isConnected = subprocess.check_output(['bash', '/home/pi/CarComputer/computer/connection.sh'])
+        isConnected = isConnected.strip()
+       
+        # turn on/off time if the internet is not present, it's needed for time, @todo: get from GPS itself
+        if isConnected == "ok":
+            timeUpdated = " - " + dt.datetime.now().time().strftime('%I:%M%p').lstrip('0') + " - "
+        else:
+            timeUpdated = "             "
         if timeNow != timeUpdated:
-            printByFontColorPosition("120", "249", "150", "225", " - " + timeUpdated + " - ", " - " + timeNow + " - ")        
+            printByFontColorPosition("120", "249", "150", "225", timeUpdated, timeNow)
             timeNow = timeUpdated
+
         
         # if button pressed go to the 2nd screen for 5 seconds
         buttonInfo = data.getJSONFromDataFile('button.data')
