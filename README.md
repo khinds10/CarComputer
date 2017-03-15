@@ -1,5 +1,7 @@
 #CarComputer - GPS & Weather Module for you vehicle
 
+![Car Computer](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/CarComputer.png "Car Computer")
+
 ####Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
 
 Download "RASPBIAN JESSIE LITE VERSION"
@@ -120,11 +122,35 @@ Add the following lines to have your raspberrypi automatically connect to your h
 
 ###Supplied needed
 
-`(list here)`
+2" 320x240 TFT LCD Digole Display
+
+SSD1306 Display
+
+DHT11 Humidistat
+
+Momentary Push Button (x2)
+
+LEDs (RED / Blue / Orange / Yellow)
+
+
+###Print the Enclosure
+
+Using the provided STL files in the enclosure/ folder print the front and back panels as well as the enclosure.
+
+Hot glue the push button switches, the LEDs and both displays as shown:
+
+![Assemble1](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble1.jpg "Assemble1")
+
+![Assemble2](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble2.jpg "Assemble2")
+
 
 ###Building the CarComputer
 
-`(schmatic here)`
+This is the wiring for the unit
+
+![Schematic](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/schematic.png "Schematic")
+
+####Connect the following Devices the pins on the  Pi Zero
 
 Digole:         3v / GND / SDA / SCL
 
@@ -141,12 +167,12 @@ Power LED:      330ohm resistor - 3v / GND
 LEDs
 
 LED Blue:       330ohm resistor - GPIO 27 (13) / GND
+`The Blue LED, for pin 13 will be for if the internet is connected or not.`
 
 LED Orange:     330ohm resistor - GPIO 22 (15) / GND
 
 LED Yellow:     330ohm resistor - GPIO 23 (16) / GND
-
-`The Blue LED, for pin 13 will be for if the internet is connected or not.  The Orange LED, pin 15 will be for if the GPS is currently tracking your location or not.`
+`Yellow LED, pin 15 will be for if the GPS is currently tracking your location or not.`
 
 ###Connect the USB Module to RPi HW UART
 
@@ -154,6 +180,20 @@ Using HW UART for the GPS module requires the following to free the UART connect
 
 "Cross"-Connect the TX and RX pins from the GPS module to the RPi TX (GPIO 14/8 pin) and RX (GPIO 15/10 pin) -- [TX goes to RX on the device and vice versa.]
 Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
+
+
+###Final Assembly
+
+The following shows the internal devices wired before the enclosure is screwed shut on each corner front and back with small screws.
+
+I've used very long speaker wire to allow for the humidistat to sit in the car away from the direct sun for an accurate reading.
+
+![Assemble3](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble3.jpg "Assemble3")
+
+Note: I've wrapped the wireless USB adapter in felt tape to have it avoid rattling while driving inside the enclosure.
+
+![Assemble4](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble4.jpg "Assemble4")
+
 
 ####Configure your Pi to use the GPS Modeul on UART
 
@@ -336,5 +376,18 @@ Add the following lines
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
+
+
+###Finished and powered on!
+
+![Assembly Powered](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble-Powered.jpg "Assembly Powered")
+
+###Mounting inside your vehicle
+
+####Mount on Dash
+![Car Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Car-Mount.jpg "Car Mount")
+
+####Mount Humidistat away from direct Sun
+![Humidistat Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Humidistat-Mount.jpg "Humidistat Mount")
 
 ###Reboot your RPi and you should be ready for driving!
