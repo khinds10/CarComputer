@@ -124,14 +124,27 @@ Add the following lines to have your raspberrypi automatically connect to your h
 
 2" 320x240 TFT LCD Digole Display
 
+![Digole Display](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Digole-Display.png "Digole Display")
+
 SSD1306 Display
+
+![SSD1306](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/SSD1306-Display.jpg "SSD1306")
 
 DHT11 Humidistat
 
+![DHT11](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/DHT11.jpg "DHT11")
+
+RaspberriPi Zero
+
+![RaspberriPi Zero](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/PiZero.jpg "RaspberriPi Zero")
+
 Momentary Push Button (x2)
+
+![Push Button Switch](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/PushButton.jpg "Push Button Switch")
 
 LEDs (RED / Blue / Orange / Yellow)
 
+![LED](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/LED.jpg "LED")
 
 ###Print the Enclosure
 
