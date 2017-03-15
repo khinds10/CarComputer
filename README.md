@@ -1,8 +1,8 @@
-#CarComputer - GPS & Weather Module for you vehicle
+# CarComputer - GPS & Weather Module for you vehicle
 
 ![Car Computer](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/CarComputer.png "Car Computer")
 
-####Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
+#### Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
 
 Download "RASPBIAN JESSIE LITE VERSION"
 https://www.raspberrypi.org/downloads/raspbian/
@@ -120,7 +120,7 @@ Add the following lines to have your raspberrypi automatically connect to your h
 >
 >_syntax on_
 
-###Supplied needed
+### Supplied needed
 
 2" 320x240 TFT LCD Digole Display
 
@@ -146,7 +146,7 @@ LEDs (RED / Blue / Orange / Yellow)
 
 ![LED](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/LED.jpg "LED")
 
-###Print the Enclosure
+### Print the Enclosure
 
 Using the provided STL files in the enclosure/ folder print the front and back panels as well as the enclosure.
 
@@ -157,13 +157,13 @@ Hot glue the push button switches, the LEDs and both displays as shown:
 ![Assemble2](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble2.jpg "Assemble2")
 
 
-###Building the CarComputer
+### Building the CarComputer
 
 This is the wiring for the unit
 
 ![Schematic](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/schematic.png "Schematic")
 
-####Connect the following Devices the pins on the  Pi Zero
+#### Connect the following Devices the pins on the  Pi Zero
 
 Digole:         3v / GND / SDA / SCL
 
@@ -187,7 +187,7 @@ LED Orange:     330ohm resistor - GPIO 22 (15) / GND
 LED Yellow:     330ohm resistor - GPIO 23 (16) / GND
 `Yellow LED, pin 15 will be for if the GPS is currently tracking your location or not.`
 
-###Connect the USB Module to RPi HW UART
+### Connect the USB Module to RPi HW UART
 
 Using HW UART for the GPS module requires the following to free the UART connection up on your Pi.
 
@@ -195,7 +195,7 @@ Using HW UART for the GPS module requires the following to free the UART connect
 Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
 
 
-###Final Assembly
+### Final Assembly
 
 The following shows the internal devices wired before the enclosure is screwed shut on each corner front and back with small screws.
 
@@ -208,7 +208,7 @@ Note: I've wrapped the wireless USB adapter in felt tape to have it avoid rattli
 ![Assemble4](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble4.jpg "Assemble4")
 
 
-####Configure your Pi to use the GPS Modeul on UART
+#### Configure your Pi to use the GPS Modeul on UART
 
 sudo vi /boot/cmdline.txt
 change:
@@ -222,7 +222,7 @@ Run the following commands:
 `sudo systemctl stop serial-getty@ttyAMA0.service`
 `sudo systemctl disable serial-getty@ttyAMA0.service`
 
-####GPS Module Install
+#### GPS Module Install
 
 For testing force your USB device to connect to gpsd
 
@@ -247,7 +247,7 @@ Make sure the command is working
 
 `cgps -s`
 
-####DHT11 Install
+#### DHT11 Install
 
 `cd ~`
 
@@ -281,7 +281,7 @@ Run the test
 
 > You should see a metric reading of Temp and Humidity displayed on the command line.
 
-###SSD1306 Display Driver
+### SSD1306 Display Driver
 
 Download and install drivers for ssd1306 Display
 
@@ -291,13 +291,13 @@ Download and install drivers for ssd1306 Display
 `sudo python setup.py install`
 `sudo pip install pillow`
 
-####Setup and Run the scripts
+#### Setup and Run the scripts
 
 `cd ~`
 
 `git clone https://github.com/khinds10/CarComputer.git`
 
-###Install driving monitoring tools & DB Logging
+### Install driving monitoring tools & DB Logging
 
 `sudo apt-get install ifstat memcached python-memcache postgresql postgresql-contrib python-psycopg2`
 
@@ -361,7 +361,7 @@ Run the following queries:
 >CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
 
 
-###Hack required to get GPSD working with UART connection on reboot
+### Hack required to get GPSD working with UART connection on reboot
 
 `sudo su`
 
@@ -371,10 +371,10 @@ Run the following queries:
 @reboot /bin/sleep 5; killall gpsd
 @reboot /bin/sleep 10; /usr/sbin/gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock
 
-###Create the logs folder for the data to be saved
+### Create the logs folder for the data to be saved
 `mkdir /home/pi/CarComputer/computer/logs`
 
-###Setup the scripts to run at boot
+### Setup the scripts to run at boot
 `crontab -e`
 
 Add the following lines 
@@ -391,16 +391,16 @@ Add the following lines
 `@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
 
 
-###Finished and powered on!
+### Finished and powered on!
 
 ![Assembly Powered](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble-Powered.jpg "Assembly Powered")
 
-###Mounting inside your vehicle
+### Mounting inside your vehicle
 
-####Mount on Dash
+#### Mount on Dash
 ![Car Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Car-Mount.jpg "Car Mount")
 
-####Mount Humidistat away from direct Sun
+#### Mount Humidistat away from direct Sun
 ![Humidistat Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Humidistat-Mount.jpg "Humidistat Mount")
 
-###Reboot your RPi and you should be ready for driving!
+### Reboot your RPi and you should be ready for driving!
