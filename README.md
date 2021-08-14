@@ -167,7 +167,7 @@ LEDs (RED / Blue / Orange / Yellow)
 
 ![LED](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/LED.jpg "LED")
 
-### Print the Enclosure
+## Print the Enclosure
 
 Using the provided STL files in the enclosure/ folder print the front and back panels as well as the enclosure.
 
@@ -178,7 +178,7 @@ Hot glue the push button switches, the LEDs and both displays as shown:
 ![Assemble2](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble2.jpg "Assemble2")
 
 
-### Building the CarComputer
+## Building the CarComputer
 
 This is the wiring for the unit
 
@@ -222,21 +222,33 @@ Note: I've wrapped the wireless USB adapter in felt tape to have it avoid rattli
 ![Assemble4](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Assemble4.jpg "Assemble4")
 
 
-#### Configure your Pi to use the GPS Modeul on UART
+#### Configure your Pi to use the GPS Module on UART
 
+```shell
 sudo vi /boot/cmdline.txt
-change:
-`dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait`
+```
+
+Change:
+
+```
+dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+```
 to:
-`dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait`
-(eg, remove console=ttyAMA0,115200 and if there, kgdboc=ttyAMA0,115200)
+```
+dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
+```
+(e.g., remove console=ttyAMA0,115200 and if there, kgdboc=ttyAMA0,115200)
 
-Note you might see console=serial0,115200 or console=ttyS0,115200 and should remove those parts of the line if present.
+Note: you might see `console=serial0,115200` or `console=ttyS0,115200` and should remove those parts of the line if present.
+
 Run the following commands:
-`sudo systemctl stop serial-getty@ttyAMA0.service`
-`sudo systemctl disable serial-getty@ttyAMA0.service`
 
-#### GPS Module Install
+```shell
+sudo systemctl stop serial-getty@ttyAMA0.service
+sudo systemctl disable serial-getty@ttyAMA0.service
+```
+
+#### GPS module install
 
 For testing force your USB device to connect to gpsd
 
@@ -308,103 +320,116 @@ sudo pip install pillow
 
 #### Setup and Run the scripts
 
-`cd ~`
-
-`git clone https://github.com/khinds10/CarComputer.git`
+```shell
+cd ~
+git clone https://github.com/khinds10/CarComputer.git
+```
 
 ### Install driving monitoring tools & DB Logging
 
-`sudo apt-get install ifstat memcached python-memcache postgresql postgresql-contrib python-psycopg2`
+```shell
+sudo apt-get install ifstat memcached python-memcache postgresql postgresql-contrib python-psycopg2
+sudo vi /etc/postgresql/9.4/main/pg_hba.conf
+```
 
-`sudo vi /etc/postgresql/9.4/main/pg_hba.conf`
+Add the following line to the end of the file:
+```
+local all pi password
+```
 
-> Add the following line to the end of the file:
->
->local all pi password
+```shell
+sudo -i -u postgres
+psql
+```
 
-`sudo -i -u postgres`
+```sql
+create role pi password 'password here';
+alter role pi login;
+alter role pi superuser;
+\du
+```
 
-`psql`
+(you should see your PI user with the permissions granted)
 
-`create role pi password 'password here';`
-
-`alter role pi login;`
-
-`alter role pi superuser;`
-
-`\du`
-
->(you should see your PI user with the permissions granted)
-
-`create database driving_statistics;`
-
-`\q`
-
-`exit`
-
-`psql -d driving_statistics`
+```sql
+create database driving_statistics;
+\q
+exit
+psql -d driving_statistics
+```
 
 Run the following queries:
 
->CREATE TABLE driving\_stats (
-> id serial,
-> time timestamp without time zone NOT NULL,
-> new\_trip\_start timestamp without time zone NULL,
-> gps\_latitude double precision	,
-> gps\_longitude double precision,
-> gps\_altitude real,
-> gps\_speed real,
-> gps\_climb real,
-> gps\_track real,
-> locale\_address text,
-> locale\_area text,
-> locale\_city text,
-> locale\_county text,
-> locale\_country text,
-> locale\_zipcode text,
-> inside\_temp real,
-> inside\_hmidty real,
-> weather\_time timestamp,
-> weather\_summary text,
-> weather\_icon text,
-> weather\_apparentTemperature real,
-> weather\_humidity real,
-> weather\_precipIntensity real,
-> weather\_precipProbability real,
-> weather\_windSpeed real
->);
->CREATE UNIQUE INDEX time_idx ON driving\_stats (time);
-
+```sql
+CREATE TABLE driving_stats (
+ id serial,
+ time timestamp without time zone NOT NULL,
+ new_trip_start timestamp without time zone NULL,
+ gps_latitude double precision,
+ gps_longitude double precision,
+ gps_altitude real,
+ gps_speed real,
+ gps_climb real,
+ gps_track real,
+ locale_address text,
+ locale_area text,
+ locale_city text,
+ locale_county text,
+ locale_country text,
+ locale_zipcode text,
+ inside_temp real,
+ inside_hmidty real,
+ weather_time timestamp,
+ weather_summary text,
+ weather_icon text,
+ weather_apparentTemperature real,
+ weather_humidity real,
+ weather_precipIntensity real,
+ weather_precipProbability real,
+ weather_windSpeed real
+);
+CREATE UNIQUE INDEX time_idx ON driving_stats (time);
+```
 
 ### Hack required to get GPSD working with UART connection on reboot
 
-`sudo su`
+```shell
+sudo su
+crontab -e
+```
 
-`crontab -e`
-
-\# m h  dom mon dow   command
+```cron
+# m h  dom mon dow   command
 @reboot /bin/sleep 5; killall gpsd
 @reboot /bin/sleep 10; /usr/sbin/gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock
+```
 
 ### Create the logs folder for the data to be saved
-`mkdir /home/pi/CarComputer/computer/logs`
+
+```shell
+mkdir /home/pi/CarComputer/computer/logs
+```
 
 ### Setup the scripts to run at boot
-`crontab -e`
 
-Add the following lines 
+```shell
+crontab -e
+```
 
-`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1`
-`@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Indicators.py > /home/pi/CarComputer/computer/Indicators.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Button.py > /home/pi/CarComputer/computer/Button.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Compass.py > /home/pi/CarComputer/computer/Compass.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1`
-`@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1`
+Add the following lines:
 
+```cron
+@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/GPS.py > /home/pi/CarComputer/computer/GPS.log 2>&1
+@reboot /bin/sleep 15; nohup python /home/pi/CarComputer/computer/Indicators.py > /home/pi/CarComputer/computer/Indicators.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Button.py > /home/pi/CarComputer/computer/Button.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Compass.py > /home/pi/CarComputer/computer/Compass.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Locale.py > /home/pi/CarComputer/computer/Locale.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Temp.py > /home/pi/CarComputer/computer/Temp.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Weather.py > /home/pi/CarComputer/computer/Weather.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Stats.py > /home/pi/CarComputer/computer/Stats.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Logger.py > /home/pi/CarComputer/computer/Logger.log 2>&1
+@reboot /bin/sleep 20; nohup python /home/pi/CarComputer/computer/Digole.py > /home/pi/CarComputer/computer/Digole.log 2>&1
+```
 
 ### Finished and powered on!
 
