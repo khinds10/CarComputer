@@ -2,7 +2,7 @@
 
 ![Car Computer](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/CarComputer.png "Car Computer")
 
-## Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
+## Flashing Raspberry Pi Hard Disk / Install required software (using Ubuntu Linux)
 
 Download "RASPBIAN JESSIE LITE VERSION" from https://www.raspberrypi.org/downloads/raspbian/
 
@@ -29,17 +29,23 @@ $ sudo dd bs=4M if=/path/to/raspbian-jessie-lite.img of=/dev/sdX
 
 *(note: in this case, it's /dev/sdb, /dev/sdb1 was an existing factory partition on the microSD)*
 
-### Setting up your RaspberriPi
+### Setting up your Raspberry Pi
 
 Insert your new microSD card to the raspberrypi and power it on with a monitor connected to the HDMI port.
 
 First login: user: **pi**, password: **raspberry**.
 
-Change your account password for security (from terminal)
->`sudo passwd pi`
+Change your account password for security (from terminal):
 
-Enable RaspberriPi Advanced Options (from terminal)
->`sudo raspi-config`
+```shell
+sudo passwd pi
+```
+
+Enable Raspberry Pi Advanced Options (from terminal):
+
+```shell
+sudo raspi-config
+```
 
 Choose:
 `1 Expand File System`
@@ -149,9 +155,9 @@ DHT11 Humidistat
 
 ![DHT11](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/DHT11.jpg "DHT11")
 
-RaspberriPi Zero
+Raspberry Pi Zero
 
-![RaspberriPi Zero](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/PiZero.jpg "RaspberriPi Zero")
+![Raspberry Pi Zero](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/PiZero.jpg "Raspberry Pi Zero")
 
 Momentary Push Button (x2)
 
