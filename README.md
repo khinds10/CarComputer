@@ -2,36 +2,38 @@
 
 ![Car Computer](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/CarComputer.png "Car Computer")
 
-#### Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
+## Flashing RaspberriPi Hard Disk / Install Required Software (Using Ubuntu Linux)
 
-Download "RASPBIAN JESSIE LITE VERSION"
-https://www.raspberrypi.org/downloads/raspbian/
+Download "RASPBIAN JESSIE LITE VERSION" from https://www.raspberrypi.org/downloads/raspbian/
 
-**Create your new hard disk for DashboardPI**
->Insert the microSD to your computer via USB adapter and create the disk image using the `dd` command
->
-> Locate your inserted microSD card via the `df -h` command, unmount it and create the disk image with the disk copy `dd` command
-> 
-> $ `df -h`
-> */dev/sdb1       7.4G   32K  7.4G   1% /media/XXX/1234-5678*
-> 
-> $ `umount /dev/sdb1`
-> 
-> **Caution: be sure the command is completely accurate, you can damage other disks with this command**
-> 
-> *if=location of RASPBIAN JESSIE FULL VERSION image file*
-> *of=location of your microSD card*
-> 
-> $ `sudo dd bs=4M if=/path/to/raspbian-jessie-lite.img of=/dev/sdb`
-> *(note: in this case, it's /dev/sdb, /dev/sdb1 was an existing factory partition on the microSD)*
+### Create your new hard disk for DashboardPI
 
-**Setting up your RaspberriPi**
+Insert the microSD to your computer via USB adapter and create the disk image using the `dd` command:
 
-*Insert your new microSD card to the raspberrypi and power it on with a monitor connected to the HDMI port*
+Locate your inserted microSD card via the `df -h` command, unmount it and create the disk image with the disk copy `dd` command
 
-Login
-> user: **pi**
-> pass: **raspberry**
+```
+$ df -h
+/dev/sdb1       7.4G   32K  7.4G   1% /media/XXX/1234-5678*
+$ umount /dev/sdb1
+```
+
+**Caution: be sure the command is completely accurate, you can damage other disks with this command**
+
+* `if` = location of RASPBIAN JESSIE FULL VERSION image file
+* `of` = location of your microSD card
+
+```
+$ sudo dd bs=4M if=/path/to/raspbian-jessie-lite.img of=/dev/sdX
+```
+
+*(note: in this case, it's /dev/sdb, /dev/sdb1 was an existing factory partition on the microSD)*
+
+### Setting up your RaspberriPi
+
+Insert your new microSD card to the raspberrypi and power it on with a monitor connected to the HDMI port.
+
+First login: user: **pi**, password: **raspberry**.
 
 Change your account password for security (from terminal)
 >`sudo passwd pi`
@@ -52,43 +54,56 @@ Choose:
 >`A7 I2C`
 >*Enable i2c interface*
 
-**Enable the English/US Keyboard**
+### Enable the English/US Keyboard
 
->`sudo nano /etc/default/keyboard`
+```shell
+sudo nano /etc/default/keyboard
+```
 
-> Change the following line:
->`XKBLAYOUT="us"`
+Change the following line:
+```
+XKBLAYOUT="us"
+```
 
-**Reboot PI for Keyboard layout changes / file system resizing to take effect**
->$ `sudo shutdown -r now`
+### Reboot PI for Keyboard layout changes / file system resizing to take effect
 
-**Auto-Connect to your WiFi**
+```
+$ sudo shutdown -r now
+```
 
->`sudo nano /etc/wpa_supplicant/wpa_supplicant.conf`
+### Auto-Connect to your Wi-Fi
 
-Add the following lines to have your raspberrypi automatically connect to your home WiFi
+```shell
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+Add the following lines to have your raspberrypi automatically connect to your home Wi-Fi:
 *(if your wireless network is named "linksys" for example, in the following example)*
 
+```
 	network={
 	   ssid="linksys"
 	   psk="WIRELESS PASSWORD HERE"
 	}
+```
 
-**Reboot PI to connect to WiFi network**
+### Reboot PI to connect to WiFi network
 
->$ `sudo shutdown -r now`
->
->Now that your PI is finally on the local network, you can login remotely to it via SSH.
->But first you need to get the IP address it currently has.
+```
+sudo shutdown -r now
+```
+
+Now that your PI is finally on the local network, you can login remotely to it via SSH.
+But first you need to get the IP address it currently has.
 >
 >$ `ifconfig`
 >*Look for "inet addr: 192.168.XXX.XXX" in the following command's output for your PI's IP Address*
 
-**Go to another machine and login to your raspberrypi via ssh**
+#### Go to another machine and login to your raspberrypi via ssh
 
 > $ `ssh pi@192.168.XXX.XXX`
 
-**Start Installing required packages**
+#### Install required packages
 
 >$ `sudo apt-get update && sudo apt-get upgrade`
 >
@@ -120,7 +135,7 @@ Add the following lines to have your raspberrypi automatically connect to your h
 >
 >_syntax on_
 
-### Supplied needed
+### Supplies needed
 
 2" 320x240 TFT LCD Digole Display
 
@@ -165,27 +180,20 @@ This is the wiring for the unit
 
 #### Connect the following Devices the pins on the  Pi Zero
 
+```
 Digole:         3v / GND / SDA / SCL
-
 SSD1306:        3v / GND / SDA / SCL
-
 DHT11:          5v / GPIO 16 (36) / GND
-
 Push Button 1:  GND / GPIO 18 (24)
-
 Push Button 2:  GND / GPIO 11 (17)
-
 Power LED:      330ohm resistor - 3v / GND
+```
 
-LEDs
+LEDs:
 
-LED Blue:       330ohm resistor - GPIO 27 (13) / GND
-`The Blue LED, for pin 13 will be for if the internet is connected or not.`
-
-LED Orange:     330ohm resistor - GPIO 22 (15) / GND
-
-LED Yellow:     330ohm resistor - GPIO 23 (16) / GND
-`Yellow LED, pin 15 will be for if the GPS is currently tracking your location or not.`
+* LED Blue:       330ohm resistor - GPIO 27 (13) / GND (the Blue LED, for pin 13 will be for if the internet is connected or not)
+* LED Orange:     330ohm resistor - GPIO 22 (15) / GND
+* LED Yellow:     330ohm resistor - GPIO 23 (16) / GND (Yellow LED, pin 15 will be for if the GPS is currently tracking your location or not)
 
 ### Connect the USB Module to RPi HW UART
 
@@ -195,7 +203,7 @@ Using HW UART for the GPS module requires the following to free the UART connect
 Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
 
 
-### Final Assembly
+### Final assembly
 
 The following shows the internal devices wired before the enclosure is screwed shut on each corner front and back with small screws.
 
@@ -226,22 +234,23 @@ Run the following commands:
 
 For testing force your USB device to connect to gpsd
 
-`sudo gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock`
+```shell
+sudo gpsd /dev/ttyAMA0 -F /var/run/gpsd.sock
+sudo systemctl stop gpsd.socket
+sudo killall gpsd
+sudo dpkg-reconfigure gpsd
+sudo vi /etc/default/gpsd
+```
 
-`sudo systemctl stop gpsd.socket`
+Default settings for gpsd:
 
-`sudo killall gpsd`
-
-`sudo dpkg-reconfigure gpsd`
-
-`sudo vi /etc/default/gpsd`
-
-> \# Default settings for gpsd.
-> START_DAEMON="true"
-> GPSD_OPTIONS="-n"
-> DEVICES="/dev/ttyAMA0"
-> USBAUTO="false"
-> GPSD_SOCKET="/var/run/gpsd.sock"
+```shell
+START_DAEMON="true"
+GPSD_OPTIONS="-n"
+DEVICES="/dev/ttyAMA0"
+USBAUTO="false"
+GPSD_SOCKET="/var/run/gpsd.sock"
+```
 
 Make sure the command is working
 
@@ -249,19 +258,15 @@ Make sure the command is working
 
 #### DHT11 Install
 
-`cd ~`
-
-`git clone https://github.com/adafruit/Adafruit_Python_DHT.git`
-
-`cd Adafruit_Python_DHT/`
-
-`sudo python setup.py install`
-
-`sudo python ez_setup.py`
-
-`cd examples/`
-
-`vi simpletest.py`
+```shell
+cd ~
+git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+cd Adafruit_Python_DHT/
+sudo python setup.py install
+sudo python ez_setup.py
+cd examples/
+vi simpletest.py
+```
 
 Change the following line:
 
@@ -275,21 +280,25 @@ Uncomment the line and change the pin number to 16
 
 > pin = 16
 
-Run the test
+Run the test:
 
-`python simpletest.py`
+```shell
+python simpletest.py
+```
 
-> You should see a metric reading of Temp and Humidity displayed on the command line.
+You should see a metric reading of Temp and Humidity displayed on the command line.
 
 ### SSD1306 Display Driver
 
 Download and install drivers for ssd1306 Display
 
-`sudo apt-get install i2c-tools python-smbus python-pip ifstat git python-imaging`
-`git clone https://github.com/rm-hull/ssd1306.git`
-`cd ssd1306`
-`sudo python setup.py install`
-`sudo pip install pillow`
+```shell
+sudo apt-get install i2c-tools python-smbus python-pip ifstat git python-imaging
+git clone https://github.com/rm-hull/ssd1306.git
+cd ssd1306
+sudo python setup.py install
+sudo pip install pillow
+```
 
 #### Setup and Run the scripts
 
