@@ -31,7 +31,7 @@ $ sudo dd bs=4M if=/path/to/raspbian-jessie-lite.img of=/dev/sdX
 
 ### Setting up your Raspberry Pi
 
-Insert your new microSD card to the raspberrypi and power it on with a monitor connected to the HDMI port.
+Insert your new microSD card to the Raspberry Pi and power it on with a monitor connected to the HDMI port.
 
 First login: user: **pi**, password: **raspberry**.
 
@@ -83,7 +83,7 @@ $ sudo shutdown -r now
 sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
-Add the following lines to have your raspberrypi automatically connect to your home Wi-Fi:
+Add the following lines to have your Raspberry Pi automatically connect to your home Wi-Fi:
 *(if your wireless network is named "linksys" for example, in the following example)*
 
 ```
@@ -93,7 +93,7 @@ Add the following lines to have your raspberrypi automatically connect to your h
 	}
 ```
 
-### Reboot PI to connect to WiFi network
+### Reboot Raspberry Pi to connect to WiFi network
 
 ```
 sudo shutdown -r now
@@ -101,45 +101,64 @@ sudo shutdown -r now
 
 Now that your PI is finally on the local network, you can login remotely to it via SSH.
 But first you need to get the IP address it currently has.
->
->$ `ifconfig`
->*Look for "inet addr: 192.168.XXX.XXX" in the following command's output for your PI's IP Address*
 
-#### Go to another machine and login to your raspberrypi via ssh
+```shell
+ifconfig
+```
 
-> $ `ssh pi@192.168.XXX.XXX`
+*Look for "inet addr: 192.168.XXX.XXX" in the following command's output for your PI's IP Address*
+
+#### Go to another machine and login to your Raspberry Pi via ssh
+
+```shell
+ssh pi@192.168.XXX.XXX
+```
 
 #### Install required packages
 
->$ `sudo apt-get update && sudo apt-get upgrade`
->
->$ `sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools libi2c-dev python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim python-psutil`
->
->$ `sudo pip install RPi.GPIO`
+```shell
+sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install build-essential git gpsd gpsd-clients i2c-tools libi2c-dev python3 python3-pip python-dev python-gps python-imaging python-pip python-smbus rpi.gpio vim python-psutil
+sudo pip install RPi.GPIO
+```
 
-**Update local timezone settings**
+#### Update local timezone settings
 
->$ `sudo dpkg-reconfigure tzdata`
+```shell
+sudo dpkg-reconfigure tzdata
+```
 
-`select your timezone using the interface`
+select your timezone using the interface.
 
-**Setup the simple directory `l` command [optional]**
+#### Setup the simple directory `l` command [optional]
 
->`vi ~/.bashrc`
->
->*add the following line:*
->
->`alias l='ls -lh'`
->
->`source ~/.bashrc`
+```shell
+vi ~/.bashrc
+```
 
-**Fix VIM default syntax highlighting [optional]**
+add the following line:
 
->`sudo vi  /etc/vim/vimrc`
->
->uncomment the following line:
->
->_syntax on_
+```shell
+alias l='ls -lh'
+```
+
+Apply now:
+
+```shell
+source ~/.bashrc
+```
+
+#### Fix VIM default syntax highlighting [optional]
+
+```shell
+sudo vi  /etc/vim/vimrc
+```
+
+uncomment the following line:
+
+```ini
+syntax on
+```
 
 ### Supplies needed
 
@@ -201,13 +220,12 @@ LEDs:
 * LED Orange:     330ohm resistor - GPIO 22 (15) / GND
 * LED Yellow:     330ohm resistor - GPIO 23 (16) / GND (Yellow LED, pin 15 will be for if the GPS is currently tracking your location or not)
 
-### Connect the USB Module to RPi HW UART
+### Connect the USB module to Raspberry Pi HW UART
 
 Using HW UART for the GPS module requires the following to free the UART connection up on your Pi.
 
-"Cross"-Connect the TX and RX pins from the GPS module to the RPi TX (GPIO 14/8 pin) and RX (GPIO 15/10 pin) -- [TX goes to RX on the device and vice versa.]
-Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
-
+* "Cross"-Connect the TX and RX pins from the GPS module to the RPi TX (GPIO 14/8 pin) and RX (GPIO 15/10 pin) -- [TX goes to RX on the device and vice versa.]
+* Connect RPi 5V to the VIN pin and the GPS module GND pin to an available RPi GND pin.
 
 ### Final assembly
 
@@ -288,15 +306,21 @@ vi simpletest.py
 
 Change the following line:
 
-> sensor = Adafruit_DHT.DHT11
+```shell
+sensor = Adafruit_DHT.DHT11
+```
 
 Comment the line out
 
-> pin = 'P8_11'
+```shell
+pin = 'P8_11'
+```
 
 Uncomment the line and change the pin number to 16
 
-> pin = 16
+```shell
+pin = 16
+```
 
 Run the test:
 
@@ -308,7 +332,7 @@ You should see a metric reading of Temp and Humidity displayed on the command li
 
 ### SSD1306 Display Driver
 
-Download and install drivers for ssd1306 Display
+Download and install drivers for ssd1306 display:
 
 ```shell
 sudo apt-get install i2c-tools python-smbus python-pip ifstat git python-imaging
@@ -333,6 +357,7 @@ sudo vi /etc/postgresql/9.4/main/pg_hba.conf
 ```
 
 Add the following line to the end of the file:
+
 ```
 local all pi password
 ```
@@ -437,10 +462,12 @@ Add the following lines:
 
 ### Mounting inside your vehicle
 
-#### Mount on Dash
+* Mount on Dash
+
 ![Car Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Car-Mount.jpg "Car Mount")
 
-#### Mount Humidistat away from direct Sun
+* Mount Humidistat away from direct Sun
+
 ![Humidistat Mount](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/Humidistat-Mount.jpg "Humidistat Mount")
 
-### Reboot your RPi and you should be ready for driving!
+* Reboot your Raspberry Pi and you should be ready for driving!
