@@ -1,4 +1,4 @@
-# CarComputer - GPS & Weather Module for you vehicle
+# CarComputer - GPS & Weather Module for your vehicle
 
 ![Car Computer](https://raw.githubusercontent.com/khinds10/CarComputer/master/construction/CarComputer.png "Car Computer")
 
